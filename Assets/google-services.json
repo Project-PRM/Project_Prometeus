@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "19425164607",
+    "project_id": "project-prm-d785c",
+    "storage_bucket": "project-prm-d785c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:19425164607:android:8cdea55030b24dd8e4a78a",
+        "android_client_info": {
+          "package_name": "com.REDCALYPSO.ProjectPRM"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-qeSaybrwAtLE24OnGFe7qU6r2UOBq1s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
