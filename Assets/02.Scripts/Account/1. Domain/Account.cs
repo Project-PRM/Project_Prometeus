@@ -2,14 +2,12 @@ using Firebase.Firestore;
 
 public class Account
 {
-    private readonly string _email;
-    [FirestoreProperty] public string Email => _email;
-
-    [FirestoreProperty] public string Nickname { get; private set; }
+    [FirestoreProperty] public string Email { get; set; }
+    [FirestoreProperty] public string Nickname { get; set; }
 
     private Account(string email, string nickname)
     {
-        _email = email;
+        Email = email;
         Nickname = nickname;
     }
 
