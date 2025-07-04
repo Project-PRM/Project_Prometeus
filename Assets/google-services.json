@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "19425164607",
-    "project_id": "project-prm-d785c",
-    "storage_bucket": "project-prm-d785c.firebasestorage.app"
+    "project_number": "411416449317",
+    "project_id": "project-prometeus",
+    "storage_bucket": "project-prometeus.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:19425164607:android:8cdea55030b24dd8e4a78a",
+        "mobilesdk_app_id": "1:411416449317:android:a8b63a65fd329092508acc",
         "android_client_info": {
           "package_name": "com.REDCALYPSO.ProjectPRM"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB-qeSaybrwAtLE24OnGFe7qU6r2UOBq1s"
+          "current_key": "AIzaSyDatb-EVcx0jXJc8z71fv5tVd0XgPgyjlg"
         }
       ],
       "services": {
