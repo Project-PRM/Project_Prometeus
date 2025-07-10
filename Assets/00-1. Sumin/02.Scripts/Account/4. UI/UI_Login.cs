@@ -11,7 +11,7 @@ public class UI_Login : UI_PopUp
 
     public void OnClickGoToRegister()
     {
-        UIManager.Instance.OpenPanel(EUIPanelType.Register);
+        LoginUIManager.Instance.OpenPanel(EUIPanelType.Register);
     }
 
     public async void OnLoginButtonClicked()
@@ -19,20 +19,20 @@ public class UI_Login : UI_PopUp
         string email = _emailInputField.text;
         string password = _passwordInputField.text;
 
-        UIManager.Instance.ShowLoading(true);
+        LoginUIManager.Instance.ShowLoading(true);
 
         AccountResult result = await AccountManager.Instance.LoginAsync(email, password);
 
-        UIManager.Instance.ShowLoading(false);
+        LoginUIManager.Instance.ShowLoading(false);
 
         if (result.Success)
         {
-            UIManager.Instance.OpenPanel(EUIPanelType.BulletinBoard); // 성공 시 메인 UI로 전환
+            LoginUIManager.Instance.OpenPanel(EUIPanelType.BulletinBoard); // 성공 시 메인 UI로 전환
         }
         else
         {
-            UIManager.Instance.ShowError(result.ErrorMessage);
-            UIManager.Instance.OpenPanel(EUIPanelType.Login);
+            LoginUIManager.Instance.ShowError(result.ErrorMessage);
+            LoginUIManager.Instance.OpenPanel(EUIPanelType.Login);
         }
     }
 }
