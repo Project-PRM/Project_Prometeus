@@ -1,19 +1,6 @@
 using System.Threading.Tasks;
 using System;
 
-public struct AccountResult
-{
-    public bool Success { get; }
-    public string ErrorMessage { get; }
-
-    public AccountResult(bool success, string errorMessage = null)
-    {
-        Success = success;
-        ErrorMessage = errorMessage;
-    }
-}
-
-
 public class AccountManager : Singleton<AccountManager>
 {
     public event Action OnLoginSuccess;
@@ -32,16 +19,15 @@ public class AccountManager : Singleton<AccountManager>
 
     public async Task<AccountResult> LoginAsync(string email, string password)
     {
-        var (success, errorMessage) = await _repository.LoginAsync(email, password);
+        var result = await _repository.LoginAsync(email, password);
 
-        if (success)
+        if (result.Success)
         {
             OnLoginSuccess?.Invoke();
         }
 
-        return new AccountResult(success, errorMessage);
+        return new AccountResult(result.Success, result.ErrorMessage);
     }
-
 
     public void Logout()
     {
@@ -51,12 +37,12 @@ public class AccountManager : Singleton<AccountManager>
 
     public async Task<bool> ChangeMyNicknameAsync(string newNickname, Action<string> onFail = null)
     {
-        var (success, errorMessage) = await _repository.ChangeMyNicknameAsync(newNickname);
-        if (!success)
+        var result = await _repository.ChangeMyNicknameAsync(newNickname);
+        if (!result.Success)
         {
-            onFail?.Invoke(errorMessage);
+            onFail?.Invoke(result.ErrorMessage);
         }
-        return success;
+        return result.Success;
     }
 
     public async Task<string> GetUserNicknameWithEmail(string email)
