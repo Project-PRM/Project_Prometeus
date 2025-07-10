@@ -42,5 +42,6 @@ public class UI_Login : UI_PopUp
             LoginUIManager.Instance.ShowError(result.ErrorMessage);
             //LoginUIManager.Instance.OpenPanel(EUIPanelType.Login);
         }
+        EventManager.Broadcast(new DummyEvent(result.ErrorMessage));
     }
 }
