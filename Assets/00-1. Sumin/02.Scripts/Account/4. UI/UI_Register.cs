@@ -1,22 +1,30 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI_Register : UI_PopUp
 {
+    [Header ("# UIs")]
     [SerializeField] private TMP_InputField _emailInputField;
     [SerializeField] private TMP_InputField _nicknameInputField;
     [SerializeField] private TMP_InputField _passwordInputField;
     [SerializeField] private TMP_InputField _passwordCheckInputField;
+    [SerializeField] private Button _registerButton;
+    [SerializeField] private Button _toLoginButton;
 
-    public override void Show() { base.Show(); }
-    public override void Hide() { base.Hide(); }
+    protected override void Awake()
+    {
+        base.Awake();
+        _registerButton.onClick.AddListener(OnClickRegisterButton);
+        _toLoginButton.onClick.AddListener(OnClickRegisterPanelExit);
+    }
 
     public void OnClickRegisterPanelExit()
     {
-        UIManager.Instance.OpenPanel(EUIPanelType.Login);
+        LoginUIManager.Instance.OpenPanel(EUIPanelType.Login);
     }
 
-    public async void OnRegisterButtonClicked()
+    public async void OnClickRegisterButton()
     {
         string email = _emailInputField.text;
         string nickname = _nicknameInputField.text;
@@ -25,27 +33,27 @@ public class UI_Register : UI_PopUp
 
         if (string.IsNullOrWhiteSpace(email))
         {
-            UIManager.Instance.ShowError("이메일를 입력해주세요.");
+            LoginUIManager.Instance.ShowError("이메일를 입력해주세요.");
             return;
         }
         else if (string.IsNullOrWhiteSpace(nickname))
         {
-            UIManager.Instance.ShowError("닉네임을 입력해주세요.");
+            LoginUIManager.Instance.ShowError("닉네임을 입력해주세요.");
             return;
         }
         else if (string.IsNullOrWhiteSpace(password))
         {
-            UIManager.Instance.ShowError("비밀번호를 입력해주세요.");
+            LoginUIManager.Instance.ShowError("비밀번호를 입력해주세요.");
             return;
         }
         else if (string.IsNullOrWhiteSpace(passwordCheck))
         {
-            UIManager.Instance.ShowError("비밀번호 확인을 입력해주세요.");
+            LoginUIManager.Instance.ShowError("비밀번호 확인을 입력해주세요.");
             return;
         }
         else if (password != passwordCheck)
         {
-            UIManager.Instance.ShowError("비밀번호와 확인이 일치하지 않습니다.");
+            LoginUIManager.Instance.ShowError("비밀번호와 확인이 일치하지 않습니다.");
             return;
         }
 
@@ -53,7 +61,7 @@ public class UI_Register : UI_PopUp
         Account account;
         if(!Account.TryCreate(email, nickname, out account, out message))
         {
-            UIManager.Instance.ShowError(message);
+            LoginUIManager.Instance.ShowError(message);
             return;
         }
         
@@ -61,11 +69,11 @@ public class UI_Register : UI_PopUp
         if (result.Success)
         {
             Debug.Log($"회원가입 성공");
-            UIManager.Instance.OpenPanel(EUIPanelType.Login);
+            LoginUIManager.Instance.OpenPanel(EUIPanelType.Login);
         }
         else
         {
-            UIManager.Instance.ShowError(result.ErrorMessage);
+            LoginUIManager.Instance.ShowError(result.ErrorMessage);
         }
     }
 }

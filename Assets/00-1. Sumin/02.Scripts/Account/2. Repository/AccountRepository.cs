@@ -31,6 +31,7 @@ public class AccountRepository
         return snapshot.Exists; // 문서가 있으면 이미 사용중
     }
 
+    // 회원 가입 시도
     public async Task<AccountResult> RegisterAsync(string email, string nickname, string password)
     {
         await FirebaseInitialize.WaitForInitializationAsync();
@@ -44,24 +45,27 @@ public class AccountRepository
         try
         {
             var result = await _auth.CreateUserWithEmailAndPasswordAsync(email, password);
+
+            // DisplayName 설정
             await SetInitialNicknameAsync(result.User, nickname);
 
-            // 닉네임 컬렉션에 닉네임 등록 (중복 방지용)
+            // 닉네임 컬렉션 등록
             var docRef = _db.Collection("Nicknames").Document(nickname);
-            await docRef.SetAsync(new
-            {
-                UserId = result.User.UserId,
-                Email = result.User.Email
-            });
+            await docRef.SetAsync(new { UserId = result.User.UserId, Email = result.User.Email });
 
             Debug.Log($"회원가입 성공 : {result.User.UserId}");
             return new AccountResult(true, null);
         }
         catch (Exception ex)
         {
+            // 회원가입 실패 시 닉네임 문서가 생성되었을 수 있으므로 삭제 시도
+            var docRef = _db.Collection("Nicknames").Document(nickname);
+            await docRef.DeleteAsync(); // 예외 무시 가능
+
             Debug.LogError($"회원가입 실패: {ex.Message}");
             return new AccountResult(false, ex.Message);
         }
+
     }
 
     /// <summary>
@@ -82,7 +86,7 @@ public class AccountRepository
     /// <summary>
     /// 로그인
     /// </summary>
-    public async Task<(bool isSuccess, string errorMessage)> LoginAsync(string email, string password)
+    public async Task<AccountResult> LoginAsync(string email, string password)
     {
         await FirebaseInitialize.WaitForInitializationAsync();
 
@@ -91,12 +95,12 @@ public class AccountRepository
             var result = await _auth.SignInWithEmailAndPasswordAsync(email, password);
             SetMyAccount(result.User);
             Debug.Log($"로그인 성공 : {result.User.DisplayName} ({result.User.UserId})");
-            return (true, null);
+            return new AccountResult(true, $"로그인 성공 : {result.User.DisplayName} ({result.User.UserId})");
         }
         catch (Exception ex)
         {
             Debug.LogError($"로그인 실패: {ex.Message}");
-            return (false, ex.Message);
+            return new AccountResult(false, ex.Message);
         }
     }
 
@@ -123,7 +127,7 @@ public class AccountRepository
     /// <summary>
     /// 로그인 후, 자신의 닉네임 변경 용
     /// </summary>
-    public async Task<(bool isSuccess, string errorMessage)> ChangeMyNicknameAsync(string newNickname)
+    public async Task<AccountResult> ChangeMyNicknameAsync(string newNickname)
     {
         await FirebaseInitialize.WaitForInitializationAsync();
 
@@ -131,33 +135,49 @@ public class AccountRepository
 
         if (user == null)
         {
-            string msg = "로그인된 유저가 없습니다.";
-            Debug.LogWarning(msg);
-            return (false, msg);
+            return new AccountResult(false, "로그인된 유저가 없습니다.");
         }
 
         if (user.Email != _myAccount.Email)
         {
-            string msg = "유저 정보가 다릅니다";
-            Debug.LogError(msg);
-            return (false, msg);
+            return new AccountResult(false, "유저 정보가 다릅니다");
         }
 
+        if (await IsNicknameTakenAsync(newNickname))
+        {
+            return new AccountResult(false, "이미 사용 중인 닉네임입니다.");
+        }
+
+        string oldNickname = user.DisplayName;
         var profile = new UserProfile { DisplayName = newNickname };
 
         try
         {
+            // 1. Firebase Auth의 DisplayName 업데이트
             await user.UpdateUserProfileAsync(profile);
+
+            // 2. 내부 캐싱된 Account 객체 닉네임 업데이트
             _myAccount.SetNickname(newNickname, out string _);
-            Debug.Log($"닉네임이 '{newNickname}'(으)로 변경되었습니다.");
-            return (true, null);
+
+            // 3. Firestore에서 기존 닉네임 문서 삭제
+            await _db.Collection("Nicknames").Document(oldNickname).DeleteAsync();
+
+            // 4. Firestore에 새 닉네임 문서 등록
+            await _db.Collection("Nicknames").Document(newNickname).SetAsync(new
+            {
+                UserId = user.UserId,
+                Email = user.Email
+            });
+
+            return new AccountResult(true, $"닉네임이 '{newNickname}'(으)로 변경되었습니다.");
         }
         catch (Exception ex)
         {
             Debug.LogError("닉네임 변경 실패: " + ex.Message);
-            return (false, ex.Message);
+            return new AccountResult(false, ex.Message);
         }
     }
+
     #endregion
 
     /// <summary>

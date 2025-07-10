@@ -5,7 +5,7 @@ using Firebase.Firestore;
 using UnityEngine;
 using System.Threading.Tasks;
 
-public class FirebaseInitialize : MonoBehaviour
+public static class FirebaseInitialize
 {
     public static FirebaseApp App { get; private set; }
     public static FirebaseAuth Auth { get; private set; }
@@ -15,12 +15,12 @@ public class FirebaseInitialize : MonoBehaviour
 
     private static TaskCompletionSource<bool> _initTcs = new TaskCompletionSource<bool>();
 
-    private void Start()
+    static FirebaseInitialize()
     {
         InitAsync();
     }
 
-    public async void InitAsync()
+    public static async void InitAsync()
     {
         var dependencyStatus = await FirebaseApp.CheckAndFixDependenciesAsync();
         if (dependencyStatus == DependencyStatus.Available)

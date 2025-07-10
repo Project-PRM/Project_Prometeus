@@ -7,13 +7,9 @@ public enum EUIPanelType
 {
     Login,
     Register,
-    BulletinBoard,
-    Post,
-    WritePost,
-    EditPost
 }
 
-public class UIManager : Singleton<UIManager>
+public class LoginUIManager : Singleton<LoginUIManager>
 {
     [SerializeField] private TextMeshProUGUI _warningMessageText;
     
@@ -55,9 +51,9 @@ public class UIManager : Singleton<UIManager>
             else pair.Value.Hide();
         }
 
-        bool isLogin = _registerPanel.gameObject.activeSelf && _loginPanel.gameObject.activeSelf;
+        //bool isLogin = !_registerPanel.gameObject.activeSelf && _loginPanel.gameObject.activeSelf;
 
-        _warningMessageText?.gameObject.SetActive(isLogin);
+        //_warningMessageText?.gameObject.SetActive(isLogin);
     }
 
     /// <summary>
@@ -83,7 +79,7 @@ public class UIManager : Singleton<UIManager>
 
     public void ShowLoading(bool flag)
     {
-        ShowError(string.Empty);
+        ShowError("로딩중");
         //_panel_Loading.SetActive(flag);
     }
 }
