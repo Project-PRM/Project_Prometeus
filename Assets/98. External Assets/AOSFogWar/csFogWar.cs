@@ -10,11 +10,12 @@
 
 
 using System;                       // Convert
+using System.Collections;                  // Handles
+using System.Collections.Generic;   // List
 using System.IO;                    // Directory
 using System.Linq;                  // Enumerable
-using System.Collections.Generic;   // List
+using UnityEditor;
 using UnityEngine;                  // Monobehaviour
-using UnityEditor;                  // Handles
 
 
 
@@ -178,6 +179,16 @@ namespace FischlWorks_FogWar
                 }
             }
 
+            public void SetRange(int range)
+            {
+                if (range < 0)
+                {
+                    Debug.LogErrorFormat("시야범위는 0보다 커야함 멍청아");
+                    return;
+                }
+                sightRange = range;
+            }
+
             [Header("Debug")]
             [SerializeField]
             private Vector2Int lastSeenAt = new Vector2Int(Int32.MaxValue, Int32.MaxValue);
@@ -274,7 +285,13 @@ namespace FischlWorks_FogWar
 
 
         // --- --- ---
+        public void SetFogRevealerRange(int index, int Range)
+        {
+            fogRevealers[index].SetRange(Range);
 
+            UpdateFogField();
+            UpdateFogPlaneTextureBuffer();
+        }
 
 
         private void Start()
