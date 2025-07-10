@@ -13,7 +13,7 @@ public enum EUIPanelType
     EditPost
 }
 
-public class UIManager : Singleton<UIManager>
+public class LoginUIManager : Singleton<LoginUIManager>
 {
     [SerializeField] private TextMeshProUGUI _warningMessageText;
     
