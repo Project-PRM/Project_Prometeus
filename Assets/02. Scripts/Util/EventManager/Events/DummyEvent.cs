@@ -9,4 +9,5 @@ public class DummyEvent : GameEvent
     {
         _message = message;
     }
+
 }
