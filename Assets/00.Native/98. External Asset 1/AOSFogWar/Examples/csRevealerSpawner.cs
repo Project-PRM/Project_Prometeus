@@ -68,6 +68,10 @@ namespace FischlWorks_FogWar
                     fogWar.RemoveFogRevealer(fogWar._FogRevealers.Count - 1);
                 }
             }
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                fogWar.SetFogRevealerRange(1, fogWar._FogRevealers[1]._SightRange + 5);
+            }
         }
     }
 
