@@ -1,22 +1,30 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI_Register : UI_PopUp
 {
+    [Header ("# UIs")]
     [SerializeField] private TMP_InputField _emailInputField;
     [SerializeField] private TMP_InputField _nicknameInputField;
     [SerializeField] private TMP_InputField _passwordInputField;
     [SerializeField] private TMP_InputField _passwordCheckInputField;
+    [SerializeField] private Button _registerButton;
+    [SerializeField] private Button _toLoginButton;
 
-    public override void Show() { base.Show(); }
-    public override void Hide() { base.Hide(); }
+    protected override void Awake()
+    {
+        base.Awake();
+        _registerButton.onClick.AddListener(OnClickRegisterButton);
+        _toLoginButton.onClick.AddListener(OnClickRegisterPanelExit);
+    }
 
     public void OnClickRegisterPanelExit()
     {
         LoginUIManager.Instance.OpenPanel(EUIPanelType.Login);
     }
 
-    public async void OnRegisterButtonClicked()
+    public async void OnClickRegisterButton()
     {
         string email = _emailInputField.text;
         string nickname = _nicknameInputField.text;

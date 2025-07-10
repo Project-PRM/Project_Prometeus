@@ -1,13 +1,21 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UI_Login : UI_PopUp
 {
+    [Header("# UIs")]
     [SerializeField] private TMP_InputField _emailInputField;
     [SerializeField] private TMP_InputField _passwordInputField;
+    [SerializeField] private Button _toRegisterButton;
+    [SerializeField] private Button _loginButton;
 
-    public override void Show() { base.Show(); }
-    public override void Hide() { base.Hide(); }
+    protected override void Awake()
+    {
+        base.Awake();
+        _toRegisterButton.onClick.AddListener(OnClickGoToRegister);
+        _loginButton.onClick.AddListener(OnLoginButtonClicked);
+    }
 
     public void OnClickGoToRegister()
     {
@@ -27,12 +35,13 @@ public class UI_Login : UI_PopUp
 
         if (result.Success)
         {
-            LoginUIManager.Instance.OpenPanel(EUIPanelType.BulletinBoard); // 성공 시 메인 UI로 전환
+            Debug.Log("로그인 성공");
         }
         else
         {
             LoginUIManager.Instance.ShowError(result.ErrorMessage);
-            LoginUIManager.Instance.OpenPanel(EUIPanelType.Login);
+            //LoginUIManager.Instance.OpenPanel(EUIPanelType.Login);
         }
+        EventManager.Broadcast(new DummyEvent(result.ErrorMessage));
     }
 }
