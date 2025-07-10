@@ -14,7 +14,7 @@ private csFogWar _fogWar; =>변수 초기화 할당 빈오브젝트에 csFogWar 
 - 추가 : int index = _fogWar.AddFogRevealer(new csFogWar.FogRevealer([Transform]같은팀 Transform, [int]초기 시야 범위, (Bool)true));
 			ps1. 매개변수 맨끝 bool 값은 움직일떄만 fog를 업데이트할것인가 하는 것인데 최적화생각하면 true로 쓰는게 맞을것 같음
 			ps2. false면 안움직여도 계속 fog 업데이트함
-- 삭제 : _fogWar.RemoveFogRevealer(fogWar._FogRevealers.Count - 1);
+- 삭제 : _fogWar.RemoveFogRevealer([int] 인덱스);
 -----------------------------------------------------------------------------------
 
 [시야 업데이트]
