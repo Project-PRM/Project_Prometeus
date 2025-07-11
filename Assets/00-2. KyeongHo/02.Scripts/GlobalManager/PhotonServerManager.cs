@@ -25,6 +25,10 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
         
         // 방장이 로드한 씬으로 다른 참여자가 똑같이 이동하게끔 동기화 해주는 옵션
         PhotonNetwork.AutomaticallySyncScene = true;
+        PhotonNetwork.AuthValues = new AuthenticationValues();
+        PhotonNetwork.AuthValues.UserId = AccountManager.Instance.MyAccount.UserId;
+        
+        Debug.Log($"Photon UserId : {PhotonNetwork.AuthValues.UserId}");
         PhotonNetwork.ConnectUsingSettings();
     }
     private void Start()
@@ -134,6 +138,8 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
         Debug.Log("마스터 서버 접속 완료");
         Debug.Log(PhotonNetwork.CloudRegion);
         Debug.Log($"InLobby : {PhotonNetwork.InLobby}");
+        
+        
 
         PhotonNetwork.JoinLobby();
     }
