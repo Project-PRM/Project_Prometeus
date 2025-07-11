@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using Photon.Pun;
+using Unity.Cinemachine;
 
 public class Player : MonoBehaviour
 {
@@ -15,6 +16,11 @@ public class Player : MonoBehaviour
     {
         _photonView = GetComponent<PhotonView>();
         _animator = GetComponent<Animator>();
+
+        if (_photonView.IsMine)
+        {
+            SetupCamera();
+        }
     }
 
     public T GetActivity<T>() where T : PlayerActivity
@@ -32,5 +38,15 @@ public class Player : MonoBehaviour
         }
 
         throw new Exception($"Activity {type.Name} not found on {gameObject.name}.");
+    }
+
+    private void SetupCamera()
+    {
+        CinemachineCamera cam = FindAnyObjectByType<CinemachineCamera>();
+        if (cam != null)
+        {
+            cam.Follow = this.transform; // 예: 머리 위 Empty
+            cam.LookAt = this.transform;
+        }
     }
 }

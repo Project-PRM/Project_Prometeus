@@ -1522,7 +1522,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _showDuration: 0.3
-  _nextSceneName: KyoungHo_LobbyTest
+  _nextSceneName: Lobby_copied
   _emailInputField: {fileID: 455349043}
   _passwordInputField: {fileID: 1663427242}
   _toRegisterButton: {fileID: 626572149}

@@ -93,7 +93,7 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
         {
             Debug.Log("게임 시작! 게임 씬으로 전환합니다.");
             PrintAllPlayerTeams();
-            // PhotonNetwork.LoadLevel("GameScene");
+            PhotonNetwork.LoadLevel(1);
         }
         string team;
         PhotonPlayer player = PhotonNetwork.LocalPlayer;

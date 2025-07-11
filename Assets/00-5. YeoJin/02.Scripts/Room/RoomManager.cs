@@ -1,6 +1,9 @@
 using Photon.Pun;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Collections;
+using ExitGames.Client.Photon;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class RoomManager : PunSingleton<RoomManager>
 {
@@ -13,15 +16,19 @@ public class RoomManager : PunSingleton<RoomManager>
     private void Start()
     {
         // 팀별로 스폰 포인트를 할당
-        AssignSpawnPoints();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            AssignSpawnPoints();
+        }
         // 스폰 포인트별로 팀 스폰
-        PhotonServerManager.Instance.OnGameStarted += GeneratePlayer;
+        // GeneratePlayer(myTeam);
+        StartCoroutine(WaitForSpawnDataAndSpawn());
     }
 
     private void AssignSpawnPoints()
     {
-        // 팀 A ~ E를 각각 스폰포인트에 할당
-        // 1. 스폰포인트 셔플
+        if (!PhotonNetwork.IsMasterClient) return;
+
         List<Transform> shuffled = new List<Transform>(spawnPoints);
         for (int i = 0; i < shuffled.Count; i++)
         {
@@ -29,10 +36,55 @@ public class RoomManager : PunSingleton<RoomManager>
             (shuffled[i], shuffled[randIndex]) = (shuffled[randIndex], shuffled[i]);
         }
 
-        // 2. 팀 이름에 따라 5개 선택해서 매핑
+        // Room CustomProperties에 저장할 해시테이블
+        Hashtable spawnTable = new Hashtable();
+
         for (int i = 0; i < Mathf.Min(teamNames.Length, shuffled.Count); i++)
         {
-            _teamSpawnDict[teamNames[i]] = shuffled[i];
+            Vector3 pos = shuffled[i].position;
+            spawnTable[$"spawn_{teamNames[i]}"] = $"{pos.x},{pos.y},{pos.z}";
+        }
+
+        PhotonNetwork.CurrentRoom.SetCustomProperties(spawnTable);
+        Debug.Log("Spawn points saved to room properties.");
+    }
+
+    private IEnumerator WaitForSpawnDataAndSpawn()
+    {
+        string myTeam = PhotonServerManager.Instance.GetPlayerTeam(PhotonNetwork.LocalPlayer);
+        string key = $"spawn_{myTeam}";
+
+        // 최대 3초까지 기다리기
+        float timeout = 3f;
+        while (!PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(key) && timeout > 0f)
+        {
+            timeout -= Time.deltaTime;
+            yield return null;
+        }
+
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(key, out object spawnData))
+        {
+            string[] split = spawnData.ToString().Split(',');
+            if (split.Length == 3 &&
+                float.TryParse(split[0], out float x) &&
+                float.TryParse(split[1], out float y) &&
+                float.TryParse(split[2], out float z))
+            {
+                Vector3 basePos = new Vector3(x, y, z);
+                Vector3 offset = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)) * 1.5f;
+                Vector3 finalPos = basePos + offset;
+
+                GameObject player = PhotonNetwork.Instantiate("Player", finalPos, Quaternion.identity);
+                Debug.Log($"Spawned player at {finalPos} for team {myTeam}");
+            }
+            else
+            {
+                Debug.LogError("Invalid spawn data format.");
+            }
+        }
+        else
+        {
+            Debug.LogError($"No spawn data found for team {myTeam}");
         }
     }
 
@@ -49,9 +101,14 @@ public class RoomManager : PunSingleton<RoomManager>
 
         Transform spawnPoint = _teamSpawnDict[team];
 
-        // 팀 이름에 맞는 스폰포인트에 스폰
-        GameObject player = PhotonNetwork.Instantiate("Player", spawnPoint.position, spawnPoint.rotation);
-        Debug.Log($"Spawned player for team {team} at {spawnPoint.position}");
-    }
+        // 오프셋 주기
+        Vector3 offset = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)) * 1.5f;
 
+        Vector3 spawnPos = spawnPoint.position + offset;
+        Quaternion spawnRot = spawnPoint.rotation;
+
+        // 팀 이름에 맞는 스폰포인트에 스폰
+        GameObject player = PhotonNetwork.Instantiate("Player", spawnPos, spawnRot);
+        Debug.Log($"Spawned player for team {team} at {spawnPos}");
+    }
 }
