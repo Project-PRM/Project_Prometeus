@@ -1,16 +1,12 @@
+using System;
 using UnityEngine;
-
-public class EnemyBTStat : MonoBehaviour
+[Serializable]
+public class EnemyBTStat
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [Header("이동")]
+    public float MoveSpeed;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [Header("공격")]
+    public float AttackDistance;
+
 }

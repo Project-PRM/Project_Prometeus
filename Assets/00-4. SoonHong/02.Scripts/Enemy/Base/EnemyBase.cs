@@ -1,16 +1,18 @@
 using UnityEngine;
 
-public class EnemyBase : MonoBehaviour
+public class EnemyBase : MonoBehaviour, IDamageAble
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public EnemyStat EnemyStat;
+
+    private float _helath;
+
+    private void Awake()
     {
-        
+        _helath = EnemyStat.MaxHelath;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void TakeDamage(float Damage)
     {
-        
+        _helath -= Damage;
     }
 }

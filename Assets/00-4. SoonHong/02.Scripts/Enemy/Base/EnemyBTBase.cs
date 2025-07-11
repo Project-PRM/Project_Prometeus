@@ -12,7 +12,7 @@ public class EnemyBTBase : MonoBehaviour
     public List<GameObject> PatrolPoints;
 
     [Header("Enemy 스텟")]
-    public EnemyStat EnemyStat;
+    public EnemyBTStat EnemyStat;
 
     private GameObject _target;
     private NavMeshAgent _navMeshAgent;
