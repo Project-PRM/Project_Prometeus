@@ -9,7 +9,9 @@ public class EnemyOnPlayerCollider : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(other.gameObject.name);
-        _enemyBTBase.TargetSetup(other.gameObject);
+        if(other.gameObject.CompareTag("Player"))
+        {
+            _enemyBTBase.TargetSetup(other.gameObject);
+        }
     }
 }
