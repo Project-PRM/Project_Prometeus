@@ -14,16 +14,8 @@ public partial class CheckTargetDetectCondition : Condition
         if (CurrentDistance.Value <= TraceDistance.Value)
         {
             return true;
-
         }
         return false;
     }
 
-    public override void OnStart()
-    {
-    }
-
-    public override void OnEnd()
-    {
-    }
 }

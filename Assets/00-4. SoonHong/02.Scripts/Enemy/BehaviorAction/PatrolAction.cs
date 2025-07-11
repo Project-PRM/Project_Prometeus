@@ -5,6 +5,7 @@ using Action = Unity.Behavior.Action;
 using Unity.Properties;
 using UnityEngine.AI;
 using UnityEngine.Splines;
+using Photon.Realtime;
 
 [Serializable, GeneratePropertyBag]
 [NodeDescription(name: "Patrol", story: "[Self] Navigate To PatrolPosition", category: "Action", id: "94bb376163ae0aea3cd2ee4fc3dd7924")]
