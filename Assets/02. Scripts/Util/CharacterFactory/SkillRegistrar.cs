@@ -23,9 +23,9 @@ public static class SkillRegistrar
     public static void RegisterAll()
     {
         // 스킬 만들 때 여기에 등록
-        SkillFactory.Register("BasicAttack", () => new BasicAttack());
-        SkillFactory.Register("DummySkill", () => new DummySkill());
-        SkillFactory.Register("DummyUltimate", () => new DummyUltimate());
-        SkillFactory.Register("DumyPassive", () => new DummyPassive());
+        SkillFactory.Register(ESkillName.BasicAttack.ToString(), () => new BasicAttack());
+        SkillFactory.Register(ESkillName.DummySkill.ToString(), () => new DummySkill());
+        SkillFactory.Register(ESkillName.DummyUltimate.ToString(), () => new DummyUltimate());
+        SkillFactory.Register(ESkillName.DummyPassive.ToString(), () => new DummyPassive());
     }
 }
