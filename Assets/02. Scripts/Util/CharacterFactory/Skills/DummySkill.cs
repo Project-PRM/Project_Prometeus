@@ -1,11 +1,15 @@
 using UnityEngine;
 
+[Skill("DummySkill")]
 public class DummySkill : ISkill
 {
-    // 이게 필수
-    static DummySkill()
+    private float _timer = 0f;
+
+    public SkillData Data { get; set; }
+
+    public void Update()
     {
-        SkillFactory.Register("DummySkill", () => new DummySkill());
+        _timer += Time.deltaTime;
     }
 
     public void Activate(CharacterBase user)
