@@ -54,7 +54,7 @@ public class AccountRepository
             await docRef.SetAsync(new { UserId = result.User.UserId, Email = result.User.Email });
 
             Debug.Log($"회원가입 성공 : {result.User.UserId}");
-            return new AccountResult(true, null);
+            return new AccountResult(true, $"회원가입 성공 : {nickname}");
         }
         catch (Exception ex)
         {
@@ -187,7 +187,7 @@ public class AccountRepository
     {
         if (user != null)
         {
-            Account.TryCreate(user.Email, user.DisplayName, out _myAccount, out string message);
+            Account.TryCreate(user.UserId, user.Email, user.DisplayName, out _myAccount, out string message);
         }
         else
         {
