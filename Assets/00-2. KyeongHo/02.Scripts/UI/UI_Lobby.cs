@@ -11,17 +11,21 @@ public class UI_Lobby : MonoBehaviour
    public string GameScene;
    
    public TextMeshProUGUI TeamNameText;
-   public Button GameStartButton;
    public TextMeshProUGUI RoomPlayerCountText;
+   public Button GameStartButton;
+   public Button MatchingStartButton;
    
      
    private void Start()
    {
       EventManager.AddListener<GameStartEvent>(Refresh);
    }
-   public void Refresh(GameStartEvent evt)
+   public void Refresh(GameStartEvent evt = null)
    {
-      TeamNameText.text = $"TeamName : {evt.TeamName}";
+      if (evt != null)
+      {
+         TeamNameText.text = $"TeamName : {evt.TeamName}";  
+      }
       RoomPlayerCountText.text = $"{PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}";
    }
 
@@ -39,5 +43,15 @@ public class UI_Lobby : MonoBehaviour
       {
          Debug.Log("방장만 시작 가능");
       }
+   }
+
+   public void OnClickMatchingStartButton()
+   {
+      TeamNameText.gameObject.SetActive(true);
+      RoomPlayerCountText.gameObject.SetActive(true);
+      PhotonServerManager.Instance.CreateOrJoinRandomRoom();
+      Refresh();
+      Debug.Log("매칭 시작...........");
+      
    }
 }
