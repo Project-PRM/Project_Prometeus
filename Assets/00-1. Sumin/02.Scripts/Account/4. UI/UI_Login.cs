@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,6 +15,19 @@ public class UI_Login : UI_PopUp
     [SerializeField] private Button _toRegisterButton;
     [SerializeField] private Button _loginButton;
 
+
+    [Header("테스트용 버튼")]
+    public Button DummyLoginButton;
+
+    private List<string> _dummyEmails = new List<string> {"test2@t.com", "test3@t.com", "test4@t.com", "test5@t.com", "test6@t.com", "test7@t.com", "test8@t.com", "test9@t.com", "test10@t.com", "test11@t.com", "test12@t.com", "test13@t.com", "test14@t.com", "test15@t.com" };
+    private string _dummyPassword = "tttttt";
+    
+    public void OnDummyLoginButtonClick(int number)
+    {
+        _emailInputField.text = _dummyEmails[number];
+        _passwordInputField.text = _dummyPassword;
+        OnLoginButtonClicked();
+    }
     protected override void Awake()
     {
         base.Awake();
