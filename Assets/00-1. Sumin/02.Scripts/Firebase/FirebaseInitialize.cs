@@ -1,5 +1,4 @@
 using Firebase;
-using Firebase.Extensions;
 using Firebase.Auth;
 using Firebase.Firestore;
 using UnityEngine;

@@ -1,52 +1,78 @@
+using Photon.Pun;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Rendering;
 
-public class CharacterBehaviour : MonoBehaviour
+public class CharacterBehaviour : PlayerActivity
 {
     [SerializeField] private ECharacterName _characterName;
 
     private CharacterBase _character;
 
-    private void Awake()
+    private bool _isInitialized = false;
+
+    // 캐릭터 스킬 조합
+    protected override async void Start()
     {
-        // 예시: 나중엔 Firebase나 Json에서 가져와야 함
-        /*_character = CharacterFactory.CreateCharacter(
-            _characterName.ToString(), "MagicBolt", "HealOnKill", "FoxFire", "DashThrough"
-        );*/
+        base.Start();
+        if (!CharacterManager.Instance.IsInitialized) 
+        {
+            await CharacterManager.Instance.Init();
+        }
+        var skills = await CharacterManager.Instance.GetCharacterMetaDataAsync(_characterName);
+
         _character = new CharacterBase(
             this,
             _characterName.ToString(),
-            SkillFactory.Create("MagicBolt"),
-            SkillFactory.Create("HealOnKill"),
-            SkillFactory.Create("FoxFire"),
-            SkillFactory.Create("DashThrough")
+            SkillFactory.Create(ESkillType.BasicAttack.ToString()),
+            SkillFactory.Create(skills.Passive),
+            SkillFactory.Create(skills.Skill),
+            SkillFactory.Create(skills.Ultimate),
+            CharacterManager.Instance.CharacterStats
         );
+
+        _isInitialized = true;
     }
 
-    // 이게 최종적으로 쓸 함수임
-    /*private async void Start()
+    public void OnAttack(InputAction.CallbackContext callback)
     {
-        // ECharacterName → string 변환
-        string name = _characterName.ToString();
+        if (!_photonView.IsMine) return;
 
-        // Firebase에서 캐릭터 데이터 불러오기
-        CharacterData data = await FirebaseManager.GetCharacterData(name);
+        if (callback.performed)
+        {
+            // 일반 공격을 함
+            Debug.Log("Normal Attack performed");
+            _character.UseSkill(ESkillType.BasicAttack);
+            _photonView.RPC(nameof(RPC_NormalAttack), RpcTarget.All);
+        }
+    }
 
-        _character = CharacterFactory.CreateCharacter(
-            data.Name,
-            data.Basic,
-            data.Passive,
-            data.Skill,
-            data.Ultimate
-        );
-    }*/
+    [PunRPC]
+    private void RPC_NormalAttack()
+    {
+        Debug.Log("Normal Attack performed via RPC");
+        _character.UseSkill(ESkillType.BasicAttack);
+    }
 
-    // 스킬 사용만 알아서 추가
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q))
-            _character.UseSkill(ESkillType.BasicAttack);
+        if(_isInitialized == false)
+        {
+            return;
+        }
+        //_character.Update();
 
-        if (Input.GetKeyDown(KeyCode.W))
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    _character.UseSkill(ESkillType.BasicAttack);
+        //}
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
             _character.UseSkill(ESkillType.Skill);
+        }
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            _character.UseSkill(ESkillType.Ultimate);
+        }
     }
 }
