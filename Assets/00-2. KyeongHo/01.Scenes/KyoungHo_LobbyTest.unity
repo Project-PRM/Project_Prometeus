@@ -1003,6 +1003,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isDontDestroy: 0
+  MaxPlayers: 3
 --- !u!4 &1838789483
 Transform:
   m_ObjectHideFlags: 0
