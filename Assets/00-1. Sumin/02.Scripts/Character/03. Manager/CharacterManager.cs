@@ -23,17 +23,17 @@ public class CharacterManager : Singleton<CharacterManager>
 
     public async Task Init()
     {
+
         if (IsInitialized)
         {
             return;
         }
-        _skillDataMap = await _repository.GetAllSkillDatas();
-        SkillFactory.LoadSkillData(_skillDataMap);
-
         foreach (ECharacterName characterName in System.Enum.GetValues(typeof(ECharacterName)))
         {
             _characterMetaDataCache[characterName] = await _repository.GetCharacterSkillNames(characterName);
         }
+        _skillDataMap = await _repository.GetAllSkillDatas();
+        SkillFactory.LoadSkillData(_skillDataMap);
 
         IsInitialized = true;
     }
