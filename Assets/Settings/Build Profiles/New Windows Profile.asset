@@ -21,7 +21,9 @@ MonoBehaviour:
   m_OverrideGlobalSceneList: 1
   m_Scenes:
   - m_enabled: 1
-    m_path: Assets/00-2. KyeongHo/01.Scenes/KyoungHo_MatchTest.unity
+    m_path: Assets/00-2. KyeongHo/01.Scenes/KyoungHo_LoginTest.unity
+  - m_enabled: 1
+    m_path: Assets/00-2. KyeongHo/01.Scenes/KyoungHo_LobbyTest.unity
   m_ScriptingDefines: []
   m_PlayerSettingsYaml:
     m_Settings:

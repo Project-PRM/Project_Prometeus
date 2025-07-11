@@ -15,21 +15,21 @@ public class Account
 
     public static bool TryCreate(string userId, string email, string nickname, out Account account, out string errorMessage)
     {
-        var emailSpecification = new AccountEmailSpecification();
-        if (!emailSpecification.IsSatisfiedBy(email))
-        {
-            account = null;
-            errorMessage = emailSpecification.ErrorMessage;
-            return false;
-        }
-
-        var nicknameSpecification = new AccountNicknameSpecification();
-        if (!nicknameSpecification.IsSatisfiedBy(nickname))
-        {
-            account = null;
-            errorMessage = nicknameSpecification.ErrorMessage;
-            return false;
-        }
+        // var emailSpecification = new AccountEmailSpecification();
+        // if (!emailSpecification.IsSatisfiedBy(email))
+        // {
+        //     account = null;
+        //     errorMessage = emailSpecification.ErrorMessage;
+        //     return false;
+        // }
+        //
+        // var nicknameSpecification = new AccountNicknameSpecification();
+        // if (!nicknameSpecification.IsSatisfiedBy(nickname))
+        // {
+        //     account = null;
+        //     errorMessage = nicknameSpecification.ErrorMessage;
+        //     return false;
+        // }
 
         account = new Account(userId, email, nickname);
         errorMessage = null;
