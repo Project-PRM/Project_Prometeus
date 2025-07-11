@@ -1,4 +1,4 @@
-﻿// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // <copyright file="Room.cs" company="Exit Games GmbH">
 //   Loadbalancing Framework for Photon - Copyright (C) 2018 Exit Games GmbH
 // </copyright>
@@ -185,10 +185,10 @@ namespace Photon.Realtime
         }
 
         /// <summary>While inside a Room, this is the list of players who are also in that room.</summary>
-        private Dictionary<int, Player> players = new Dictionary<int, Player>();
+        private Dictionary<int, PhotonPlayer> players = new Dictionary<int, PhotonPlayer>();
 
         /// <summary>While inside a Room, this is the list of players who are also in that room.</summary>
-        public Dictionary<int, Player> Players
+        public Dictionary<int, PhotonPlayer> Players
         {
             get
             {
@@ -461,7 +461,7 @@ namespace Photon.Realtime
         /// This is internally used by the LoadBalancing API. There is usually no need to remove players yourself.
         /// This is not a way to "kick" players.
         /// </summary>
-        protected internal virtual void RemovePlayer(Player player)
+        protected internal virtual void RemovePlayer(PhotonPlayer player)
         {
             this.Players.Remove(player.ActorNumber);
             player.RoomReference = null;
@@ -493,7 +493,7 @@ namespace Photon.Realtime
         /// </remarks>
         /// <param name="masterClientPlayer">The player to become the next Master Client.</param>
         /// <returns>False when this operation couldn't be done currently. Requires a v4 Photon Server.</returns>
-        public bool SetMasterClient(Player masterClientPlayer)
+        public bool SetMasterClient(PhotonPlayer masterClientPlayer)
         {
             if (this.isOffline)
             {
@@ -509,7 +509,7 @@ namespace Photon.Realtime
         /// </summary>
         /// <param name="player">The new player - identified by ID.</param>
         /// <returns>False if the player could not be added (cause it was in the list already).</returns>
-        public virtual bool AddPlayer(Player player)
+        public virtual bool AddPlayer(PhotonPlayer player)
         {
             if (!this.Players.ContainsKey(player.ActorNumber))
             {
@@ -524,7 +524,7 @@ namespace Photon.Realtime
         /// Updates a player reference in the Players dictionary (no matter if it existed before or not).
         /// </summary>
         /// <param name="player">The Player instance to insert into the room.</param>
-        public virtual Player StorePlayer(Player player)
+        public virtual PhotonPlayer StorePlayer(PhotonPlayer player)
         {
             this.Players[player.ActorNumber] = player;
             player.RoomReference = this;
@@ -545,11 +545,11 @@ namespace Photon.Realtime
         /// <param name="id">ID to look for.</param>
         /// <param name="findMaster">If true, the Master Client is returned for ID == 0.</param>
         /// <returns>The player with the ID or null.</returns>
-        public virtual Player GetPlayer(int id, bool findMaster = false)
+        public virtual PhotonPlayer GetPlayer(int id, bool findMaster = false)
         {
             int idToFind = (findMaster && id == 0) ? this.MasterClientId : id;
 
-            Player result = null;
+            PhotonPlayer result = null;
             this.Players.TryGetValue(idToFind, out result);
 
             return result;

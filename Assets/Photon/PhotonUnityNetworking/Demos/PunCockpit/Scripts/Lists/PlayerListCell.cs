@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PlayerListCell.cs" company="Exit Games GmbH">
 //   Part of: Photon Unity Utilities,
 // </copyright>
@@ -37,7 +37,7 @@ namespace Photon.Pun.Demo.Cockpit
 
         public LayoutElement LayoutElement;
 
-        Player _player;
+        PhotonPlayer _player;
 
         public bool isInactiveCache;
 
@@ -48,7 +48,7 @@ namespace Photon.Pun.Demo.Cockpit
             UpdateInfo();
         }
 
-        public void AddToList(Player info, bool animate = false)
+        public void AddToList(PhotonPlayer info, bool animate = false)
         {
             //Debug.Log("AddToList " + info.ToStringFull());
 

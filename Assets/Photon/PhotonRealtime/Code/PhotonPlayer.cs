@@ -38,7 +38,7 @@ namespace Photon.Realtime
     /// <remarks>
     /// Each player has a actorNumber, valid for that room. It's -1 until assigned by server (and client logic).
     /// </remarks>
-    public class Player
+    public class PhotonPlayer
     {
         /// <summary>
         /// Used internally to identify the masterclient of a room.
@@ -147,7 +147,7 @@ namespace Photon.Realtime
         /// <param name="nickName">NickName of the player (a "well known property").</param>
         /// <param name="actorNumber">ID or ActorNumber of this player in the current room (a shortcut to identify each player in room)</param>
         /// <param name="isLocal">If this is the local peer's player (or a remote one).</param>
-        protected internal Player(string nickName, int actorNumber, bool isLocal) : this(nickName, actorNumber, isLocal, null)
+        protected internal PhotonPlayer(string nickName, int actorNumber, bool isLocal) : this(nickName, actorNumber, isLocal, null)
         {
         }
 
@@ -159,7 +159,7 @@ namespace Photon.Realtime
         /// <param name="actorNumber">ID or ActorNumber of this player in the current room (a shortcut to identify each player in room)</param>
         /// <param name="isLocal">If this is the local peer's player (or a remote one).</param>
         /// <param name="playerProperties">A Hashtable of custom properties to be synced. Must use String-typed keys and serializable datatypes as values.</param>
-        protected internal Player(string nickName, int actorNumber, bool isLocal, Hashtable playerProperties)
+        protected internal PhotonPlayer(string nickName, int actorNumber, bool isLocal, Hashtable playerProperties)
         {
             this.IsLocal = isLocal;
             this.actorNumber = actorNumber;
@@ -175,7 +175,7 @@ namespace Photon.Realtime
         /// </summary>
         /// <param name="id">ActorNumber of the a player in this room.</param>
         /// <returns>Player or null.</returns>
-        public Player Get(int id)
+        public PhotonPlayer Get(int id)
         {
             if (this.RoomReference == null)
             {
@@ -187,7 +187,7 @@ namespace Photon.Realtime
 
         /// <summary>Gets this Player's next Player, as sorted by ActorNumber (Player.ID). Wraps around.</summary>
         /// <returns>Player or null.</returns>
-        public Player GetNext()
+        public PhotonPlayer GetNext()
         {
             return GetNextFor(this.ActorNumber);
         }
@@ -196,7 +196,7 @@ namespace Photon.Realtime
         /// <remarks>Useful when you pass something to the next player. For example: passing the turn to the next player.</remarks>
         /// <param name="currentPlayer">The Player for which the next is being needed.</param>
         /// <returns>Player or null.</returns>
-        public Player GetNextFor(Player currentPlayer)
+        public PhotonPlayer GetNextFor(PhotonPlayer currentPlayer)
         {
             if (currentPlayer == null)
             {
@@ -209,14 +209,14 @@ namespace Photon.Realtime
         /// <remarks>Useful when you pass something to the next player. For example: passing the turn to the next player.</remarks>
         /// <param name="currentPlayerId">The ActorNumber (Player.ID) for which the next is being needed.</param>
         /// <returns>Player or null.</returns>
-        public Player GetNextFor(int currentPlayerId)
+        public PhotonPlayer GetNextFor(int currentPlayerId)
         {
             if (this.RoomReference == null || this.RoomReference.Players == null || this.RoomReference.Players.Count < 2)
             {
                 return null;
             }
 
-            Dictionary<int, Player> players = this.RoomReference.Players;
+            Dictionary<int, PhotonPlayer> players = this.RoomReference.Players;
             int nextHigherId = int.MaxValue;    // we look for the next higher ID
             int lowestId = currentPlayerId;     // if we are the player with the highest ID, there is no higher and we return to the lowest player's id
 
@@ -298,7 +298,7 @@ namespace Photon.Realtime
         /// </summary>
         public override bool Equals(object p)
         {
-            Player pp = p as Player;
+            PhotonPlayer pp = p as PhotonPlayer;
             return (pp != null && this.GetHashCode() == pp.GetHashCode());
         }
 

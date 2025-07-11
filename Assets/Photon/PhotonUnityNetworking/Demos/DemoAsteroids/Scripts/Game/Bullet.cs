@@ -1,11 +1,11 @@
-﻿using Photon.Realtime;
+using Photon.Realtime;
 using UnityEngine;
 
 namespace Photon.Pun.Demo.Asteroids
 {
     public class Bullet : MonoBehaviour
     {
-        public Player Owner { get; private set; }
+        public PhotonPlayer Owner { get; private set; }
 
         public void Start()
         {
@@ -17,7 +17,7 @@ namespace Photon.Pun.Demo.Asteroids
             Destroy(gameObject);
         }
 
-        public void InitializeBullet(Player owner, Vector3 originalDirection, float lag)
+        public void InitializeBullet(PhotonPlayer owner, Vector3 originalDirection, float lag)
         {
             Owner = owner;
 
