@@ -1,4 +1,4 @@
-﻿// ----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // <copyright file="PunTurnManager.cs" company="Exit Games GmbH">
 //   PhotonNetwork Framework for Unity - Copyright (C) 2018 Exit Games GmbH
 // </copyright>
@@ -31,7 +31,7 @@ namespace Photon.Pun.UtilityScripts
         /// <summary>
         /// External definition for better garbage collection management, used in ProcessEvent.
         /// </summary>
-        Player sender;
+        PhotonPlayer sender;
         
         /// <summary>
         /// Wraps accessing the "turn" custom properties of a room.
@@ -111,7 +111,7 @@ namespace Photon.Pun.UtilityScripts
         /// <summary>
         /// The finished players.
         /// </summary>
-        private readonly HashSet<Player> finishedPlayers = new HashSet<Player>();
+        private readonly HashSet<PhotonPlayer> finishedPlayers = new HashSet<PhotonPlayer>();
 
         /// <summary>
         /// The turn manager event offset event message byte. Used internaly for defining data in Room Custom Properties
@@ -194,7 +194,7 @@ namespace Photon.Pun.UtilityScripts
         /// </summary>
         /// <returns><c>true</c>, if player finished the current turn, <c>false</c> otherwise.</returns>
         /// <param name="player">The Player to check for</param>
-        public bool GetPlayerFinishedTurn(Player player)
+        public bool GetPlayerFinishedTurn(PhotonPlayer player)
         {
             if (player != null && this.finishedPlayers != null && this.finishedPlayers.Contains(player))
             {
@@ -300,7 +300,7 @@ namespace Photon.Pun.UtilityScripts
         /// <param name="player">Player reference</param>
         /// <param name="turn">Turn Index</param>
         /// <param name="move">Move Object data</param>
-        void OnPlayerMove(Player player, int turn, object move);
+        void OnPlayerMove(PhotonPlayer player, int turn, object move);
 
         /// <summary>
         /// When a player finishes a turn (includes the action/move of that player)
@@ -308,7 +308,7 @@ namespace Photon.Pun.UtilityScripts
         /// <param name="player">Player reference</param>
         /// <param name="turn">Turn index</param>
         /// <param name="move">Move Object data</param>
-        void OnPlayerFinished(Player player, int turn, object move);
+        void OnPlayerFinished(PhotonPlayer player, int turn, object move);
 
 
         /// <summary>
@@ -395,7 +395,7 @@ namespace Photon.Pun.UtilityScripts
         /// </summary>
         /// <returns>The finished turn index</returns>
         /// <param name="player">Player reference</param>
-        public static int GetFinishedTurn(this Player player)
+        public static int GetFinishedTurn(this PhotonPlayer player)
         {
             Room room = PhotonNetwork.CurrentRoom;
             if (room == null || room.CustomProperties == null || !room.CustomProperties.ContainsKey(TurnPropKey))
@@ -412,7 +412,7 @@ namespace Photon.Pun.UtilityScripts
         /// </summary>
         /// <param name="player">Player Reference</param>
         /// <param name="turn">Turn Index</param>
-        public static void SetFinishedTurn(this Player player, int turn)
+        public static void SetFinishedTurn(this PhotonPlayer player, int turn)
         {
             Room room = PhotonNetwork.CurrentRoom;
             if (room == null || room.CustomProperties == null)

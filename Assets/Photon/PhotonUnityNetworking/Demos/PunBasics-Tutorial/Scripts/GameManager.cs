@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="Launcher.cs" company="Exit Games GmbH">
 //   Part of: Photon Unity Networking Demos
 // </copyright>
@@ -114,7 +114,7 @@ namespace Photon.Pun.Demo.PunBasics
         /// Called when a Photon Player got connected. We need to then load a bigger scene.
         /// </summary>
         /// <param name="other">Other.</param>
-        public override void OnPlayerEnteredRoom( Player other  )
+        public override void OnPlayerEnteredRoom( PhotonPlayer other  )
 		{
 			Debug.Log( "OnPlayerEnteredRoom() " + other.NickName); // not seen if you're the player connecting
 
@@ -130,7 +130,7 @@ namespace Photon.Pun.Demo.PunBasics
 		/// Called when a Photon Player got disconnected. We need to load a smaller scene.
 		/// </summary>
 		/// <param name="other">Other.</param>
-		public override void OnPlayerLeftRoom( Player other  )
+		public override void OnPlayerLeftRoom( PhotonPlayer other  )
 		{
 			Debug.Log( "OnPlayerLeftRoom() " + other.NickName ); // seen when other disconnects
 

@@ -1,4 +1,4 @@
-﻿namespace Photon.Pun
+namespace Photon.Pun
 {
     using Photon.Realtime;
 
@@ -32,7 +32,7 @@
         /// </summary>
         /// <param name="newOwner"></param>
         /// <param name="previousOwner"></param>
-        void OnOwnerChange(Player newOwner, Player previousOwner);
+        void OnOwnerChange(PhotonPlayer newOwner, PhotonPlayer previousOwner);
     }
 
     /// <summary>
@@ -45,6 +45,6 @@
         /// </summary>
         /// <param name="newOwner"></param>
         /// <param name="previousOwner"></param>
-        void OnControllerChange(Player newController, Player previousController);
+        void OnControllerChange(PhotonPlayer newController, PhotonPlayer previousController);
     }
 }

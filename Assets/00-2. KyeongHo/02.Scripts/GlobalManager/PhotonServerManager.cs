@@ -57,12 +57,12 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     {
         if (!PhotonNetwork.IsMasterClient) return;
 
-        Player[] players = PhotonNetwork.PlayerList;
+        PhotonPlayer[] players = PhotonNetwork.PlayerList;
         
         // 플레이어 목록을 섞기 (랜덤 팀 배정)
         for (int i = 0; i < players.Length; i++)
         {
-            Player temp = players[i];
+            PhotonPlayer temp = players[i];
             int randomIndex = UnityEngine.Random.Range(i, players.Length);
             players[i] = players[randomIndex];
             players[randomIndex] = temp;
@@ -92,13 +92,13 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
             // PhotonNetwork.LoadLevel("GameScene");
         }
         string team;
-        Player player = PhotonNetwork.LocalPlayer;
+        PhotonPlayer player = PhotonNetwork.LocalPlayer;
         team = GetPlayerTeam(player);
         OnGameStarted?.Invoke(team);
         
     }
     // 현재 플레이어의 팀 정보를 가져오는 메서드
-    public string GetPlayerTeam(Player player)
+    public string GetPlayerTeam(PhotonPlayer player)
     {
         if (player.CustomProperties.TryGetValue(TEAM_PROPERTY_KEY, out object team))
         {
@@ -110,7 +110,7 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     // 모든 플레이어의 팀 정보를 출력하는 메서드 (디버깅용)
     public void PrintAllPlayerTeams()
     {
-        foreach (Player player in PhotonNetwork.PlayerList)
+        foreach (PhotonPlayer player in PhotonNetwork.PlayerList)
         {
             Debug.Log($"플레이어: {player.NickName}, 팀: {GetPlayerTeam(player)}");
         }
@@ -157,7 +157,7 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
             StartGame();
         }
     }
-    public override void OnPlayerEnteredRoom(Player newPlayer)
+    public override void OnPlayerEnteredRoom(PhotonPlayer newPlayer)
     {
         Debug.Log($"새로운 플레이어 입장: {newPlayer.NickName}");
         Debug.Log($"현재 플레이어 수: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}");
@@ -170,7 +170,7 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
             // StartGame();
         }
     }
-    public override void OnPlayerLeftRoom(Player otherPlayer)
+    public override void OnPlayerLeftRoom(PhotonPlayer otherPlayer)
     {
         Debug.Log($"플레이어 퇴장: {otherPlayer.NickName}");
         Debug.Log($"현재 플레이어 수: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}");

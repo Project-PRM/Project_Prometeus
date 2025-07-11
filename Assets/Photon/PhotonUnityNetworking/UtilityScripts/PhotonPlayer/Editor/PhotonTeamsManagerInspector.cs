@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PhotonTeamsManagerEditor.cs" company="Exit Games GmbH">
 //   Part of: Photon Unity Utilities, 
 // </copyright>
@@ -97,7 +97,7 @@ namespace Photon.Pun.UtilityScripts
                     {
                         foldouts[availableTeam.Code] = true;
                     }
-                    Player[] teamMembers;
+                    PhotonPlayer[] teamMembers;
                     if (photonTeams.TryGetTeamMembers(availableTeam, out teamMembers) && teamMembers != null)
                     {
                         foldouts[availableTeam.Code] = EditorGUILayout.Foldout(foldouts[availableTeam.Code],
