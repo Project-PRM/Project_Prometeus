@@ -8,13 +8,16 @@ public class PlayerMove : PlayerActivity
 {
     private Vector2 _movement;
     private CharacterController _controller;
-    // 멀티용
-    private PhotonView _photonView;
 
-    private void Awake()
+    private const float GRAVITY = -9.81f;
+    private float _yVelocity = 0;
+
+    private bool _isSprinting = false;
+
+    protected override void Start()
     {
+        base.Start();
         _controller = GetComponent<CharacterController>();
-        _photonView = GetComponent<PhotonView>();
     }
 
     public void OnMove(InputAction.CallbackContext callback)
@@ -23,7 +26,26 @@ public class PlayerMove : PlayerActivity
 
         if (callback.performed || callback.canceled)
         {
-            _movement = callback.ReadValue<Vector2>();
+            Vector2 input = callback.ReadValue<Vector2>();
+            _movement = input;
+            _owner.Animator.SetFloat("Move", _movement.magnitude);
+        }
+    }
+
+    public void OnSprint(InputAction.CallbackContext callback)
+    {
+        // 대시/스프린트 추가할 경우 사용
+        if (!_photonView.IsMine) return;
+
+        if (callback.started || callback.performed)
+        {
+            _isSprinting = true;
+            Debug.Log("Sprint ON");
+        }
+        else if (callback.canceled)
+        {
+            _isSprinting = false;
+            Debug.Log("Sprint OFF");
         }
     }
 
@@ -33,14 +55,34 @@ public class PlayerMove : PlayerActivity
 
         Vector3 move = new Vector3(_movement.x, 0, _movement.y);
 
-        // 이동
-        _controller.Move(move * 5f * Time.deltaTime);
-
         // 회전 (입력 방향이 있을 때만)
         if (move.sqrMagnitude > 0.001f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(move);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 30f * Time.deltaTime);
+        }
+
+        // 중력
+        if (_controller.isGrounded)
+        {
+            _yVelocity = -1f;
+        }
+        else
+        {
+            _yVelocity += GRAVITY * Time.deltaTime;
+        }
+
+        move.y = _yVelocity;
+
+        // 이동
+        if (_isSprinting)
+        {
+            // 매직넘버 : 임시 (PlayerStat 관련 미구현
+            _controller.Move(move * 10f * Time.deltaTime);
+        }
+        else
+        {
+            _controller.Move(move * 5f * Time.deltaTime);
         }
     }
 }
