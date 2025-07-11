@@ -369,12 +369,12 @@ namespace Photon.Realtime
 			Debug.Log(this.GetFormattedTimestamp() + " SupportLogger OnRoomListUpdate(roomList). roomList.Count: " + roomList.Count);
         }
 
-        public void OnPlayerEnteredRoom(Player newPlayer)
+        public void OnPlayerEnteredRoom(PhotonPlayer newPlayer)
         {
 			Debug.Log(this.GetFormattedTimestamp() + " SupportLogger OnPlayerEnteredRoom(" + newPlayer+").");
         }
 
-        public void OnPlayerLeftRoom(Player otherPlayer)
+        public void OnPlayerLeftRoom(PhotonPlayer otherPlayer)
         {
 			Debug.Log(this.GetFormattedTimestamp() + " SupportLogger OnPlayerLeftRoom(" + otherPlayer+").");
         }
@@ -384,12 +384,12 @@ namespace Photon.Realtime
 			Debug.Log(this.GetFormattedTimestamp() + " SupportLogger OnRoomPropertiesUpdate(propertiesThatChanged).");
         }
 
-        public void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+        public void OnPlayerPropertiesUpdate(PhotonPlayer targetPlayer, Hashtable changedProps)
         {
 			Debug.Log(this.GetFormattedTimestamp() + " SupportLogger OnPlayerPropertiesUpdate(targetPlayer,changedProps).");
         }
 
-        public void OnMasterClientSwitched(Player newMasterClient)
+        public void OnMasterClientSwitched(PhotonPlayer newMasterClient)
         {
 			Debug.Log(this.GetFormattedTimestamp() + " SupportLogger OnMasterClientSwitched(" + newMasterClient+").");
         }

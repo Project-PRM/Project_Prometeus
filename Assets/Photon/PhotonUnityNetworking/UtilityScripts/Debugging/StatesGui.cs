@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="TabViewManager.cs" company="Exit Games GmbH">
 // </copyright>
 // <summary>
@@ -143,7 +143,7 @@ namespace Photon.Pun.UtilityScripts
             }
             if (Others)
             {
-                foreach (Player player in PhotonNetwork.PlayerListOthers)
+                foreach (PhotonPlayer player in PhotonNetwork.PlayerListOthers)
                 {
                     GUILayout.Label(PlayerToString(player));
                 }
@@ -199,7 +199,7 @@ namespace Photon.Pun.UtilityScripts
             GUILayout.EndArea();
         }
 
-        private string PlayerToString(Player player)
+        private string PlayerToString(PhotonPlayer player)
         {
             if (PhotonNetwork.NetworkingClient == null)
             {

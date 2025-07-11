@@ -1,4 +1,4 @@
-﻿using ExitGames.Client.Photon;
+using ExitGames.Client.Photon;
 using Photon.Realtime;
 using System.Collections.Generic;
 using UnityEngine;
@@ -116,7 +116,7 @@ namespace Photon.Pun.Demo.Asteroids
                 playerListEntries = new Dictionary<int, GameObject>();
             }
 
-            foreach (Player p in PhotonNetwork.PlayerList)
+            foreach (PhotonPlayer p in PhotonNetwork.PlayerList)
             {
                 GameObject entry = Instantiate(PlayerListEntryPrefab);
                 entry.transform.SetParent(InsideRoomPanel.transform);
@@ -154,7 +154,7 @@ namespace Photon.Pun.Demo.Asteroids
             playerListEntries = null;
         }
 
-        public override void OnPlayerEnteredRoom(Player newPlayer)
+        public override void OnPlayerEnteredRoom(PhotonPlayer newPlayer)
         {
             GameObject entry = Instantiate(PlayerListEntryPrefab);
             entry.transform.SetParent(InsideRoomPanel.transform);
@@ -166,7 +166,7 @@ namespace Photon.Pun.Demo.Asteroids
             StartGameButton.gameObject.SetActive(CheckPlayersReady());
         }
 
-        public override void OnPlayerLeftRoom(Player otherPlayer)
+        public override void OnPlayerLeftRoom(PhotonPlayer otherPlayer)
         {
             Destroy(playerListEntries[otherPlayer.ActorNumber].gameObject);
             playerListEntries.Remove(otherPlayer.ActorNumber);
@@ -174,7 +174,7 @@ namespace Photon.Pun.Demo.Asteroids
             StartGameButton.gameObject.SetActive(CheckPlayersReady());
         }
 
-        public override void OnMasterClientSwitched(Player newMasterClient)
+        public override void OnMasterClientSwitched(PhotonPlayer newMasterClient)
         {
             if (PhotonNetwork.LocalPlayer.ActorNumber == newMasterClient.ActorNumber)
             {
@@ -182,7 +182,7 @@ namespace Photon.Pun.Demo.Asteroids
             }
         }
 
-        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+        public override void OnPlayerPropertiesUpdate(PhotonPlayer targetPlayer, Hashtable changedProps)
         {
             if (playerListEntries == null)
             {
@@ -284,7 +284,7 @@ namespace Photon.Pun.Demo.Asteroids
                 return false;
             }
 
-            foreach (Player p in PhotonNetwork.PlayerList)
+            foreach (PhotonPlayer p in PhotonNetwork.PlayerList)
             {
                 object isPlayerReady;
                 if (p.CustomProperties.TryGetValue(AsteroidsGame.PLAYER_READY, out isPlayerReady))

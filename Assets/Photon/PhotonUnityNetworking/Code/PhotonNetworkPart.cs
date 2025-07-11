@@ -82,11 +82,11 @@ namespace Photon.Pun
         }
 
         /// <summary>Parameters: PhotonView for which ownership changed, previous owner of the view.</summary>
-        private static event Action<PhotonView, Player> OnOwnershipRequestEv;
+        private static event Action<PhotonView, PhotonPlayer> OnOwnershipRequestEv;
         /// <summary>Parameters: PhotonView for which ownership was requested, player who requests ownership.</summary>
-        private static event Action<PhotonView, Player> OnOwnershipTransferedEv;
+        private static event Action<PhotonView, PhotonPlayer> OnOwnershipTransferedEv;
         /// <summary>Parameters: PhotonView for which ownership was requested, player who requested (but didn't get) ownership.</summary>
-        private static event Action<PhotonView, Player> OnOwnershipTransferFailedEv;
+        private static event Action<PhotonView, PhotonPlayer> OnOwnershipTransferFailedEv;
 
         /// <summary>
         /// Registers an object for callbacks for the implemented callback-interfaces.
@@ -354,7 +354,7 @@ namespace Photon.Pun
         /// <summary>
         /// Executes a received RPC event
         /// </summary>
-        internal static void ExecuteRpc(Hashtable rpcData, Player sender)
+        internal static void ExecuteRpc(Hashtable rpcData, PhotonPlayer sender)
         {
             if (rpcData == null || !rpcData.ContainsKey(keyByteZero))
             {
@@ -1192,7 +1192,7 @@ namespace Photon.Pun
         static RaiseEventOptions RpcOptionsToAll = new RaiseEventOptions();
 
 
-        internal static void RPC(PhotonView view, string methodName, RpcTarget target, Player player, bool encrypt, params object[] parameters)
+        internal static void RPC(PhotonView view, string methodName, RpcTarget target, PhotonPlayer player, bool encrypt, params object[] parameters)
         {
             if (blockedSendingGroups.Contains(view.Group))
             {
@@ -1791,7 +1791,7 @@ namespace Photon.Pun
         /// <summary>
         /// Reads updates created by OnSerializeWrite
         /// </summary>
-        private static void OnSerializeRead(object[] data, Player sender, int networkTime, short correctPrefix)
+        private static void OnSerializeRead(object[] data, PhotonPlayer sender, int networkTime, short correctPrefix)
         {
             // read view ID from key (byte)0: a int-array (PUN 1.17++)
             int viewID = (int)data[SyncViewId];
@@ -2189,7 +2189,7 @@ namespace Photon.Pun
         private static void OnEvent(EventData photonEvent)
         {
             int actorNr = photonEvent.Sender;
-            Player originatingPlayer = null;
+            PhotonPlayer originatingPlayer = null;
             if (actorNr > 0 && NetworkingClient.CurrentRoom != null)
             {
                 originatingPlayer = NetworkingClient.CurrentRoom.GetPlayer(actorNr);
@@ -2330,7 +2330,7 @@ namespace Photon.Pun
                                 if (requestedFromOwnerId == currentPvOwnerId || (requestedFromOwnerId == 0 && currentPvOwnerId == MasterClient.ActorNumber) || currentPvOwnerId == 0)
                                 {
                                     // a takeover is successful automatically, if taken from current owner
-                                    Player prevOwner = requestedView.Owner;
+                                    PhotonPlayer prevOwner = requestedView.Owner;
 
                                     requestedView.OwnerActorNr = actorNr;
                                     requestedView.ControllerActorNr = actorNr;
@@ -2383,7 +2383,7 @@ namespace Photon.Pun
                             if (requestedView.OwnershipTransfer == OwnershipOption.Takeover ||
                                 (requestedView.OwnershipTransfer == OwnershipOption.Request && (originatingPlayer == requestedView.Controller || originatingPlayer == requestedView.Owner)))
                             {
-                                Player prevOwner = requestedView.Owner;
+                                PhotonPlayer prevOwner = requestedView.Owner;
 
                                 requestedView.OwnerActorNr= newOwnerId;
                                 requestedView.ControllerActorNr = newOwnerId;
@@ -2436,8 +2436,8 @@ namespace Photon.Pun
                                 continue;
                             }
 
-                            Player prevOwner = view.Owner;
-                            Player newOwner = CurrentRoom.GetPlayer(newOwnerId, true);
+                            PhotonPlayer prevOwner = view.Owner;
+                            PhotonPlayer newOwner = CurrentRoom.GetPlayer(newOwnerId, true);
 
                             view.OwnerActorNr= newOwnerId;
                             view.ControllerActorNr = newOwnerId;

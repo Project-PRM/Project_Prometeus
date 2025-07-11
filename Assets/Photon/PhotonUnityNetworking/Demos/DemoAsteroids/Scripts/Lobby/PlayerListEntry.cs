@@ -1,4 +1,4 @@
-﻿// --------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------
 // <copyright file="PlayerListEntry.cs" company="Exit Games GmbH">
 //   Part of: Asteroid Demo,
 // </copyright>
@@ -83,7 +83,7 @@ namespace Photon.Pun.Demo.Asteroids
 
         private void OnPlayerNumberingChanged()
         {
-            foreach (Player p in PhotonNetwork.PlayerList)
+            foreach (PhotonPlayer p in PhotonNetwork.PlayerList)
             {
                 if (p.ActorNumber == ownerId)
                 {

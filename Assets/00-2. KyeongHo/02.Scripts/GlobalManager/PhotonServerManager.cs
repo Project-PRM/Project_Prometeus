@@ -2,7 +2,6 @@ using System;
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
-using PhotonPlayer = Photon.Realtime.Player;
 using UnityEngine;
 
 public class PhotonServerManager : PunSingleton<PhotonServerManager>
