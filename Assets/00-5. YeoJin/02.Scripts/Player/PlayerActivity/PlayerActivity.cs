@@ -1,16 +1,15 @@
+using Photon.Pun;
 using UnityEngine;
 
-public class PlayerActivity : MonoBehaviour
+public abstract class PlayerActivity : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    protected Player _owner { get; private set; }
+    protected PhotonView _photonView { get; private set; }
 
-    // Update is called once per frame
-    void Update()
+    protected virtual void Start()
     {
-        
+        _owner = GetComponent<Player>();
+
+        _photonView = _owner.PhotonView;
     }
 }
