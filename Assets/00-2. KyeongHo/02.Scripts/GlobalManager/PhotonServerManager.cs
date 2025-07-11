@@ -179,7 +179,6 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
         Debug.Log($"InLobby : {PhotonNetwork.InLobby}");
  
         // 로비 입장 후 자동으로 매치 찾기 시작
-        CreateOrJoinRandomRoom();
     }
     public override void OnJoinedRoom()
     {
@@ -196,6 +195,7 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     {
         Debug.Log($"새로운 플레이어 입장: {newPlayer.NickName}");
         Debug.Log($"현재 플레이어 수: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}");
+        EventManager.Broadcast(new GameStartEvent(GetPlayerTeam(PhotonNetwork.LocalPlayer)));
         
         // 15명이 모두 모이면 게임 시작 (마스터 클라이언트가)
         if (PhotonNetwork.IsMasterClient)
