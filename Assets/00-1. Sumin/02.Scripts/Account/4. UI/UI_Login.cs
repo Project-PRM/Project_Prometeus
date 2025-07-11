@@ -1,9 +1,13 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UI_Login : UI_PopUp
 {
+    [Header("# Scene")]
+    [SerializeField] private string _nextSceneName = "KyeongHo_LobbyTest";
+
     [Header("# UIs")]
     [SerializeField] private TMP_InputField _emailInputField;
     [SerializeField] private TMP_InputField _passwordInputField;
@@ -36,6 +40,8 @@ public class UI_Login : UI_PopUp
         if (result.Success)
         {
             Debug.Log("로그인 성공");
+            // TODO : 이거 바꾸셈
+            SceneManager.LoadScene(_nextSceneName);
         }
         else
         {
