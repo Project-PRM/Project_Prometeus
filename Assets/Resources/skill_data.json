@@ -1,0 +1,50 @@
+{
+  "BasicAttack": {
+    "SkillName": "BasicAttack",
+    "Damage": 10.0,
+    "BuffAmount": 0.0,
+    "DebuffAmount": 0.0,
+    "Cost": 1.0,
+    "Cooltime": 0.0,
+    "Duration": 0.0,
+    "Radius": 0.0,
+    "MaxRange": 1.0,
+    "Speed": 0.0
+  },
+  "DummyPassive": {
+    "SkillName": "DummyPassive",
+    "Damage": 10.0,
+    "BuffAmount": 0.0,
+    "DebuffAmount": 0.0,
+    "Cost": 1.0,
+    "Cooltime": 0.0,
+    "Duration": 0.0,
+    "Radius": 0.0,
+    "MaxRange": 1.0,
+    "Speed": 0.0
+  },
+  "DummyUltimate": {
+    "SkillName": "DummyUltimate",
+    "Damage": 10.0,
+    "BuffAmount": 0.0,
+    "DebuffAmount": 0.0,
+    "Cost": 1.0,
+    "Cooltime": 0.0,
+    "Duration": 0.0,
+    "Radius": 0.0,
+    "MaxRange": 1.0,
+    "Speed": 0.0
+  },
+  "NewSkill3": {
+    "SkillName": "DummySkill",
+    "Damage": 10.0,
+    "BuffAmount": 0.0,
+    "DebuffAmount": 0.0,
+    "Cost": 1.0,
+    "Cooltime": 0.0,
+    "Duration": 0.0,
+    "Radius": 0.0,
+    "MaxRange": 1.0,
+    "Speed": 0.0
+  }
+}
