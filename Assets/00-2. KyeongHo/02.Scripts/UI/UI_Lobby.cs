@@ -34,7 +34,7 @@ public class UI_Lobby : MonoBehaviour
       // TODO : 지금은 그냥 GameScene으로 넘어가지만, 나중엔 인원이 꽉 차면 알아서 게임 시작
       
       if(PhotonNetwork.IsMasterClient)
-         PhotonNetwork.LoadLevel(GameScene);
+         PhotonNetwork.LoadLevel(2);
       else
       {
          Debug.Log("방장만 시작 가능");

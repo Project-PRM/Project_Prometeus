@@ -55,7 +55,7 @@ public class UI_Login : UI_PopUp
         {
             Debug.Log("로그인 성공");
             // TODO : 이거 바꾸셈
-            SceneManager.LoadScene(_nextSceneName);
+            SceneManager.LoadScene(1);
         }
         else
         {
