@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class UI_Login : UI_PopUp
 {
     [Header("# Scene")]
-    [SerializeField] private string _nextSceneName = "KyoungHo_LobbyTest";
+    [SerializeField] private string _nextSceneName = "Lobby_copied";
 
     [Header("# UIs")]
     [SerializeField] private TMP_InputField _emailInputField;
