@@ -48,7 +48,6 @@ public class EnemyBTBase : MonoBehaviour
         _target = target;
         _behaviorAgent.SetVariableValue("Target", target);
         _behaviorAgent.SetVariableValue("IsTargetDetected", true);
-        Debug.Log("TargetOn");
     }
  
 }
