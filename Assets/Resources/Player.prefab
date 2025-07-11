@@ -1140,6 +1140,7 @@ GameObject:
   - component: {fileID: 7011826955886075382}
   - component: {fileID: 3180342013625804560}
   - component: {fileID: 839721842557911230}
+  - component: {fileID: 3177763884507239518}
   - component: {fileID: 3284400772661504412}
   - component: {fileID: 6612345965212137129}
   - component: {fileID: 3288031797573168734}
@@ -1240,8 +1241,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Look[/Mouse/delta]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 839721842557911230}
-        m_TargetAssemblyTypeName: PlayerAttack, Assembly-CSharp
+      - m_Target: {fileID: 3177763884507239518}
+        m_TargetAssemblyTypeName: CharacterBehaviour, Assembly-CSharp
         m_MethodName: OnAttack
         m_Mode: 0
         m_Arguments:
@@ -1366,11 +1367,24 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4181686743975786951}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6bd45f22d4a6d024ab8dca01a4b90b5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3177763884507239518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4181686743975786951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e53f40355875f4f4da79666d07697068, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _characterName: 0
 --- !u!95 &3284400772661504412
 Animator:
   serializedVersion: 7
