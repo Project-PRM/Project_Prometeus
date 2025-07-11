@@ -4,6 +4,7 @@ using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class PhotonServerManager : PunSingleton<PhotonServerManager>
 {
@@ -11,7 +12,8 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     private readonly TypedLobby _lobbyA = new TypedLobby("A", LobbyType.Default);
     private readonly TypedLobby _lobbyB = new TypedLobby("B", LobbyType.Default);
     
-    private const int MAX_PLAYERS = 15;
+    [SerializeField]
+    private int MaxPlayers = 15;
     private const int PLAYERS_PER_TEAM = 3;
     private const string TEAM_PROPERTY_KEY = "team";
     // 팀 구분용 문자열
@@ -41,14 +43,14 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     {
         RoomOptions roomOptions = new RoomOptions
         {
-            MaxPlayers = MAX_PLAYERS,
+            MaxPlayers = MaxPlayers,
             IsVisible = true,
             IsOpen = true
         };
 
         PhotonNetwork.JoinRandomOrCreateRoom(
             expectedCustomRoomProperties: null,
-            expectedMaxPlayers: MAX_PLAYERS,
+            expectedMaxPlayers: (byte)MaxPlayers,
             matchingType: MatchmakingMode.FillRoom,
             typedLobby: _lobbyA,
             sqlLobbyFilter: null,
@@ -198,7 +200,7 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
         // 15명이 모두 모이면 게임 시작 (마스터 클라이언트가)
         if (PhotonNetwork.IsMasterClient)
         {
-            if (PhotonNetwork.CurrentRoom.PlayerCount >= MAX_PLAYERS)
+            if (PhotonNetwork.CurrentRoom.PlayerCount >= MaxPlayers)
             {
                 //방이 꽉차면 더 이상 새로운 플레이어가 들어오지 못함
                 PhotonNetwork.CurrentRoom.IsOpen = false;
@@ -223,7 +225,7 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
         // 랜덤 방 입장 실패 시 새로운 방 생성
         RoomOptions roomOptions = new RoomOptions
         {
-            MaxPlayers = MAX_PLAYERS,
+            MaxPlayers = MaxPlayers,
             IsVisible = true,
             IsOpen = true
         };
