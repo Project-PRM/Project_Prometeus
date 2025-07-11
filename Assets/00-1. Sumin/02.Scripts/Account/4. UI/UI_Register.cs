@@ -56,14 +56,6 @@ public class UI_Register : UI_PopUp
             LoginUIManager.Instance.ShowError("비밀번호와 확인이 일치하지 않습니다.");
             return;
         }
-
-        string message;
-        Account account;
-        if(!Account.TryCreate(email, nickname, out account, out message))
-        {
-            LoginUIManager.Instance.ShowError(message);
-            return;
-        }
         
         AccountResult result = await AccountManager.Instance.RegisterAsync(email, nickname, password);
         if (result.Success)
