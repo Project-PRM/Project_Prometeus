@@ -8,10 +8,13 @@ public class Player : MonoBehaviour
     private Dictionary<Type, PlayerActivity> _cache = new();
     private PhotonView _photonView;
     public PhotonView PhotonView => _photonView;
+    private Animator _animator;
+    public Animator Animator => _animator;
 
     private void Awake()
     {
         _photonView = GetComponent<PhotonView>();
+        _animator = GetComponent<Animator>();
     }
 
     public T GetActivity<T>() where T : PlayerActivity

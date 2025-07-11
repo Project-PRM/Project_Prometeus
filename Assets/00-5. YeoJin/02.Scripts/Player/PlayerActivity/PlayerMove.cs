@@ -12,9 +12,9 @@ public class PlayerMove : PlayerActivity
     private const float GRAVITY = -9.81f;
     private float _yVelocity = 0;
 
-    protected override void Awake()
+    protected override void Start()
     {
-        base.Awake();
+        base.Start();
         _controller = GetComponent<CharacterController>();
     }
 
@@ -24,7 +24,9 @@ public class PlayerMove : PlayerActivity
 
         if (callback.performed || callback.canceled)
         {
-            _movement = callback.ReadValue<Vector2>();
+            Vector2 input = callback.ReadValue<Vector2>();
+            _movement = input;
+            _owner.Animator.SetFloat("Move", _movement.magnitude);
         }
     }
 
