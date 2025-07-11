@@ -6,7 +6,7 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/00-2. KyeongHo/01.Scenes/KyoungHo_MatchTest.unity
+    path: Assets/00-2. KyeongHo/01.Scenes/KyoungHo_LobbyTest.unity
     guid: 5453cd3b4c9dfb84a81cf0dea80f205b
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 99f9c9493070a9d4c979a8fec7c5a8d3, type: 2}
