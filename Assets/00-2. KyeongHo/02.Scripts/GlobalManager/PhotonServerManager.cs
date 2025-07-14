@@ -1,10 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PhotonServerManager : PunSingleton<PhotonServerManager>
 {
@@ -12,26 +13,30 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     private readonly TypedLobby _lobbyA = new TypedLobby("A", LobbyType.Default);
     private readonly TypedLobby _lobbyB = new TypedLobby("B", LobbyType.Default);
     
-    [SerializeField]
-    private int MaxPlayers = 15;
+    public int MaxPlayers = 15;
     private const int PLAYERS_PER_TEAM = 3;
     private const string TEAM_PROPERTY_KEY = "team";
     // 팀 구분용 문자열
     private readonly string[] teamNames = { "A", "B", "C", "D", "E" };
     private string _myTeamName =  string.Empty;
+    public string MyTeamName => _myTeamName;
+
+    public Dictionary<int, int> TeamIndex = new();
     
     private void Init()
     {
         PhotonNetwork.SendRate = 60;
         PhotonNetwork.SerializationRate = 60;
         PhotonNetwork.GameVersion = _gameVersion;
-        
-        // 방장이 로드한 씬으로 다른 참여자가 똑같이 이동하게끔 동기화 해주는 옵션
         PhotonNetwork.AutomaticallySyncScene = true;
-        PhotonNetwork.AuthValues = new AuthenticationValues();
-        PhotonNetwork.AuthValues.UserId = AccountManager.Instance.MyAccount.UserId;
-        
-        Debug.Log($"Photon UserId : {PhotonNetwork.AuthValues.UserId}");
+
+        string userId = AccountManager.Instance.MyAccount.UserId;
+        string nickname = AccountManager.Instance.MyAccount.Nickname;
+
+        PhotonNetwork.AuthValues = new AuthenticationValues(userId);
+        PhotonNetwork.NickName = nickname;
+
+        Debug.Log($"[Init] Photon UserId: {userId}, Nickname: {nickname}");
         PhotonNetwork.ConnectUsingSettings();
     }
     private void Start()
@@ -39,33 +44,15 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
         Init();
     }
     // 솔로큐 매치 찾기 - 15인 랜덤 룸 생성 또는 참여
-    public void CreateOrJoinRandomRoom()
+    public void JoinRandomRoom()
     {
-        RoomOptions roomOptions = new RoomOptions
-        {
-            MaxPlayers = MaxPlayers,
-            IsVisible = true,
-            IsOpen = true
-        };
-
-        PhotonNetwork.JoinRandomOrCreateRoom(
-            expectedCustomRoomProperties: null,
-            expectedMaxPlayers: (byte)MaxPlayers,
-            matchingType: MatchmakingMode.FillRoom,
-            typedLobby: _lobbyA,
-            sqlLobbyFilter: null,
-            roomName: null,
-            roomOptions: roomOptions,
-            expectedUsers: null
-        );
+        PhotonNetwork.JoinRandomRoom();
+        // 랜덤 방 입장 실패 시 새로운 방 생성
     }
     // 팀 배정 메서드
-    private void AssignTeams()
+    public void AssignTeams()
     {
         if (!PhotonNetwork.IsMasterClient) return;
-
-        //테스트용으로 함수 분리함
-        // AssignDummyTeamsTest(PhotonNetwork.PlayerList);
         
         PhotonPlayer[] players = PhotonNetwork.PlayerList;
         
@@ -88,47 +75,25 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
                 props[TEAM_PROPERTY_KEY] = teamNames[teamIndex];
                 players[i].SetCustomProperties(props);
                 
+                TeamIndex[players[i].ActorNumber] = teamIndex;
                 Debug.Log($"플레이어 {players[i].NickName}를 팀 {teamNames[teamIndex]}에 배정");
             }
         }
+        //팀이 전원 불러와지지 않은 채 시작할 수 있어서 임의로 2초 줌
+        Invoke(nameof(StartGame), 3f);
+        
     }
-    // public void AssignDummyTeamsTest(PhotonPlayer[] players)
-    // {
-    //     // 플레이어 목록을 섞기 (랜덤 팀 배정)
-    //     for (int i = 0; i < players.Length; i++)
-    //     {
-    //         PhotonPlayer temp = players[i];
-    //         int randomIndex = UnityEngine.Random.Range(i, players.Length);
-    //         players[i] = players[randomIndex];
-    //         players[randomIndex] = temp;
-    //     }
-    //
-    //     // 3명씩 팀 배정
-    //     for (int i = 0; i < players.Length; i++)
-    //     {
-    //         int teamIndex = i / PLAYERS_PER_TEAM;
-    //         if (teamIndex < teamNames.Length)
-    //         {
-    //             Hashtable props = new Hashtable
-    //             {
-    //                 [TEAM_PROPERTY_KEY] = teamNames[teamIndex]
-    //             };
-    //             players[i].SetCustomProperties(props);
-    //         
-    //             Debug.Log($"플레이어 {players[i].NickName}를 팀 {teamNames[teamIndex]}에 배정");
-    //         }
-    //     }
-    // }
+
     // 게임 시작 (씬 전환)
     private void StartGame()
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            Debug.Log("게임 시작! 게임 씬으로 전환합니다.");
+            //Debug.Log("게임 시작! 게임 씬으로 전환합니다.");
+            
             PrintAllPlayerTeams();
+            PhotonNetwork.LoadLevel(2);
         }
-        EventManager.Broadcast(new GameStartEvent(GetPlayerTeam(PhotonNetwork.LocalPlayer)));
-
     }
     // 현재 플레이어의 팀 정보를 가져오는 메서드
     public string GetPlayerTeam(PhotonPlayer player)
@@ -138,6 +103,15 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
             return team.ToString();
         }
         return "None";
+    }
+    public override void OnPlayerPropertiesUpdate(PhotonPlayer targetPlayer, Hashtable changedProps)
+    {
+        if (targetPlayer.IsLocal && changedProps.ContainsKey("team"))
+        {
+            _myTeamName = changedProps["team"] as string;
+            EventManager.Broadcast(new GameStartEvent(GetPlayerTeam(PhotonNetwork.LocalPlayer)));
+            Debug.Log($"[LocalPlayer] 팀 이름 갱신됨: {_myTeamName}");
+        }
     }
 
     // 모든 플레이어의 팀 정보를 출력하는 메서드 (디버깅용)
@@ -168,8 +142,6 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
         Debug.Log(PhotonNetwork.CloudRegion);
         Debug.Log($"InLobby : {PhotonNetwork.InLobby}");
         
-        
-
         PhotonNetwork.JoinLobby();
     }
 
@@ -177,12 +149,13 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     {
         Debug.Log("로비(채널) 입장 완료!");
         Debug.Log($"InLobby : {PhotonNetwork.InLobby}");
- 
+
         // 로비 입장 후 자동으로 매치 찾기 시작
     }
     public override void OnJoinedRoom()
     {
         Debug.Log($"방 입장 완료! 현재 플레이어 수: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}");
+        EventManager.Broadcast(new GameStartEvent(GetPlayerTeam(PhotonNetwork.LocalPlayer)));
         
         // OnPlayerEnteredRoom에서 처리하는걸로 수정중
         // if (PhotonNetwork.CurrentRoom.PlayerCount >= MAX_PLAYERS)
@@ -193,29 +166,17 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     }
     public override void OnPlayerEnteredRoom(PhotonPlayer newPlayer)
     {
+  
         Debug.Log($"새로운 플레이어 입장: {newPlayer.NickName}");
         Debug.Log($"현재 플레이어 수: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}");
         EventManager.Broadcast(new GameStartEvent(GetPlayerTeam(PhotonNetwork.LocalPlayer)));
-        
-        // 15명이 모두 모이면 게임 시작 (마스터 클라이언트가)
-        if (PhotonNetwork.IsMasterClient)
-        {
-            if (PhotonNetwork.CurrentRoom.PlayerCount >= MaxPlayers)
-            {
-                //방이 꽉차면 더 이상 새로운 플레이어가 들어오지 못함
-                PhotonNetwork.CurrentRoom.IsOpen = false;
-                
-                AssignTeams();
-                //팀이 전원 불러와지지 않은 채 시작할 수 있어서 임의로 2초 줌
-                Invoke(nameof(StartGame), 5f);
-            }    
-        }
-        
     }
+
     public override void OnPlayerLeftRoom(PhotonPlayer otherPlayer)
     {
         Debug.Log($"플레이어 퇴장: {otherPlayer.NickName}");
         Debug.Log($"현재 플레이어 수: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}");
+        EventManager.Broadcast(new GameStartEvent(GetPlayerTeam(PhotonNetwork.LocalPlayer)));
     }
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
@@ -230,7 +191,16 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
             IsOpen = true
         };
         
-        PhotonNetwork.CreateRoom(null, roomOptions);
+        PhotonNetwork.JoinRandomOrCreateRoom(
+            expectedCustomRoomProperties: null,
+            expectedMaxPlayers: (byte)MaxPlayers,
+            matchingType: MatchmakingMode.FillRoom,
+            typedLobby: _lobbyA,
+            sqlLobbyFilter: null,
+            roomName: null,
+            roomOptions: roomOptions,
+            expectedUsers: null
+        );
     }
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
