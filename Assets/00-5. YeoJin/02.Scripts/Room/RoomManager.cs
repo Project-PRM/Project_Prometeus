@@ -2,19 +2,15 @@ using Photon.Pun;
 using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
-using ExitGames.Client.Photon;
-using Hashtable = ExitGames.Client.Photon.Hashtable;
-using System;
-using Random = UnityEngine.Random;
 using System.Linq;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
+using Random = UnityEngine.Random;
 
 public class RoomManager : PunSingleton<RoomManager>
 {
     [Header("Spawn Points")]
     [SerializeField] private Transform[] spawnPoints;
     [SerializeField]private Vector3[] _spawnOffset; 
-
-    private Dictionary<string, Transform> _teamSpawnDict;
 
     private void Start()
     {

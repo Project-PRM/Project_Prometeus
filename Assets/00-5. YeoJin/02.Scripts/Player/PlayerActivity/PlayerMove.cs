@@ -12,7 +12,6 @@ public class PlayerMove : PlayerActivity
     private const float GRAVITY = -9.81f;
     private float _yVelocity = 0;
 
-    [SerializeField] private float lookSensitivity = 0.1f;
     private bool _isSprinting = false;
 
     private Camera _mainCamera;

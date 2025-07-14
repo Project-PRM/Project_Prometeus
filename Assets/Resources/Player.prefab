@@ -1145,6 +1145,7 @@ GameObject:
   - component: {fileID: 6612345965212137129}
   - component: {fileID: 3288031797573168734}
   - component: {fileID: 946712415500831582}
+  - component: {fileID: 6380600178584220153}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1360,7 +1361,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b7fe5bc293ba5349b852acf9f86f9ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lookSensitivity: 0.1
 --- !u!114 &839721842557911230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1469,6 +1469,60 @@ MonoBehaviour:
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
+--- !u!114 &6380600178584220153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4181686743975786951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c8c92e8943a9914ba89720ba5fcf806, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ViewRadius: 5
+  SoftenDistance: 3
+  ViewAngle: 360
+  UnobscuredRadius: 0.5
+  Opacity: 1
+  AddCorners: 1
+  RevealHiderInFadeOutZonePercentage: 0.5
+  EyeOffset: 0
+  ShaderEyeOffset: 0
+  VisionHeight: 3
+  VisionHeightSoftenDistance: 1.5
+  SampleHidersAtRevealerHeight: 1
+  CalculateHidersAtHiderHeight: 0
+  ObstacleMask:
+    serializedVersion: 2
+    m_Bits: 64
+  RaycastResolution: 0.5
+  ResolveEdge: 1
+  MaxEdgeResolveIterations: 10
+  NumExtraIterations: 4
+  NumExtraRaysOnIteration: 3
+  MaxHidersSampledPerFrame: 50
+  MaxAcceptableEdgeAngleDifference: 0.005
+  EdgeDstThreshold: 0.1
+  DoubleHitMaxAngleDelta: 15
+  StartRevealerAsStatic: 0
+  StaticRevealer: 0
+  FogOfWarID: 0
+  IndexID: 0
+  NumberOfPoints: 0
+  Angles: []
+  Radii: []
+  AreHits: 
+  DebugMode: 0
+  DrawInitialRays: 0
+  SegmentTest: 0
+  DrawExpectedNextPoints: 0
+  DrawIteritiveRays: 0
+  DrawEdgeResolveRays: 0
+  DrawExtraCastLines: 0
+  DrawHiderSamples: 0
+  DebugLogHiderBlockerName: 0
 --- !u!1 &4438556986761831740
 GameObject:
   m_ObjectHideFlags: 0
