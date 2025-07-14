@@ -38,30 +38,49 @@ public class CharacterBase
         BindPassiveEvents();
     }
 
-    public void UseSkill(ESkillType type)
+    public void UseSkill(ESkillType type, CharacterBase target = null, Vector3? position = null)
     {
-        switch (type)
+        ISkill skill = type switch
         {
-            case ESkillType.BasicAttack:
-                _basicAttack.Activate(this);
-                RaiseEvent(ECharacterEvent.OnBasicAttack);
-                break;
-            //case ESkillType.Passive:
-            //    _passive.Activate(this); 
-            //    RaiseEvent(ECharacterEvent.OnSkillUsed);
-            //    break;
-            case ESkillType.Skill:
-                _skill.Activate(this);
-                RaiseEvent(ECharacterEvent.OnSkillUsed);
-                break;
-            case ESkillType.Ultimate:
-                _ultimate.Activate(this);
-                RaiseEvent(ECharacterEvent.OnSkillUsed);
-                break;
-            default:
-                break;
+            ESkillType.BasicAttack => _basicAttack,
+            ESkillType.Skill => _skill,
+            ESkillType.Ultimate => _ultimate,
+            _ => null
+        };
+
+        if (skill == null)
+            return;
+
+        if (skill is IUnitTargetSkill unitTargetSkill && target != null)
+        {
+            unitTargetSkill.Activate(this, target);
+        }
+        else if (skill is ITargetableSkill targetableSkill && position.HasValue)
+        {
+            targetableSkill.Activate(this, position.Value);
+        }
+        else if (skill is ISkillNoTarget skillNoTarget)
+        {
+            skillNoTarget.Activate(this);
+        }
+        else
+        {
+            Debug.LogWarning($"Skill {type} activation failed: parameters mismatch or unsupported skill type.");
+            return;
+        }
+
+        // 이벤트 발생
+        if (type == ESkillType.BasicAttack)
+        {
+            RaiseEvent(ECharacterEvent.OnBasicAttack);
+        }
+        else
+        {
+            RaiseEvent(ECharacterEvent.OnSkillUsed);
         }
     }
+
+
 
     public void Update()
     {

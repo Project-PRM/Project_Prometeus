@@ -15,6 +15,7 @@ public class SkillData
     [FirestoreProperty] public float Radius { get; set; }
     [FirestoreProperty] public float MaxRange { get; set; }
     [FirestoreProperty] public float Speed { get; set; }
+    [FirestoreProperty] public string ProjectilePrefabName { get; set; }
 
     public SkillData() { }
 }

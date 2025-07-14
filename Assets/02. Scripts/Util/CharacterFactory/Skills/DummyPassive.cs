@@ -14,7 +14,14 @@ public class DummyPassive : IEventReactiveSkill
 
     public void Activate(CharacterBase character)
     {
+        if (_timer < Data.Cooltime)
+        {
+            Debug.Log($"{character.Name} DummyPassive is on cooldown.");
+            return;
+        }
         Debug.Log($"{character.Name} activated DummyPassive.");
+
+        _timer = 0f;
     }
 
     public void OnEvent(ECharacterEvent evt)

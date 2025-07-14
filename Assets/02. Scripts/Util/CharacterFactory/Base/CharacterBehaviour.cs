@@ -88,7 +88,7 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         Debug.Log("Normal Attack performed via RPC");
         _character.UseSkill(ESkillType.BasicAttack);
     }
-
+    
     private void Update()
     {
         if(_isInitialized == false)
