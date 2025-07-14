@@ -25,9 +25,30 @@ public class RoomManager : PunSingleton<RoomManager>
         StartCoroutine(WaitForSpawnDataAndSpawn());
     }
 
+    private HashSet<string> GetActiveTeams()
+    {
+        HashSet<string> teamSet = new HashSet<string>();
+
+        foreach (var player in PhotonNetwork.PlayerList)
+        {
+            if (player.CustomProperties.TryGetValue("team", out object teamValue))
+            {
+                string teamName = teamValue as string;
+                if (!string.IsNullOrEmpty(teamName))
+                {
+                    teamSet.Add(teamName);
+                }
+            }
+        }
+
+        return teamSet;
+    }
+
     private void AssignSpawnPoints()
     {
         if (!PhotonNetwork.IsMasterClient) return;
+
+        HashSet<string> activeTeams = GetActiveTeams();
 
         List<Transform> shuffled = new List<Transform>(spawnPoints);
         for (int i = 0; i < shuffled.Count; i++)
@@ -36,13 +57,20 @@ public class RoomManager : PunSingleton<RoomManager>
             (shuffled[i], shuffled[randIndex]) = (shuffled[randIndex], shuffled[i]);
         }
 
-        // Room CustomProperties에 저장할 해시테이블
         Hashtable spawnTable = new Hashtable();
+        int j = 0;
 
-        for (int i = 0; i < Mathf.Min(teamNames.Length, shuffled.Count); i++)
+        foreach (string team in activeTeams)
         {
-            Vector3 pos = shuffled[i].position;
-            spawnTable[$"spawn_{teamNames[i]}"] = $"{pos.x},{pos.y},{pos.z}";
+            if (j >= shuffled.Count)
+            {
+                Debug.LogWarning("스폰포인트가 부족합니다.");
+                break;
+            }
+
+            Vector3 pos = shuffled[j].position;
+            spawnTable[$"spawn_{team}"] = $"{pos.x},{pos.y},{pos.z}";
+            j++;
         }
 
         PhotonNetwork.CurrentRoom.SetCustomProperties(spawnTable);
@@ -65,10 +93,7 @@ public class RoomManager : PunSingleton<RoomManager>
         if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(key, out object spawnData))
         {
             string[] split = spawnData.ToString().Split(',');
-            if (split.Length == 3 &&
-                float.TryParse(split[0], out float x) &&
-                float.TryParse(split[1], out float y) &&
-                float.TryParse(split[2], out float z))
+            if (split.Length == 3 && float.TryParse(split[0], out float x) && float.TryParse(split[1], out float y) && float.TryParse(split[2], out float z))
             {
                 Vector3 basePos = new Vector3(x, y, z);
                 Vector3 offset = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)) * 1.5f;

@@ -658,7 +658,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b0a42e96bbf0f445bc386086d1d8e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GameScene: TestScene
+  GameScene: Main_copied
   TeamNameText: {fileID: 292584531}
   GameStartButton: {fileID: 1809911043}
   RoomPlayerCountText: {fileID: 272980765}
@@ -930,6 +930,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isDontDestroy: 0
+  MaxPlayers: 3
 --- !u!4 &1788071889
 Transform:
   m_ObjectHideFlags: 0
