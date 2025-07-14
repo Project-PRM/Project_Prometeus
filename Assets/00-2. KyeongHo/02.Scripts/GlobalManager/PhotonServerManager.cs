@@ -42,6 +42,7 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     private void Start()
     {
         Init();
+        LobbyCharacterManager.Instance.UpdateCharacterDisplay();
     }
     // 솔로큐 매치 찾기 - 15인 랜덤 룸 생성 또는 참여
     public void JoinRandomRoom()
@@ -89,10 +90,9 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     {
         if (PhotonNetwork.IsMasterClient)
         {
-            //Debug.Log("게임 시작! 게임 씬으로 전환합니다.");
-            
             PrintAllPlayerTeams();
-            PhotonNetwork.LoadLevel(2);
+            // TODO : 씬 이동은 일단 나중에
+            // PhotonNetwork.LoadLevel(2);
         }
     }
     // 현재 플레이어의 팀 정보를 가져오는 메서드
@@ -110,6 +110,8 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
         {
             _myTeamName = changedProps["team"] as string;
             EventManager.Broadcast(new GameStartEvent(GetPlayerTeam(PhotonNetwork.LocalPlayer)));
+            LobbyCharacterManager.Instance.UpdateCharacterDisplay();
+            
             Debug.Log($"[LocalPlayer] 팀 이름 갱신됨: {_myTeamName}");
         }
     }
@@ -149,13 +151,15 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     {
         Debug.Log("로비(채널) 입장 완료!");
         Debug.Log($"InLobby : {PhotonNetwork.InLobby}");
-
+        LobbyCharacterManager.Instance.UpdateCharacterDisplay();
+        
         // 로비 입장 후 자동으로 매치 찾기 시작
     }
     public override void OnJoinedRoom()
     {
         Debug.Log($"방 입장 완료! 현재 플레이어 수: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}");
         EventManager.Broadcast(new GameStartEvent(GetPlayerTeam(PhotonNetwork.LocalPlayer)));
+        LobbyCharacterManager.Instance.UpdateCharacterDisplay();
         
         // OnPlayerEnteredRoom에서 처리하는걸로 수정중
         // if (PhotonNetwork.CurrentRoom.PlayerCount >= MAX_PLAYERS)
@@ -170,6 +174,8 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
         Debug.Log($"새로운 플레이어 입장: {newPlayer.NickName}");
         Debug.Log($"현재 플레이어 수: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}");
         EventManager.Broadcast(new GameStartEvent(GetPlayerTeam(PhotonNetwork.LocalPlayer)));
+        LobbyCharacterManager.Instance.UpdateCharacterDisplay();
+        
     }
 
     public override void OnPlayerLeftRoom(PhotonPlayer otherPlayer)
@@ -177,6 +183,8 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
         Debug.Log($"플레이어 퇴장: {otherPlayer.NickName}");
         Debug.Log($"현재 플레이어 수: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}");
         EventManager.Broadcast(new GameStartEvent(GetPlayerTeam(PhotonNetwork.LocalPlayer)));
+        LobbyCharacterManager.Instance.UpdateCharacterDisplay();
+        
     }
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
@@ -209,6 +217,8 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
 
     public override void OnLeftRoom()
     {
+        LobbyCharacterManager.Instance.UpdateCharacterDisplay();
+        
         Debug.Log("방에서 나왔습니다.");
     }
 
