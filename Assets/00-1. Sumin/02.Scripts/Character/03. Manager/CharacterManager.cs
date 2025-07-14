@@ -23,7 +23,6 @@ public class CharacterManager : Singleton<CharacterManager>
 
     public async Task Init()
     {
-
         if (IsInitialized)
         {
             return;
