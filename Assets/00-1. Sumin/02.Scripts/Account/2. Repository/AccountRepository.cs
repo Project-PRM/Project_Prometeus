@@ -210,4 +210,19 @@ public class AccountRepository
 
         return null; // 해당 이메일로 등록된 닉네임 없음
     }
+    public async Task<string> GetNicknameByUIDAsync(string uid)
+    {
+        await FirebaseInitialize.WaitForInitializationAsync();
+
+        var nicknameCollection = _db.Collection("Nicknames");
+        var query = nicknameCollection.WhereEqualTo("UserId", uid);
+        var querySnapshot = await query.GetSnapshotAsync();
+
+        foreach (var doc in querySnapshot.Documents)
+        {
+            return doc.Id; // 문서 ID가 닉네임
+        }
+
+        return null; // 해당 UID로 등록된 닉네임 없음
+    }
 }

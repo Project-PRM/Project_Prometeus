@@ -53,4 +53,12 @@ public class AccountManager : Singleton<AccountManager>
 
         return nickname; // 없으면 null 반환
     }
+    public async Task<string> GetUserNicknameWithUID(string uid)
+    {
+        string nickname = string.Empty;
+
+        nickname = await _repository.GetNicknameByUIDAsync(uid);
+
+        return nickname; // 없으면 null 반환
+    }
 }
