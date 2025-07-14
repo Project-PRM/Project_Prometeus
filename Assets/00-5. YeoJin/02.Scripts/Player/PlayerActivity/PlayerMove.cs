@@ -14,10 +14,13 @@ public class PlayerMove : PlayerActivity
 
     private bool _isSprinting = false;
 
+    private Camera _mainCamera;
+
     protected override void Start()
     {
         base.Start();
         _controller = GetComponent<CharacterController>();
+        _mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
     }
 
     public void OnMove(InputAction.CallbackContext callback)
@@ -49,6 +52,33 @@ public class PlayerMove : PlayerActivity
         }
     }
 
+    public void OnLook(InputAction.CallbackContext callback)
+    {
+        if (!_photonView.IsMine) return;
+
+        Vector2 screenPos = callback.ReadValue<Vector2>();
+        RotateTowardsScreenPosition(screenPos);
+    }
+
+    private void RotateTowardsScreenPosition(Vector2 screenPos)
+    {
+        Plane groundPlane = new Plane(Vector3.up, transform.position.y);
+        Ray ray = _mainCamera.ScreenPointToRay(screenPos);
+
+        if (groundPlane.Raycast(ray, out float distance))
+        {
+            Vector3 lookTarget = ray.GetPoint(distance);
+            Vector3 direction = lookTarget - transform.position;
+            direction.y = 0;
+
+            if (direction.sqrMagnitude > 0.01f)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(direction);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 20f * Time.deltaTime);
+            }
+        }
+    }
+
     private void Update()
     {
         if (!_photonView.IsMine) return;
@@ -56,11 +86,11 @@ public class PlayerMove : PlayerActivity
         Vector3 move = new Vector3(_movement.x, 0, _movement.y);
 
         // 회전 (입력 방향이 있을 때만)
-        if (move.sqrMagnitude > 0.001f)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(move);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 30f * Time.deltaTime);
-        }
+        //if (move.sqrMagnitude > 0.001f)
+        //{
+        //    Quaternion targetRotation = Quaternion.LookRotation(move);
+        //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 30f * Time.deltaTime);
+        //}
 
         // 중력
         if (_controller.isGrounded)
