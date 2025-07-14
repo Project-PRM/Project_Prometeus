@@ -80,8 +80,6 @@ public class CharacterBase
         }
     }
 
-
-
     public void Update()
     {
         _basicAttack.Update();

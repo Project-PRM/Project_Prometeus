@@ -14,6 +14,11 @@ public class AttackerUltimate : ITargetableSkill
         _timer += Time.deltaTime;
     }
 
+    public GameObject GetIndicatorPrefab()
+    {
+        return Resources.Load<GameObject>($"Indicators/{Data.IndicatorPrefabName}");
+    }
+
     public void Activate(CharacterBase character, Vector3 target)
     {
         if (_timer < Data.Cooltime)

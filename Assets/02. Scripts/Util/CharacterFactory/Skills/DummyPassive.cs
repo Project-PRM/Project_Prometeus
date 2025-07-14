@@ -12,6 +12,11 @@ public class DummyPassive : IEventReactiveSkill
         _timer += Time.deltaTime;
     }
 
+    public GameObject GetIndicatorPrefab()
+    {
+        return Resources.Load<GameObject>($"Indicators/{Data.IndicatorPrefabName}");
+    }
+
     public void Activate(CharacterBase character)
     {
         if (_timer < Data.Cooltime)

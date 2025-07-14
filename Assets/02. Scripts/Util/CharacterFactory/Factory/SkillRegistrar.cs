@@ -27,5 +27,8 @@ public static class SkillRegistrar
         SkillFactory.Register(ESkillName.DummySkill.ToString(), () => new DummySkill());
         SkillFactory.Register(ESkillName.DummyUltimate.ToString(), () => new DummyUltimate());
         SkillFactory.Register(ESkillName.DummyPassive.ToString(), () => new DummyPassive());
+        SkillFactory.Register(ESkillName.AttackerPassive.ToString(), () => new AttackerPassive());
+        SkillFactory.Register(ESkillName.AttackerSkill.ToString(), () => new AttackerSkill());
+        SkillFactory.Register(ESkillName.AttackerUltimate.ToString(), () => new AttackerUltimate());
     }
 }

@@ -2,7 +2,7 @@ using Photon.Pun;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class AttackerSkillProjectile : MonoBehaviour, IProjectile
+public class UltimateProjectile : MonoBehaviour, IProjectile
 {
     private CharacterBase _owner;
 
@@ -10,17 +10,16 @@ public class AttackerSkillProjectile : MonoBehaviour, IProjectile
     private float _damage = 0f;
     private float _maxRange = 0f;
     private float _radius = 0f;
-    private Vector3 _direction;
+    private float _duration = 3f;
 
+    private Vector3 _direction;
     private float _traveledDistance = 0f;
     private bool _isInitialized = false;
 
     public void Update()
     {
         if (!_isInitialized)
-        {
             return;
-        }
 
         float moveDistance = _speed * Time.deltaTime;
         transform.position += _direction.normalized * moveDistance;
@@ -28,33 +27,22 @@ public class AttackerSkillProjectile : MonoBehaviour, IProjectile
 
         if (_traveledDistance >= _maxRange)
         {
-            Explode();
+            SpawnAoEField();
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (_owner != null && other.gameObject == _owner.Behaviour.gameObject)
-        {
             return;
-        }
 
-        //Explode();
+        SpawnAoEField();
     }
 
-    private void Explode()
+    private void SpawnAoEField()
     {
-        // 여기 같은팀 처리 추가
-        Collider[] hits = Physics.OverlapSphere(transform.position, _radius);
-        foreach (var hit in hits)
-        {
-            if (hit.TryGetComponent<IDamageAble>(out var target))
-            {
-                target.TakeDamage(_damage);
-            }
-        }
-
-        /*PhotonNetwork.*/Destroy(gameObject);
+        PhotonNetwork.Instantiate("UltimateAoEField", transform.position, Quaternion.identity);
+        PhotonNetwork.Destroy(gameObject);
     }
 
     public void SetData(SkillData data, CharacterBase character, Vector3? direction)
@@ -64,6 +52,7 @@ public class AttackerSkillProjectile : MonoBehaviour, IProjectile
         _damage = data.Damage;
         _maxRange = data.MaxRange;
         _radius = data.Radius;
+        _duration = data.Duration; // 장판 유지 시간
         _direction = direction ?? Vector3.forward;
         _traveledDistance = 0f;
 

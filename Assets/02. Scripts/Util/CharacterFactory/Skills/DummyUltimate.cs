@@ -12,6 +12,11 @@ public class DummyUltimate : ISkill
         _timer += Time.deltaTime;
     }
 
+    public GameObject GetIndicatorPrefab()
+    {
+        return Resources.Load<GameObject>($"Indicators/{Data.IndicatorPrefabName}");
+    }
+
     public void Activate(CharacterBase user)
     {
         if(_timer < Data.Cooltime)
