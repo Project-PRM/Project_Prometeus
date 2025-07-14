@@ -4,3 +4,10 @@ public interface IStatusEffect
     public void Remove(CharacterBase target);
     public float Duration { get; }
 }
+
+
+public enum ECCType
+{
+    Stun,
+    Slow,
+}
