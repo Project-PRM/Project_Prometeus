@@ -5,6 +5,7 @@ public static class SkillFactory
 {
     private static Dictionary<string, Func<ISkill>> _skillMap;
     private static Dictionary<string, SkillData> _skillDataMap;
+
     public static void Register(string skillName, Func<ISkill> constructor)
     {
         if (!_skillMap.ContainsKey(skillName))
@@ -40,8 +41,6 @@ public static class SkillFactory
 
             return skill;
         }
-
         return null;
     }
-
 }

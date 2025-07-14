@@ -1,6 +1,8 @@
-public static class StatCalculator
+public class StatCalculator
 {
-    public static CharacterStats CalculateFinalStats(CharacterStats baseStats, EquipmentSet equipment)
+    //private bool _isDirty = false;
+
+    public CharacterStats CalculateFinalStats(CharacterStats baseStats, EquipmentSet equipment)
     {
         CharacterStats result = new CharacterStats
         {
@@ -39,4 +41,3 @@ public static class StatCalculator
         return result;
     }
 }
-
