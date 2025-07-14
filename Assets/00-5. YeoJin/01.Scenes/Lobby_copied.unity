@@ -660,8 +660,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GameScene: Main_copied
   TeamNameText: {fileID: 292584531}
-  GameStartButton: {fileID: 1809911043}
   RoomPlayerCountText: {fileID: 272980765}
+  GameStartButton: {fileID: 1809911043}
+  MatchingStartButton: {fileID: 0}
 --- !u!1 &1213618104
 GameObject:
   m_ObjectHideFlags: 0
@@ -930,7 +931,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isDontDestroy: 0
-  MaxPlayers: 3
+  MaxPlayers: 6
 --- !u!4 &1788071889
 Transform:
   m_ObjectHideFlags: 0
