@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using System.Collections;
 using ExitGames.Client.Photon;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using System;
+using Random = UnityEngine.Random;
+using System.Linq;
 
 public class RoomManager : PunSingleton<RoomManager>
 {
     [Header("Spawn Points")]
     [SerializeField] private Transform[] spawnPoints;
-    [SerializeField] private string[] teamNames = { "A", "B", "C", "D", "E" };
+    [SerializeField]private Vector3[] _spawnOffset; 
 
     private Dictionary<string, Transform> _teamSpawnDict;
 
@@ -21,7 +24,6 @@ public class RoomManager : PunSingleton<RoomManager>
             AssignSpawnPoints();
         }
         // 스폰 포인트별로 팀 스폰
-        // GeneratePlayer(myTeam);
         StartCoroutine(WaitForSpawnDataAndSpawn());
     }
 
@@ -74,7 +76,7 @@ public class RoomManager : PunSingleton<RoomManager>
         }
 
         PhotonNetwork.CurrentRoom.SetCustomProperties(spawnTable);
-        Debug.Log("Spawn points saved to room properties.");
+        Debug.Log("스폰포인트 할당 및 저장완료.");
     }
 
     private IEnumerator WaitForSpawnDataAndSpawn()
@@ -95,12 +97,28 @@ public class RoomManager : PunSingleton<RoomManager>
             string[] split = spawnData.ToString().Split(',');
             if (split.Length == 3 && float.TryParse(split[0], out float x) && float.TryParse(split[1], out float y) && float.TryParse(split[2], out float z))
             {
+                // 기본 스폰포인트 위치
                 Vector3 basePos = new Vector3(x, y, z);
-                Vector3 offset = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)) * 1.5f;
-                Vector3 finalPos = basePos + offset;
 
-                GameObject player = PhotonNetwork.Instantiate("Player", finalPos, Quaternion.identity);
-                Debug.Log($"Spawned player at {finalPos} for team {myTeam}");
+                // 현재 팀의 모든 멤버 수집 및 정렬
+                List<Photon.Realtime.PhotonPlayer> teamMembers = PhotonNetwork.PlayerList.Where(p => PhotonServerManager.Instance.GetPlayerTeam(p) == myTeam).ToList();
+                Debug.Log($"teammembers are {teamMembers[0].ActorNumber}, {teamMembers[1].ActorNumber}, {teamMembers[2].ActorNumber}");
+                teamMembers = teamMembers.OrderBy(p => p.ActorNumber).ToList(); // StringComparer.Ordinal을 사용하여 안정적인 정렬 보장
+
+                int myIndex = teamMembers.IndexOf(PhotonNetwork.LocalPlayer);
+                Debug.Log($"my index is {myIndex}");
+
+                // 각각 위치에 스폰하기
+                if (myIndex >= 0 && myIndex < _spawnOffset.Length)
+                {
+                    Vector3 finalPos = basePos + _spawnOffset[myIndex];
+                    GameObject player = PhotonNetwork.Instantiate("Player", finalPos, Quaternion.identity);
+                    Debug.Log($"[Spawn] Player {PhotonNetwork.LocalPlayer.UserId} at {finalPos} (Team {myTeam}, Index {myIndex})");
+                }
+                else
+                {
+                    Debug.LogError($"[Spawn Error] Invalid spawn offset index {myIndex} (Team size: {teamMembers.Count})");
+                }
             }
             else
             {
@@ -111,29 +129,5 @@ public class RoomManager : PunSingleton<RoomManager>
         {
             Debug.LogError($"No spawn data found for team {myTeam}");
         }
-    }
-
-    private void GeneratePlayer(string team)
-    {
-        if (!PhotonNetwork.IsConnected || !PhotonNetwork.InRoom) return;
-
-        // 팀 이름을 찾음
-        if (!_teamSpawnDict.ContainsKey(team))
-        {
-            Debug.LogError($"No spawn point defined for team '{team}'");
-            return;
-        }
-
-        Transform spawnPoint = _teamSpawnDict[team];
-
-        // 오프셋 주기
-        Vector3 offset = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)) * 1.5f;
-
-        Vector3 spawnPos = spawnPoint.position + offset;
-        Quaternion spawnRot = spawnPoint.rotation;
-
-        // 팀 이름에 맞는 스폰포인트에 스폰
-        GameObject player = PhotonNetwork.Instantiate("Player", spawnPos, spawnRot);
-        Debug.Log($"Spawned player for team {team} at {spawnPos}");
     }
 }
