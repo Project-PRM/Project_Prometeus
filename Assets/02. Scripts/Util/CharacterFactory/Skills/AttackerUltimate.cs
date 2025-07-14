@@ -1,7 +1,9 @@
 using UnityEngine;
 
-[Skill("DummySkill")]
-public class DummySkill : ISkill
+/// <summary>
+/// 투사체 발사, 지속 데미지
+/// </summary>
+public class AttackerUltimate : ITargetableSkill
 {
     private float _timer = 0f;
 
@@ -17,15 +19,13 @@ public class DummySkill : ISkill
         return Resources.Load<GameObject>($"Indicators/{Data.IndicatorPrefabName}");
     }
 
-    public void Activate(CharacterBase user)
+    public void Activate(CharacterBase character, Vector3 target)
     {
-        if(_timer < Data.Cooltime)
+        if (_timer < Data.Cooltime)
         {
-            Debug.Log($"{user.Name}의 DummySkill은 아직 쿨타임 중입니다!");
+            Debug.Log($"{character.Name} Ultimate is on cooldown.");
             return;
         }
-        Debug.Log($"{user.Name} used DummySkill! HP restored.");
-        // user.Heal(50);  // 이런 식으로 실제 캐릭터 로직 연동
 
         _timer = 0f;
     }

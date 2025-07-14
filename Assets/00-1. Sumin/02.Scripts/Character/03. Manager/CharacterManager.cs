@@ -32,7 +32,7 @@ public class CharacterManager : Singleton<CharacterManager>
             _characterMetaDataCache[characterName] = await _repository.GetCharacterSkillNames(characterName);
         }
         _skillDataMap = await _repository.GetAllSkillDatas();
-        SkillFactory.LoadSkillData(_skillDataMap);
+        SkillFactory.SetSkillDataCache(_skillDataMap);
 
         IsInitialized = true;
     }

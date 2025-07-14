@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [Skill("BasicAttack")]
-public class BasicAttack : ISkill
+public class BasicAttack : ISkillNoTarget
 {
     private float _timer = 0f;
 
@@ -10,6 +10,11 @@ public class BasicAttack : ISkill
     public void Update()
     {
         _timer += Time.deltaTime;
+    }
+
+    public GameObject GetIndicatorPrefab()
+    {
+        return Resources.Load<GameObject>($"Indicators/{Data.IndicatorPrefabName}");
     }
 
     public void Activate(CharacterBase user)

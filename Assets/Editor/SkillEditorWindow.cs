@@ -58,6 +58,8 @@ public class SkillJsonEditorWindow : EditorWindow
             skill.Radius = EditorGUILayout.FloatField("Radius", skill.Radius);
             skill.MaxRange = EditorGUILayout.FloatField("MaxRange", skill.MaxRange);
             skill.Speed = EditorGUILayout.FloatField("Speed", skill.Speed);
+            skill.ProjectilePrefabName = EditorGUILayout.TextField("Projectile Prefab Name", skill.ProjectilePrefabName);
+            skill.IndicatorPrefabName = EditorGUILayout.TextField("Indicator Prefab Name", skill.IndicatorPrefabName);
 
             if (GUILayout.Button("❌ 삭제"))
             {

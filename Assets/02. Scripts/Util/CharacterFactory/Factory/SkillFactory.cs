@@ -12,7 +12,7 @@ public static class SkillFactory
             _skillMap.Add(skillName, constructor);
     }
 
-    public static void LoadSkillData(Dictionary<string, SkillData> skillDataMap)
+    public static void SetSkillDataCache(Dictionary<string, SkillData> skillDataMap)
     {
         _skillDataMap = skillDataMap;
     }
