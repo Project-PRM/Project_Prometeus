@@ -7,6 +7,7 @@ public class NameTagManager : Singleton<NameTagManager>
 {
     [SerializeField] private GameObject nameTagPrefab;
     [SerializeField] private RectTransform nameTagRoot;
+    [SerializeField] private Vector3 _offset;
 
     private Dictionary<Photon.Realtime.PhotonPlayer, NameTag> _nameTags = new();
 
@@ -16,7 +17,8 @@ public class NameTagManager : Singleton<NameTagManager>
         {
             if (entry.Value.TargetTransform == null) continue;
 
-            Vector3 screenPos = Camera.main.WorldToScreenPoint(entry.Value.TargetTransform.position + Vector3.up * 4f);
+            Vector3 screenPos = Camera.main.WorldToScreenPoint(entry.Value.TargetTransform.position + _offset);
+
             entry.Value.RectTransform.position = screenPos;
         }
     }
