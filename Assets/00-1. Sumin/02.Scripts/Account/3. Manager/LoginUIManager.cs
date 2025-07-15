@@ -32,7 +32,7 @@ public class LoginUIManager : Singleton<LoginUIManager>
 
     private void Start()
     {
-        OpenPanel(EUIPanelType.Login);
+        // OpenPanel(EUIPanelType.Login);
     }
 
     /// <summary>
