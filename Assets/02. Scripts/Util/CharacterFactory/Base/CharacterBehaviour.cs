@@ -14,7 +14,7 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
     private bool _isInitialized = false;
 
     [Header("# Status Effects")]
-    private Dictionary<IStatusEffect, StatusEffectInstance> _activeEffects = new();
+    private List<StatusEffectInstance> _activeEffects = new();
 
     [Header("# Skill Use State")]
     private ESkillInputState _inputState = ESkillInputState.None;
@@ -202,50 +202,57 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
 
     public void ApplyEffect(IStatusEffect newEffect)
     {
-        if (_activeEffects.TryGetValue(newEffect, out var instance))
-        {
-            // 남은 시간이 더 길으면 유지, 아니면 갱신
-            if (newEffect.Duration > instance.RemainingTime)
-            {
-                instance.RemainingTime = newEffect.Duration;
-                Debug.Log($"효과 지속시간 재설정: {newEffect.Duration}초");
-            }
-            else
-            {
-                Debug.Log($"기존 효과 지속시간 유지: {instance.RemainingTime}초");
-            }
-            return; // 코루틴은 그대로 진행
-        }
-
-        // 신규 효과 적용
         newEffect.Apply(_character);
-        Coroutine coroutine = StartCoroutine(EffectDurationCoroutine(newEffect));
-        _activeEffects[newEffect] = new StatusEffectInstance(newEffect, coroutine, newEffect.Duration);
+
+        var coroutine = StartCoroutine(EffectDurationCoroutine(newEffect));
+        var instance = new StatusEffectInstance(newEffect, coroutine, newEffect.Duration);
+
+        _activeEffects.Add(instance);
     }
 
     public void RemoveEffect(IStatusEffect effect)
     {
-        if (_activeEffects.TryGetValue(effect, out var instance))
+        // 첫 번째로 매칭되는 인스턴스를 찾음(정확히 동일한 참조)
+        var instance = _activeEffects.Find(e => e.Effect == effect);
+        if (instance == null) return;
+
+        // 코루틴 정지
+        if (instance.Coroutine != null)
+            StopCoroutine(instance.Coroutine);
+
+        // 효과 제거 및 목록에서 제거
+        effect.Remove(_character);
+        _activeEffects.Remove(instance);
+    }
+
+    // 특정 타입의 효과를 모두 제거
+    public void RemoveAllEffectsOfType<T>() where T : IStatusEffect
+    {
+        var toRemove = _activeEffects.FindAll(e => e.Effect is T);
+
+        foreach (var instance in toRemove)
         {
             if (instance.Coroutine != null)
-            {
                 StopCoroutine(instance.Coroutine);
-            }
-            effect.Remove(_character);
-            _activeEffects.Remove(effect);
+
+            instance.Effect.Remove(_character);
+            _activeEffects.Remove(instance);
         }
     }
 
     private IEnumerator EffectDurationCoroutine(IStatusEffect effect)
     {
-        var instance = _activeEffects[effect];
-        while (instance.RemainingTime > 0f)
+        float remaining = effect.Duration;
+
+        while (remaining > 0f)
         {
-            instance.RemainingTime -= Time.deltaTime;
+            remaining -= Time.deltaTime;
             yield return null;
         }
 
         effect.Remove(_character);
-        _activeEffects.Remove(effect);
+
+        // 리스트에서 해당 인스턴스를 제거
+        _activeEffects.RemoveAll(e => e.Effect == effect);
     }
 }
