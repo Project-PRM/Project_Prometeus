@@ -92,7 +92,7 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
         {
             PrintAllPlayerTeams();
             // TODO : 씬 이동은 일단 나중에
-            // PhotonNetwork.LoadLevel(2);
+            PhotonNetwork.LoadLevel(2);
         }
     }
     // 현재 플레이어의 팀 정보를 가져오는 메서드
