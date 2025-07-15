@@ -7,6 +7,7 @@ using FOW;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private UI_NicknameIngame _nickname; 
     private Dictionary<Type, PlayerActivity> _cache = new();
     private PhotonView _photonView;
     public PhotonView PhotonView => _photonView;
@@ -17,8 +18,6 @@ public class Player : MonoBehaviour
     {
         _photonView = GetComponent<PhotonView>();
         _animator = GetComponent<Animator>();
-        // 호출을 늦게 해야함
-        //_character = GetComponent<CharacterBehaviour>().GetCharacterBase();
 
         if (_photonView.IsMine)
         {
@@ -26,6 +25,7 @@ public class Player : MonoBehaviour
         }
 
         TurnOnRevealer();
+        _nickname.SetName(_photonView.Owner.NickName);
     }
 
     public T GetActivity<T>() where T : PlayerActivity
@@ -66,8 +66,6 @@ public class Player : MonoBehaviour
         {
             var revealer = GetComponent<FogOfWarRevealer3D>();
             if (revealer != null) revealer.enabled = true;
-
-            NameTagManager.Instance.CreateNameTag(_photonView.Owner, transform);
             return;
         }
 
@@ -78,8 +76,6 @@ public class Player : MonoBehaviour
         {
             var revealer = GetComponent<FogOfWarRevealer3D>();
             if (revealer != null) revealer.enabled = true;
-
-            NameTagManager.Instance.CreateNameTag(_photonView.Owner, transform);
         }
     }
 }
