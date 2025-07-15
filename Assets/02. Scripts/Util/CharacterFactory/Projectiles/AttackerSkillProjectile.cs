@@ -23,9 +23,14 @@ public class AttackerSkillProjectile : MonoBehaviour, IProjectile
         }
 
         float moveDistance = _speed * Time.deltaTime;
-        transform.position += _direction.normalized * moveDistance;
-        _traveledDistance += moveDistance;
+        Vector3 move = _direction.normalized * moveDistance;
 
+        // 이동: Y는 무시, 현재 위치의 y는 고정 -> 직선으로 가게 하고싶을때 사용
+        transform.position += new Vector3(move.x, 0f, move.z);
+        Vector3 pos = transform.position;
+        transform.position = pos;
+
+        _traveledDistance += moveDistance;
         if (_traveledDistance >= _maxRange)
         {
             Explode();

@@ -19,35 +19,11 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
     private ESkillInputState _inputState = ESkillInputState.None;
     private ESkillType? _selectedSkill = null;
     private Vector3 _aimDirection = Vector3.zero;
-    private GameObject _aimIndicator;
     private enum ESkillInputState
     {
         None,
         Aiming
     }
-
-    // 캐릭터 스킬 조합
-    //protected override async void Start()
-    //{
-    //    base.Start();
-    //    if (!CharacterManager.Instance.IsInitialized) 
-    //    {
-    //        await CharacterManager.Instance.Init();
-    //    }
-    //    var skills = await CharacterManager.Instance.GetCharacterMetaDataAsync(_characterName);
-
-    //    _character = new CharacterBase(
-    //        this,
-    //        _characterName.ToString(),
-    //        SkillFactory.Create(ESkillType.BasicAttack.ToString()),
-    //        SkillFactory.Create(skills.Passive),
-    //        SkillFactory.Create(skills.Skill),
-    //        SkillFactory.Create(skills.Ultimate),
-    //        CharacterManager.Instance.CharacterStats
-    //    );
-
-    //    _isInitialized = true;
-    //}
 
     protected async void Start()
     {
@@ -83,44 +59,12 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         }
     }*/
 
-    //public void OnAttack(InputAction.CallbackContext callback)
-    //{
-    //    if (callback.performed)
-    //    {
-    //        // 일반 공격을 함
-    //        Debug.Log("Normal Attack performed");
-    //        _character.UseSkill(ESkillType.BasicAttack);
-    //    }
-    //}
-
     [PunRPC]
     private void RPC_NormalAttack()
     {
         Debug.Log("Normal Attack performed via RPC");
         _character.UseSkill(ESkillType.BasicAttack);
     }
-
-    //private void Update()
-    //{
-    //    if(_isInitialized == false)
-    //    {
-    //        return;
-    //    }
-    //    _character.Update();
-
-    //    if (Input.GetMouseButtonDown(0))
-    //    {
-    //        _character.UseSkill(ESkillType.BasicAttack);
-    //    }
-    //    if (Input.GetKeyDown(KeyCode.Q))
-    //    {
-    //        _character.UseSkill(ESkillType.Skill);
-    //    }
-    //    if (Input.GetKeyDown(KeyCode.Z))
-    //    {
-    //        _character.UseSkill(ESkillType.Ultimate);
-    //    }
-    //}
 
     private void Update()
     {
@@ -140,25 +84,45 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
                 break;
         }
 
-        // 평타는 그대로
         if (_inputState == ESkillInputState.None && Input.GetMouseButtonDown(0))
         {
             _character.UseSkill(ESkillType.BasicAttack);
         }
     }
 
+    // 입력 처리: 스킬 키 입력 (Q, Z, Shift 등)
     private void HandleSkillKeyInput()
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            EnterAimingMode(ESkillType.Skill);
+            TryActivateSkillOrEnterAiming(ESkillType.Skill);
         }
         else if (Input.GetKeyDown(KeyCode.Z))
         {
-            EnterAimingMode(ESkillType.Ultimate);
+            TryActivateSkillOrEnterAiming(ESkillType.Ultimate);
+        }
+        else if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            TryActivateSkillOrEnterAiming(ESkillType.Passive);
         }
     }
 
+    // 스킬 타입에 따라 즉발 스킬은 즉시 실행, 아니면 조준 모드로 진입
+    private void TryActivateSkillOrEnterAiming(ESkillType skillType)
+    {
+        ISkill skill = _character.GetSkill(skillType);
+
+        if (skill is ISkillNoTarget noTargetSkill)
+        {
+            noTargetSkill.Activate(_character); // 즉시 발동
+        }
+        else
+        {
+            EnterAimingMode(skillType); // 조준 모드 진입
+        }
+    }
+
+    // 조준 모드 설정
     private void EnterAimingMode(ESkillType skillType)
     {
         _selectedSkill = skillType;
@@ -166,6 +130,7 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         //_aimIndicator.SetActive(true);
     }
 
+    // 조준 UI 업데이트 (에임 방향 벡터 갱신 등)
     private void UpdateAimingUI()
     {
         Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -177,40 +142,15 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         //_aimIndicator.transform.rotation = Quaternion.LookRotation(Vector3.forward, _aimDirection);
     }
 
-    public void ApplyEffect(IStatusEffect effect)
-    {
-        effect.Apply(_character);
-        _activeEffects.Add(effect);
-        StartCoroutine(RemoveEffectAfterTime(effect));
-    }
-
+    // 조준 상태에서 마우스 클릭 시 스킬 시전
     private void HandleAimingInput()
     {
         if (Input.GetMouseButtonDown(0)) // 좌클릭: 시전
         {
             if (_selectedSkill.HasValue)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-
-                Vector3 targetPoint;
-                CharacterBase targetUnit = null;
-
-                if (Physics.Raycast(ray, out hit, 100f)) // 100f는 최대 거리
-                {
-                    targetPoint = hit.point;
-
-                    // 대상 캐릭터가 있다면
-                    if (hit.collider.TryGetComponent<CharacterBehaviour>(out var behaviour))
-                    {
-                        targetUnit = behaviour.GetCharacterBase(); // 이건 CharacterBehaviour에 따로 만들어야 함
-                    }
-                }
-                else
-                {
-                    // 바닥 등 맞은 게 없을 경우, 카메라 앞 10m 지점으로 임시 설정
-                    targetPoint = ray.GetPoint(10f);
-                }
+                Vector3 targetPoint = GetMouseWorldPosition();
+                CharacterBase targetUnit = GetTargetUnderMouse(targetPoint);
 
                 _character.UseSkill(_selectedSkill.Value, targetUnit, targetPoint);
             }
@@ -224,10 +164,24 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         }
     }
 
-
-    private CharacterBase GetTargetUnderMouse(Vector3 mouseWorld)
+    // 마우스 클릭 위치의 월드 좌표 반환 (y = 0 평면 기준)
+    private Vector3 GetMouseWorldPosition()
     {
-        Collider[] hits = Physics.OverlapSphere(mouseWorld, 0.2f); // 또는 Physics.Raycast
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+        if (groundPlane.Raycast(ray, out float enter))
+        {
+            return ray.GetPoint(enter);
+        }
+
+        return ray.GetPoint(10f); // 실패 시 fallback
+    }
+
+    // 마우스 위치에 있는 캐릭터를 찾아 반환 (없으면 null)
+    private CharacterBase GetTargetUnderMouse(Vector3 worldPoint)
+    {
+        Collider[] hits = Physics.OverlapSphere(worldPoint, 0.5f);
         foreach (var hit in hits)
         {
             if (hit.TryGetComponent<CharacterBehaviour>(out var behaviour))
@@ -235,10 +189,10 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
                 return behaviour.GetCharacterBase();
             }
         }
-
         return null;
     }
 
+    // 조준 상태 및 선택된 스킬 초기화
     private void ResetSkillState()
     {
         _selectedSkill = null;
@@ -246,12 +200,22 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         //_aimIndicator.SetActive(false);
     }
 
+    // 상태이상 효과 적용
+    public void ApplyEffect(IStatusEffect effect)
+    {
+        effect.Apply(_character);
+        _activeEffects.Add(effect);
+        StartCoroutine(RemoveEffectAfterTime(effect));
+    }
+
+    // 상태이상 효과 제거
     public void RemoveEffect(IStatusEffect effect)
     {
         effect.Remove(_character);
         _activeEffects.Remove(effect);
     }
 
+    // 일정 시간 후 상태이상 효과 제거
     private IEnumerator RemoveEffectAfterTime(IStatusEffect effect)
     {
         yield return new WaitForSeconds(effect.Duration);
