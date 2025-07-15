@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class EnemyBase : MonoBehaviour, IDamageAble
+public class EnemyBase : MonoBehaviour, IDamageable
 {
     public EnemyStat EnemyStat;
 
@@ -14,5 +14,12 @@ public class EnemyBase : MonoBehaviour, IDamageAble
     public void TakeDamage(float Damage)
     {
         _helath -= Damage;
+    }
+
+    public void Heal(float Amount)
+    {
+        _helath += Amount;
+        if (_helath > EnemyStat.MaxHelath)
+            _helath = EnemyStat.MaxHelath;
     }
 }

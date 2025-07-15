@@ -9,7 +9,9 @@
     "Duration": 0.0,
     "Radius": 0.0,
     "MaxRange": 1.0,
-    "Speed": 0.0
+    "Speed": 0.0,
+    "ProjectilePrefabName": null,
+    "IndicatorPrefabName": null
   },
   "DummyPassive": {
     "SkillName": "DummyPassive",
@@ -21,7 +23,9 @@
     "Duration": 0.0,
     "Radius": 0.0,
     "MaxRange": 1.0,
-    "Speed": 0.0
+    "Speed": 0.0,
+    "ProjectilePrefabName": null,
+    "IndicatorPrefabName": null
   },
   "DummyUltimate": {
     "SkillName": "DummyUltimate",
@@ -33,7 +37,9 @@
     "Duration": 0.0,
     "Radius": 0.0,
     "MaxRange": 1.0,
-    "Speed": 0.0
+    "Speed": 0.0,
+    "ProjectilePrefabName": null,
+    "IndicatorPrefabName": null
   },
   "NewSkill3": {
     "SkillName": "DummySkill",
@@ -45,6 +51,92 @@
     "Duration": 0.0,
     "Radius": 0.0,
     "MaxRange": 1.0,
-    "Speed": 0.0
+    "Speed": 0.0,
+    "ProjectilePrefabName": null,
+    "IndicatorPrefabName": null
+  },
+  "NewSkill4": {
+    "SkillName": "AttackerPassive",
+    "Damage": 0.0,
+    "BuffAmount": 0.0,
+    "DebuffAmount": 0.0,
+    "Cost": 0.0,
+    "Cooltime": 0.0,
+    "Duration": 0.0,
+    "Radius": 0.0,
+    "MaxRange": 0.0,
+    "Speed": 0.0,
+    "ProjectilePrefabName": null,
+    "IndicatorPrefabName": null
+  },
+  "NewSkill5": {
+    "SkillName": "AttackerSkill",
+    "Damage": 0.0,
+    "BuffAmount": 0.0,
+    "DebuffAmount": 0.0,
+    "Cost": 0.0,
+    "Cooltime": 0.0,
+    "Duration": 0.0,
+    "Radius": 0.0,
+    "MaxRange": 0.0,
+    "Speed": 0.0,
+    "ProjectilePrefabName": "AttackerSkillProjectile",
+    "IndicatorPrefabName": "LineIndicator"
+  },
+  "NewSkill6": {
+    "SkillName": "AttackerUltimate",
+    "Damage": 0.0,
+    "BuffAmount": 0.0,
+    "DebuffAmount": 0.0,
+    "Cost": 0.0,
+    "Cooltime": 0.0,
+    "Duration": 0.0,
+    "Radius": 0.0,
+    "MaxRange": 0.0,
+    "Speed": 0.0,
+    "ProjectilePrefabName": "AttackerUltimateProjectile",
+    "IndicatorPrefabName": "LineIndicator"
+  },
+  "NewSkill7": {
+    "SkillName": "BuffPassive",
+    "Damage": 0.0,
+    "BuffAmount": 10.0,
+    "DebuffAmount": 0.0,
+    "Cost": 0.0,
+    "Cooltime": 0.0,
+    "Duration": 0.0,
+    "Radius": 0.0,
+    "MaxRange": 0.0,
+    "Speed": 0.0,
+    "ProjectilePrefabName": null,
+    "IndicatorPrefabName": null
+  },
+  "NewSkill8": {
+    "SkillName": "BuffSkill",
+    "Damage": 0.0,
+    "BuffAmount": 10.0,
+    "DebuffAmount": 0.0,
+    "Cost": 0.0,
+    "Cooltime": 0.0,
+    "Duration": 0.0,
+    "Radius": 0.0,
+    "MaxRange": 0.0,
+    "Speed": 0.0,
+    "ProjectilePrefabName": null,
+    "IndicatorPrefabName": null
+  },
+  "NewSkill9": {
+    "SkillName": "BuffUltimate",
+    "Damage": 0.0,
+    "BuffAmount": 10.0,
+    "DebuffAmount": 0.0,
+    "Cost": 0.0,
+    "Cooltime": 0.0,
+    "Duration": 0.0,
+    "Radius": 5.0,
+    "MaxRange": 0.0,
+    "Speed": 0.0,
+    "ProjectilePrefabName": null,
+    "IndicatorPrefabName": null
   }
 }

@@ -5,4 +5,10 @@ public enum ESkillName
     DummySkill,
     DummyUltimate,
     DummyPassive,
+    AttackerPassive,
+    AttackerSkill,
+    AttackerUltimate,
+    BuffPassive,
+    BuffSkill,
+    BuffUltimate,
 }

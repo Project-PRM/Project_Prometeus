@@ -16,6 +16,7 @@ public class CharacterStats
     [FirestoreProperty] public float SprintStaminaCost { get; set; }
     [FirestoreProperty] public float BaseVision { get; set; }
 
+    // Firebase용 기본 생성자
     public CharacterStats() { }
 
     // 전체 필드 초기화 생성자
@@ -45,5 +46,22 @@ public class CharacterStats
         StaminaRegen = staminaRegen;
         SprintStaminaCost = sprintStaminaCost;
         BaseVision = baseVision;
+    }
+
+    // 깊은 복사 생성자
+    public CharacterStats(CharacterStats other)
+    {
+        MaxHealth = other.MaxHealth;
+        MaxMana = other.MaxMana;
+        BaseDamage = other.BaseDamage;
+        BaseArmor = other.BaseArmor;
+        BaseAttackCoolTime = other.BaseAttackCoolTime;
+        BaseAttackRange = other.BaseAttackRange;
+        MoveSpeed = other.MoveSpeed;
+        SprintSpeed = other.SprintSpeed;
+        MaxStamina = other.MaxStamina;
+        StaminaRegen = other.StaminaRegen;
+        SprintStaminaCost = other.SprintStaminaCost;
+        BaseVision = other.BaseVision;
     }
 }

@@ -7,8 +7,6 @@ using ExitGames.Client.Photon;
 
 public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
 {
-    public static LobbyCharacterManager Instance;
-
     [Header("캐릭터 스폰 위치")]
     public Transform centerPos; // 내 캐릭터 위치
     public Transform leftPos;   // 팀원1 위치
@@ -16,18 +14,6 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
 
     // 생성된 캐릭터들을 관리하기 위한 딕셔너리
     private Dictionary<int, GameObject> spawnedCharacters = new Dictionary<int, GameObject>();
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
 
     /// <summary>
     /// 현재 네트워크 상태에 맞춰 캐릭터 디스플레이를 업데이트하는 메인 함수
@@ -80,7 +66,7 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
         
         // TODO: AccountManager 등에서 플레이어의 캐릭터 프리팹 정보를 가져와야 함
         // 예시: GameObject characterPrefab = GetPrefabFromPlayer(player);
-        GameObject characterPrefab = Resources.Load<GameObject>("Player"); // 임시 프리팹
+        GameObject characterPrefab = Resources.Load<GameObject>("LobbyPlayer"); // 임시 프리팹
 
         GameObject character = Instantiate(characterPrefab, spawnPos.position, spawnPos.rotation);
         spawnedCharacters[player.ActorNumber] = character;
