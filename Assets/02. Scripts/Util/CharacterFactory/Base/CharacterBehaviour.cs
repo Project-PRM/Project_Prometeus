@@ -19,35 +19,11 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
     private ESkillInputState _inputState = ESkillInputState.None;
     private ESkillType? _selectedSkill = null;
     private Vector3 _aimDirection = Vector3.zero;
-    private GameObject _aimIndicator;
     private enum ESkillInputState
     {
         None,
         Aiming
     }
-
-    // 캐릭터 스킬 조합
-    //protected override async void Start()
-    //{
-    //    base.Start();
-    //    if (!CharacterManager.Instance.IsInitialized) 
-    //    {
-    //        await CharacterManager.Instance.Init();
-    //    }
-    //    var skills = await CharacterManager.Instance.GetCharacterMetaDataAsync(_characterName);
-
-    //    _character = new CharacterBase(
-    //        this,
-    //        _characterName.ToString(),
-    //        SkillFactory.Create(ESkillType.BasicAttack.ToString()),
-    //        SkillFactory.Create(skills.Passive),
-    //        SkillFactory.Create(skills.Skill),
-    //        SkillFactory.Create(skills.Ultimate),
-    //        CharacterManager.Instance.CharacterStats
-    //    );
-
-    //    _isInitialized = true;
-    //}
 
     protected async void Start()
     {
@@ -83,44 +59,12 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         }
     }*/
 
-    //public void OnAttack(InputAction.CallbackContext callback)
-    //{
-    //    if (callback.performed)
-    //    {
-    //        // 일반 공격을 함
-    //        Debug.Log("Normal Attack performed");
-    //        _character.UseSkill(ESkillType.BasicAttack);
-    //    }
-    //}
-
     [PunRPC]
     private void RPC_NormalAttack()
     {
         Debug.Log("Normal Attack performed via RPC");
         _character.UseSkill(ESkillType.BasicAttack);
     }
-
-    //private void Update()
-    //{
-    //    if(_isInitialized == false)
-    //    {
-    //        return;
-    //    }
-    //    _character.Update();
-
-    //    if (Input.GetMouseButtonDown(0))
-    //    {
-    //        _character.UseSkill(ESkillType.BasicAttack);
-    //    }
-    //    if (Input.GetKeyDown(KeyCode.Q))
-    //    {
-    //        _character.UseSkill(ESkillType.Skill);
-    //    }
-    //    if (Input.GetKeyDown(KeyCode.Z))
-    //    {
-    //        _character.UseSkill(ESkillType.Ultimate);
-    //    }
-    //}
 
     private void Update()
     {
@@ -140,7 +84,6 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
                 break;
         }
 
-        // 평타는 그대로
         if (_inputState == ESkillInputState.None && Input.GetMouseButtonDown(0))
         {
             _character.UseSkill(ESkillType.BasicAttack);
@@ -156,6 +99,10 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         else if (Input.GetKeyDown(KeyCode.Z))
         {
             EnterAimingMode(ESkillType.Ultimate);
+        }
+        else if (Input.GetKeyDown(KeyCode.E))
+        {
+            _character.UseSkill(ESkillType.Passive);
         }
     }
 
@@ -190,27 +137,8 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         {
             if (_selectedSkill.HasValue)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-
-                Vector3 targetPoint;
-                CharacterBase targetUnit = null;
-
-                if (Physics.Raycast(ray, out hit, 100f)) // 100f는 최대 거리
-                {
-                    targetPoint = hit.point;
-
-                    // 대상 캐릭터가 있다면
-                    if (hit.collider.TryGetComponent<CharacterBehaviour>(out var behaviour))
-                    {
-                        targetUnit = behaviour.GetCharacterBase(); // 이건 CharacterBehaviour에 따로 만들어야 함
-                    }
-                }
-                else
-                {
-                    // 바닥 등 맞은 게 없을 경우, 카메라 앞 10m 지점으로 임시 설정
-                    targetPoint = ray.GetPoint(10f);
-                }
+                Vector3 targetPoint = GetMouseWorldPosition();
+                CharacterBase targetUnit = GetTargetUnderMouse(targetPoint);
 
                 _character.UseSkill(_selectedSkill.Value, targetUnit, targetPoint);
             }
@@ -224,10 +152,23 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         }
     }
 
-
-    private CharacterBase GetTargetUnderMouse(Vector3 mouseWorld)
+    private Vector3 GetMouseWorldPosition()
     {
-        Collider[] hits = Physics.OverlapSphere(mouseWorld, 0.2f); // 또는 Physics.Raycast
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+        // y = 0인 지면과의 충돌점을 구함
+        Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
+        if (groundPlane.Raycast(ray, out float enter))
+        {
+            return ray.GetPoint(enter);
+        }
+
+        return ray.GetPoint(10f); // 실패 시 fallback
+    }
+
+    private CharacterBase GetTargetUnderMouse(Vector3 worldPoint)
+    {
+        Collider[] hits = Physics.OverlapSphere(worldPoint, 0.5f); // 반경은 필요에 따라 조정
         foreach (var hit in hits)
         {
             if (hit.TryGetComponent<CharacterBehaviour>(out var behaviour))
@@ -235,7 +176,6 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
                 return behaviour.GetCharacterBase();
             }
         }
-
         return null;
     }
 

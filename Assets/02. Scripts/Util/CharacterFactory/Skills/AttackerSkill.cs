@@ -1,9 +1,7 @@
-using Photon.Pun;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 
 /// <summary>
-/// 투사체 발사
+/// 투사체 발사형 스킬
 /// </summary>
 public class AttackerSkill : ITargetableSkill
 {
@@ -29,20 +27,13 @@ public class AttackerSkill : ITargetableSkill
             return;
         }
 
-        // 마우스 방향 계산
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mousePos.z = 0f;
-        Vector3 dir = (mousePos - character.Behaviour.transform.position).normalized;
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-        Quaternion rotation = Quaternion.Euler(0f, 0f, angle - 90f);
+        Vector3 origin = character.Behaviour.transform.position;
+        target.y = origin.y; // Y축 고정하여 2D 발사 느낌을 주기 위함
+        Vector3 dir = (target - origin).normalized;
 
-        // 발사
-        /*GameObject projectile = PhotonNetwork.Instantiate(
-            Data.ProjectilePrefabName,
-            character.Behaviour.transform.position,
-            rotation,
-            0
-        );*/
+        // 방향을 바라보도록 회전 (3D 기준으로 z축 전방)
+        Quaternion rotation = Quaternion.LookRotation(dir);
+
         GameObject prefab = Resources.Load<GameObject>("Projectiles/" + Data.ProjectilePrefabName);
 
         if (prefab == null)
@@ -51,14 +42,9 @@ public class AttackerSkill : ITargetableSkill
             return;
         }
 
-        GameObject projectile = GameObject.Instantiate(
-            prefab,
-            character.Behaviour.transform.position,
-            rotation
-        );
+        GameObject projectile = GameObject.Instantiate(prefab, origin, rotation);
+        projectile.GetComponent<IProjectile>().SetData(Data, character, dir);
 
-
-        projectile.GetComponent<IProjectile>().SetData(Data, character, target);
         _timer = 0f;
     }
 }

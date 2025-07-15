@@ -43,13 +43,13 @@ public class CharacterBase
         ISkill skill = type switch
         {
             ESkillType.BasicAttack => _basicAttack,
+            ESkillType.Passive => _passive,
             ESkillType.Skill => _skill,
             ESkillType.Ultimate => _ultimate,
             _ => null
         };
 
-        if (skill == null)
-            return;
+        if (skill == null) return;
 
         if (skill is IUnitTargetSkill unitTargetSkill && target != null)
         {
@@ -71,14 +71,11 @@ public class CharacterBase
 
         // 이벤트 발생
         if (type == ESkillType.BasicAttack)
-        {
             RaiseEvent(ECharacterEvent.OnBasicAttack);
-        }
         else
-        {
             RaiseEvent(ECharacterEvent.OnSkillUsed);
-        }
     }
+
 
     public void Update()
     {
@@ -88,12 +85,12 @@ public class CharacterBase
         _ultimate.Update();
     }
 
-    public void RaiseEvent(ECharacterEvent characterEvent)
+    private void RaiseEvent(ECharacterEvent characterEvent)
     {
         OnEventOccurred?.Invoke(characterEvent);
     }
 
-    public void BindPassiveEvents()
+    private void BindPassiveEvents()
     {
         if (_passive is IEventReactiveSkill reactive)
         {
