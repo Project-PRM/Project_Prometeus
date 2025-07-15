@@ -13,17 +13,13 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
 
     private bool _isInitialized = false;
 
-    private List<IStatusEffect> _activeEffects = new();
+    [Header("# Status Effects")]
+    private Dictionary<IStatusEffect, StatusEffectInstance> _activeEffects = new();
 
     [Header("# Skill Use State")]
     private ESkillInputState _inputState = ESkillInputState.None;
     private ESkillType? _selectedSkill = null;
     private Vector3 _aimDirection = Vector3.zero;
-    private enum ESkillInputState
-    {
-        None,
-        Aiming
-    }
 
     protected async void Start()
     {
@@ -200,25 +196,52 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         //_aimIndicator.SetActive(false);
     }
 
-    // 상태이상 효과 적용
-    public void ApplyEffect(IStatusEffect effect)
+    public void ApplyEffect(IStatusEffect newEffect)
     {
-        effect.Apply(_character);
-        _activeEffects.Add(effect);
-        StartCoroutine(RemoveEffectAfterTime(effect));
+        if (_activeEffects.TryGetValue(newEffect, out var instance))
+        {
+            // 남은 시간이 더 길으면 유지, 아니면 갱신
+            if (newEffect.Duration > instance.RemainingTime)
+            {
+                instance.RemainingTime = newEffect.Duration;
+                Debug.Log($"효과 지속시간 재설정: {newEffect.Duration}초");
+            }
+            else
+            {
+                Debug.Log($"기존 효과 지속시간 유지: {instance.RemainingTime}초");
+            }
+            return; // 코루틴은 그대로 진행
+        }
+
+        // 신규 효과 적용
+        newEffect.Apply(_character);
+        Coroutine coroutine = StartCoroutine(EffectDurationCoroutine(newEffect));
+        _activeEffects[newEffect] = new StatusEffectInstance(newEffect, coroutine, newEffect.Duration);
     }
 
-    // 상태이상 효과 제거
     public void RemoveEffect(IStatusEffect effect)
     {
-        effect.Remove(_character);
-        _activeEffects.Remove(effect);
+        if (_activeEffects.TryGetValue(effect, out var instance))
+        {
+            if (instance.Coroutine != null)
+            {
+                StopCoroutine(instance.Coroutine);
+            }
+            effect.Remove(_character);
+            _activeEffects.Remove(effect);
+        }
     }
 
-    // 일정 시간 후 상태이상 효과 제거
-    private IEnumerator RemoveEffectAfterTime(IStatusEffect effect)
+    private IEnumerator EffectDurationCoroutine(IStatusEffect effect)
     {
-        yield return new WaitForSeconds(effect.Duration);
-        RemoveEffect(effect);
+        var instance = _activeEffects[effect];
+        while (instance.RemainingTime > 0f)
+        {
+            instance.RemainingTime -= Time.deltaTime;
+            yield return null;
+        }
+
+        effect.Remove(_character);
+        _activeEffects.Remove(effect);
     }
 }

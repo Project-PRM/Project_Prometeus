@@ -30,3 +30,26 @@ public class StunEffect : IStatusEffect
         Remove(target);
     }
 }
+
+/*public class StunEffect : IStatusEffect
+{
+    public float Duration { get; private set; }
+
+    public StunEffect(float duration)
+    {
+        Duration = duration;
+    }
+
+    public void Apply(CharacterBase target)
+    {
+        target.Behaviour.SetStunned(true);
+        Debug.Log($"{target.Name} is stunned for {Duration} seconds.");
+    }
+
+    public void Remove(CharacterBase target)
+    {
+        target.Behaviour.SetStunned(false);
+        Debug.Log($"{target.Name} is no longer stunned.");
+    }
+}
+*/
