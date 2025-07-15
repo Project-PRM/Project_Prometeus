@@ -38,6 +38,18 @@ public class CharacterBase
         BindPassiveEvents();
     }
 
+    public ISkill GetSkill(ESkillType type)
+    {
+        return type switch
+        {
+            ESkillType.BasicAttack => _basicAttack,
+            ESkillType.Passive => _passive,
+            ESkillType.Skill => _skill,
+            ESkillType.Ultimate => _ultimate,
+            _ => null
+        };
+    }
+
     public void UseSkill(ESkillType type, CharacterBase target = null, Vector3? position = null)
     {
         ISkill skill = type switch

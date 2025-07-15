@@ -94,15 +94,29 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            EnterAimingMode(ESkillType.Skill);
+            TryActivateSkillOrEnterAiming(ESkillType.Skill);
         }
         else if (Input.GetKeyDown(KeyCode.Z))
         {
-            EnterAimingMode(ESkillType.Ultimate);
+            TryActivateSkillOrEnterAiming(ESkillType.Ultimate);
         }
-        else if (Input.GetKeyDown(KeyCode.E))
+        else if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            _character.UseSkill(ESkillType.Passive);
+            TryActivateSkillOrEnterAiming(ESkillType.Passive);
+        }
+    }
+
+    private void TryActivateSkillOrEnterAiming(ESkillType skillType)
+    {
+        ISkill skill = _character.GetSkill(skillType);
+
+        if (skill is ISkillNoTarget noTargetSkill)
+        {
+            noTargetSkill.Activate(_character); // 즉시 발동
+        }
+        else
+        {
+            EnterAimingMode(skillType); // 조준 모드 진입
         }
     }
 
