@@ -45,6 +45,7 @@ public class AccountManager : Singleton<AccountManager>
         return result.Success;
     }
 
+    //TODO : GetUserIdWithNickname(string nickname)
     public async Task<string> GetUserNicknameWithEmail(string email)
     {
         string nickname = string.Empty;
