@@ -1,29 +1,24 @@
 using UnityEngine;
 using System;
+using UnityEngine.InputSystem;
 
 public class Stair : MonoBehaviour
 {
     [SerializeField] private Transform _movePoint;
-    private Transform _moveTarget;
 
-    private void Start()
-    {
-        Fade.Instance.OnFadeInComplete += () =>
-        { UpFlow(_moveTarget, _movePoint); };
-    }
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            _moveTarget = other.transform;
+            other.gameObject.GetComponent<PlayerInput>().enabled = false;
+            Fade.Instance.OnFadeInComplete += () => { UpFlow(other.transform); }; ;
             Fade.Instance.FadeInAndOut();
         }
     }
-    private void UpFlow(Transform player, Transform movePoint)
+    private void UpFlow(Transform player)
     {
-        if(player == null) throw new ArgumentNullException("이동시킬 대상 없듬");
-        if(movePoint == null) throw new ArgumentNullException("이동시킬 위치 없듬");
-
-        player.transform.position = movePoint.position;
+        player.transform.position = _movePoint.position;
+        player.gameObject.GetComponent<PlayerInput>().enabled = true;
+        Fade.Instance.OnFadeInComplete -= () => { UpFlow(player); }; ;
     }
 }
