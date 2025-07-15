@@ -13,8 +13,6 @@ public class Player : MonoBehaviour
     private Animator _animator;
     public Animator Animator => _animator;
 
-    private CharacterBase _character;
-
     private void Awake()
     {
         _photonView = GetComponent<PhotonView>();
@@ -68,6 +66,8 @@ public class Player : MonoBehaviour
         {
             var revealer = GetComponent<FogOfWarRevealer3D>();
             if (revealer != null) revealer.enabled = true;
+
+            NameTagManager.Instance.CreateNameTag(_photonView.Owner, transform);
             return;
         }
 
@@ -78,6 +78,8 @@ public class Player : MonoBehaviour
         {
             var revealer = GetComponent<FogOfWarRevealer3D>();
             if (revealer != null) revealer.enabled = true;
+
+            NameTagManager.Instance.CreateNameTag(_photonView.Owner, transform);
         }
     }
 }

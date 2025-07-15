@@ -1267,6 +1267,7 @@ GameObject:
   - component: {fileID: 3288031797573168734}
   - component: {fileID: 946712415500831582}
   - component: {fileID: 6380600178584220153}
+  - component: {fileID: 8631239530700257908}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1454,6 +1455,42 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 9caa3d8a-6b2f-4e8e-8bad-6ede561bd9be
     m_ActionName: UI/TrackedDeviceOrientation
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 3177763884507239518}
+        m_TargetAssemblyTypeName: CharacterBehaviour, Assembly-CSharp
+        m_MethodName: OnSkillUse
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 12d15c9e-8825-4f38-9e7a-192489d148b0
+    m_ActionName: 'Player/Skill[/Keyboard/q]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4181686743975786951}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: e1d5ee4b-9cc5-4d2e-b63f-3b2e1ae6b7ab
+    m_ActionName: 'Player/Ultimate[/Keyboard/z]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 00a67aa3-a054-4dae-b52d-a2716a40f96d
+    m_ActionName: 'Player/Passive[/Keyboard/leftShift]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -1645,6 +1682,18 @@ MonoBehaviour:
   DrawExtraCastLines: 0
   DrawHiderSamples: 0
   DebugLogHiderBlockerName: 0
+--- !u!114 &8631239530700257908
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4181686743975786951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 487797654dbb96c4fa4f05638e392521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4438556986761831740
 GameObject:
   m_ObjectHideFlags: 0
