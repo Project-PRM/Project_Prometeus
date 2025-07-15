@@ -15,16 +15,15 @@ public class StairMatcher : MonoBehaviour
             return;
         }
 
-        // stairs, points 복사 후 셔플
         GameObject[] shuffledStairs = (GameObject[])_stairs.Clone();
 
         Shuffle(shuffledStairs);
 
         // 앞에서부터 매칭
-        for (int i = 0; i < _matchCount; i++)
+        for (int i = _matchCount; i < _stairs.Length; i++)
         {
-            GameObject stair = shuffledStairs[i];
-            // 계단 키기
+            Debug.Log($"stair {shuffledStairs[i]} is off");
+            shuffledStairs[i].SetActive(false);
         }
     }
 
