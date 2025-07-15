@@ -27,6 +27,8 @@ public class AttackerUltimate : ITargetableSkill
             return;
         }
 
+        Debug.Log($"{character.Name} is activating Ultimate skill at {target}");
+
         _timer = 0f;
     }
 }

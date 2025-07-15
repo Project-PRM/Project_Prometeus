@@ -28,6 +28,15 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
         _playerInput.actions["Passive"].performed += OnPassiveUse;
         _playerInput.actions["Skill"].performed += OnSkillUse;
         _playerInput.actions["Ultimate"].performed += OnUltimateUse;
+        _playerInput.actions["Attack"].performed += OnAttack;
+    }
+
+    private void OnDisable()
+    {
+        _playerInput.actions["Passive"].performed -= OnPassiveUse;
+        _playerInput.actions["Skill"].performed -= OnSkillUse;
+        _playerInput.actions["Ultimate"].performed -= OnUltimateUse;
+        _playerInput.actions["Attack"].performed -= OnAttack;
     }
 
     protected async void Start()
@@ -56,53 +65,26 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
         //if (!_photonView.IsMine) return;
         if (_inputState == ESkillInputState.Aiming)
             return;
-
-        if (callback.performed)
-        {
-            TryActivateSkillOrEnterAiming(ESkillType.BasicAttack);
-            //hotonView.RPC(nameof(RPC_NormalAttack), RpcTarget.All);
-        }
+        TryActivateSkillOrEnterAiming(ESkillType.BasicAttack);
     }
 
     public void OnSkillUse(InputAction.CallbackContext callback)
     {
         //if (!_photonView.IsMine) return;
-        if (_inputState == ESkillInputState.Aiming)
-            return;
-
-        if (callback.performed)
-        {
-            TryActivateSkillOrEnterAiming(ESkillType.Skill);
-            //hotonView.RPC(nameof(RPC_NormalAttack), RpcTarget.All);
-        }
+        TryActivateSkillOrEnterAiming(ESkillType.Skill);
     }
 
     public void OnUltimateUse(InputAction.CallbackContext callback)
     {
         //if (!_photonView.IsMine) return;
-        if (_inputState == ESkillInputState.Aiming)
-            return;
-
-        if (callback.performed)
-        {
-            TryActivateSkillOrEnterAiming(ESkillType.Ultimate);
-            //hotonView.RPC(nameof(RPC_NormalAttack), RpcTarget.All);
-        }
+        TryActivateSkillOrEnterAiming(ESkillType.Ultimate);
     }
 
     public void OnPassiveUse(InputAction.CallbackContext callback)
     {
         //if (!_photonView.IsMine) return;
-        if (_inputState == ESkillInputState.Aiming)
-            return;
-
-        if (callback.performed)
-        {
-            TryActivateSkillOrEnterAiming(ESkillType.Passive);
-            //hotonView.RPC(nameof(RPC_NormalAttack), RpcTarget.All);
-        }
+        TryActivateSkillOrEnterAiming(ESkillType.Passive);
     }
-
 
     [PunRPC]
     private void RPC_NormalAttack()
@@ -119,36 +101,12 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
 
         switch (_inputState)
         {
-            case ESkillInputState.None:
-                HandleSkillKeyInput();
-                break;
-
             case ESkillInputState.Aiming:
                 UpdateAimingUI();
                 HandleAimingInput();
                 break;
-        }
-
-        if (_inputState == ESkillInputState.None && Input.GetMouseButtonDown(0))
-        {
-            _character.UseSkill(ESkillType.BasicAttack);
-        }
-    }
-
-    // 입력 처리: 스킬 키 입력 (Q, Z, Shift 등)
-    private void HandleSkillKeyInput()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            TryActivateSkillOrEnterAiming(ESkillType.Skill);
-        }
-        else if (Input.GetKeyDown(KeyCode.Z))
-        {
-            TryActivateSkillOrEnterAiming(ESkillType.Ultimate);
-        }
-        else if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            TryActivateSkillOrEnterAiming(ESkillType.Passive);
+            default:
+                break;
         }
     }
 
@@ -251,12 +209,12 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
 
     public void TakeDamage(float Damage)
     {
-        throw new System.NotImplementedException();
+        _character.TakeDamage(Damage);
     }
 
     public void Heal(float Amount)
     {
-        throw new System.NotImplementedException();
+        _character.Heal(Amount);
     }
 
     /*public void ApplyEffect(IStatusEffect newEffect)
