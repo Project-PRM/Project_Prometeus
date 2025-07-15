@@ -1,10 +1,10 @@
 using Photon.Pun;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffectable
+[RequireComponent(typeof(CharacterStatusEffect))]
+public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour
 {
     [SerializeField] private ECharacterName _characterName;
 
@@ -200,7 +200,7 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         //_aimIndicator.SetActive(false);
     }
 
-    public void ApplyEffect(IStatusEffect newEffect)
+    /*public void ApplyEffect(IStatusEffect newEffect)
     {
         newEffect.Apply(_character);
 
@@ -254,5 +254,5 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
 
         // 리스트에서 해당 인스턴스를 제거
         _activeEffects.RemoveAll(e => e.Effect == effect);
-    }
+    }*/
 }
