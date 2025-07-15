@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 1d9abdd4e004b44a6a2346bc182ffb5e
+NativeFormatImporter:
+  externalObjects: {}
+  mainObjectFileID: 11400000
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 250533
+  packageName: Photon Inventory 2 (Game Creator 2)
+  packageVersion: 1.0.4
+  assetPath: Assets/Plugins/NinjutsuGames/Installers/Photon/PhotonInventoryExamples/NinjutsuGames.Photon.Inventory.Examples.asset
+  uploadId: 634902
