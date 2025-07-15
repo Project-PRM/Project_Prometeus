@@ -4,9 +4,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterStatusEffect))]
-public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour
+[RequireComponent(typeof(PhotonView))]
+public class CharacterBehaviour : MonoBehaviour, IDamageable
 {
     [SerializeField] private ECharacterName _characterName;
+    [SerializeField] private PlayerInput _playerInput; // PlayerInput 컴포넌트 연결 필요
 
     private CharacterBase _character;
     public CharacterBase GetCharacterBase() => _character;
@@ -20,6 +22,22 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour
     private ESkillInputState _inputState = ESkillInputState.None;
     private ESkillType? _selectedSkill = null;
     private Vector3 _aimDirection = Vector3.zero;
+
+    private void OnEnable()
+    {
+        _playerInput.actions["Passive"].performed += OnPassiveUse;
+        _playerInput.actions["Skill"].performed += OnSkillUse;
+        _playerInput.actions["Ultimate"].performed += OnUltimateUse;
+        _playerInput.actions["Attack"].performed += OnAttack;
+    }
+
+    private void OnDisable()
+    {
+        _playerInput.actions["Passive"].performed -= OnPassiveUse;
+        _playerInput.actions["Skill"].performed -= OnSkillUse;
+        _playerInput.actions["Ultimate"].performed -= OnUltimateUse;
+        _playerInput.actions["Attack"].performed -= OnAttack;
+    }
 
     protected async void Start()
     {
@@ -42,18 +60,31 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour
         _isInitialized = true;
     }
 
-    /*public void OnAttack(InputAction.CallbackContext callback)
+    public void OnAttack(InputAction.CallbackContext callback)
     {
-        if (!_photonView.IsMine) return;
+        //if (!_photonView.IsMine) return;
+        if (_inputState == ESkillInputState.Aiming)
+            return;
+        TryActivateSkillOrEnterAiming(ESkillType.BasicAttack);
+    }
 
-        if (callback.performed)
-        {
-            // 일반 공격을 함
-            Debug.Log("Normal Attack performed");
-            _character.UseSkill(ESkillType.BasicAttack);
-            _photonView.RPC(nameof(RPC_NormalAttack), RpcTarget.All);
-        }
-    }*/
+    public void OnSkillUse(InputAction.CallbackContext callback)
+    {
+        //if (!_photonView.IsMine) return;
+        TryActivateSkillOrEnterAiming(ESkillType.Skill);
+    }
+
+    public void OnUltimateUse(InputAction.CallbackContext callback)
+    {
+        //if (!_photonView.IsMine) return;
+        TryActivateSkillOrEnterAiming(ESkillType.Ultimate);
+    }
+
+    public void OnPassiveUse(InputAction.CallbackContext callback)
+    {
+        //if (!_photonView.IsMine) return;
+        TryActivateSkillOrEnterAiming(ESkillType.Passive);
+    }
 
     [PunRPC]
     private void RPC_NormalAttack()
@@ -70,36 +101,12 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour
 
         switch (_inputState)
         {
-            case ESkillInputState.None:
-                HandleSkillKeyInput();
-                break;
-
             case ESkillInputState.Aiming:
                 UpdateAimingUI();
                 HandleAimingInput();
                 break;
-        }
-
-        if (_inputState == ESkillInputState.None && Input.GetMouseButtonDown(0))
-        {
-            _character.UseSkill(ESkillType.BasicAttack);
-        }
-    }
-
-    // 입력 처리: 스킬 키 입력 (Q, Z, Shift 등)
-    private void HandleSkillKeyInput()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            TryActivateSkillOrEnterAiming(ESkillType.Skill);
-        }
-        else if (Input.GetKeyDown(KeyCode.Z))
-        {
-            TryActivateSkillOrEnterAiming(ESkillType.Ultimate);
-        }
-        else if (Input.GetKeyDown(KeyCode.LeftShift))
-        {
-            TryActivateSkillOrEnterAiming(ESkillType.Passive);
+            default:
+                break;
         }
     }
 
@@ -198,6 +205,16 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour
         _selectedSkill = null;
         _inputState = ESkillInputState.None;
         //_aimIndicator.SetActive(false);
+    }
+
+    public void TakeDamage(float Damage)
+    {
+        _character.TakeDamage(Damage);
+    }
+
+    public void Heal(float Amount)
+    {
+        _character.Heal(Amount);
     }
 
     /*public void ApplyEffect(IStatusEffect newEffect)

@@ -11,6 +11,7 @@ public class CharacterBase
 
     [Header("# Datas")]
     public string Name { get; private set; }
+    public float CurrentHealth { get; private set; }
     public CharacterStats BaseStats { get; private set; } // Firebase 기반
     private bool _isDirty = true;
     private CharacterStats _cachedFinalStats;
@@ -42,11 +43,6 @@ public class CharacterBase
         _isDirty = true;
     }
 
-    public void ForceRecalculateStats()
-    {
-        _isDirty = true;
-    }
-
     private ISkill _basicAttack;
     private ISkill _passive;
     private ISkill _skill;
@@ -61,7 +57,7 @@ public class CharacterBase
         _skill = skill;
         _ultimate = ultimate;
         BaseStats = baseStats;
-
+        CurrentHealth = BaseStats.MaxHealth;
         BindPassiveEvents();
     }
 
@@ -133,6 +129,28 @@ public class CharacterBase
         if (_passive is IEventReactiveSkill reactive)
         {
             OnEventOccurred += reactive.OnEvent;
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        float finalDamage = DamageCalculator.CalculateDamage(damage, FinalStats.BaseArmor);
+        CurrentHealth -= finalDamage;
+        if (CurrentHealth < 0)
+        {
+            CurrentHealth = 0;
+            RaiseEvent(ECharacterEvent.OnDeath);
+            return;
+        }
+        RaiseEvent(ECharacterEvent.OnDamaged);
+    }
+
+    public void Heal(float amount)
+    {
+        CurrentHealth += amount;
+        if (CurrentHealth > FinalStats.MaxHealth)
+        {
+            CurrentHealth = FinalStats.MaxHealth;
         }
     }
 }

@@ -31,6 +31,7 @@ public class CharacterManager : Singleton<CharacterManager>
         {
             _characterMetaDataCache[characterName] = await _repository.GetCharacterSkillNames(characterName);
         }
+        await _repository.GetBaseCharacterStats();
         _skillDataMap = await _repository.GetAllSkillDatas();
         SkillFactory.SetSkillDataCache(_skillDataMap);
 
