@@ -90,6 +90,7 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         }
     }
 
+    // 입력 처리: 스킬 키 입력 (Q, Z, Shift 등)
     private void HandleSkillKeyInput()
     {
         if (Input.GetKeyDown(KeyCode.Q))
@@ -106,6 +107,7 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         }
     }
 
+    // 스킬 타입에 따라 즉발 스킬은 즉시 실행, 아니면 조준 모드로 진입
     private void TryActivateSkillOrEnterAiming(ESkillType skillType)
     {
         ISkill skill = _character.GetSkill(skillType);
@@ -120,6 +122,7 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         }
     }
 
+    // 조준 모드 설정
     private void EnterAimingMode(ESkillType skillType)
     {
         _selectedSkill = skillType;
@@ -127,6 +130,7 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         //_aimIndicator.SetActive(true);
     }
 
+    // 조준 UI 업데이트 (에임 방향 벡터 갱신 등)
     private void UpdateAimingUI()
     {
         Vector3 mouseWorld = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -138,13 +142,7 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         //_aimIndicator.transform.rotation = Quaternion.LookRotation(Vector3.forward, _aimDirection);
     }
 
-    public void ApplyEffect(IStatusEffect effect)
-    {
-        effect.Apply(_character);
-        _activeEffects.Add(effect);
-        StartCoroutine(RemoveEffectAfterTime(effect));
-    }
-
+    // 조준 상태에서 마우스 클릭 시 스킬 시전
     private void HandleAimingInput()
     {
         if (Input.GetMouseButtonDown(0)) // 좌클릭: 시전
@@ -166,11 +164,11 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         }
     }
 
+    // 마우스 클릭 위치의 월드 좌표 반환 (y = 0 평면 기준)
     private Vector3 GetMouseWorldPosition()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
-        // y = 0인 지면과의 충돌점을 구함
         Plane groundPlane = new Plane(Vector3.up, Vector3.zero);
         if (groundPlane.Raycast(ray, out float enter))
         {
@@ -180,9 +178,10 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         return ray.GetPoint(10f); // 실패 시 fallback
     }
 
+    // 마우스 위치에 있는 캐릭터를 찾아 반환 (없으면 null)
     private CharacterBase GetTargetUnderMouse(Vector3 worldPoint)
     {
-        Collider[] hits = Physics.OverlapSphere(worldPoint, 0.5f); // 반경은 필요에 따라 조정
+        Collider[] hits = Physics.OverlapSphere(worldPoint, 0.5f);
         foreach (var hit in hits)
         {
             if (hit.TryGetComponent<CharacterBehaviour>(out var behaviour))
@@ -193,6 +192,7 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         return null;
     }
 
+    // 조준 상태 및 선택된 스킬 초기화
     private void ResetSkillState()
     {
         _selectedSkill = null;
@@ -200,12 +200,22 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
         //_aimIndicator.SetActive(false);
     }
 
+    // 상태이상 효과 적용
+    public void ApplyEffect(IStatusEffect effect)
+    {
+        effect.Apply(_character);
+        _activeEffects.Add(effect);
+        StartCoroutine(RemoveEffectAfterTime(effect));
+    }
+
+    // 상태이상 효과 제거
     public void RemoveEffect(IStatusEffect effect)
     {
         effect.Remove(_character);
         _activeEffects.Remove(effect);
     }
 
+    // 일정 시간 후 상태이상 효과 제거
     private IEnumerator RemoveEffectAfterTime(IStatusEffect effect)
     {
         yield return new WaitForSeconds(effect.Duration);
