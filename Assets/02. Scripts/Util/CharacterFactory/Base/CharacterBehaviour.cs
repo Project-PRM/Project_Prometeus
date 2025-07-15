@@ -4,9 +4,11 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterStatusEffect))]
-public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour
+[RequireComponent(typeof(PhotonView))]
+public class CharacterBehaviour : MonoBehaviour, IDamageable
 {
     [SerializeField] private ECharacterName _characterName;
+    [SerializeField] private PlayerInput _playerInput; // PlayerInput 컴포넌트 연결 필요
 
     private CharacterBase _character;
     public CharacterBase GetCharacterBase() => _character;
@@ -20,6 +22,13 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour
     private ESkillInputState _inputState = ESkillInputState.None;
     private ESkillType? _selectedSkill = null;
     private Vector3 _aimDirection = Vector3.zero;
+
+    private void OnEnable()
+    {
+        _playerInput.actions["Passive"].performed += OnPassiveUse;
+        _playerInput.actions["Skill"].performed += OnSkillUse;
+        _playerInput.actions["Ultimate"].performed += OnUltimateUse;
+    }
 
     protected async void Start()
     {
@@ -42,18 +51,58 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour
         _isInitialized = true;
     }
 
-    /*public void OnAttack(InputAction.CallbackContext callback)
+    public void OnAttack(InputAction.CallbackContext callback)
     {
-        if (!_photonView.IsMine) return;
+        //if (!_photonView.IsMine) return;
+        if (_inputState == ESkillInputState.Aiming)
+            return;
 
         if (callback.performed)
         {
-            // 일반 공격을 함
-            Debug.Log("Normal Attack performed");
-            _character.UseSkill(ESkillType.BasicAttack);
-            _photonView.RPC(nameof(RPC_NormalAttack), RpcTarget.All);
+            TryActivateSkillOrEnterAiming(ESkillType.BasicAttack);
+            //hotonView.RPC(nameof(RPC_NormalAttack), RpcTarget.All);
         }
-    }*/
+    }
+
+    public void OnSkillUse(InputAction.CallbackContext callback)
+    {
+        //if (!_photonView.IsMine) return;
+        if (_inputState == ESkillInputState.Aiming)
+            return;
+
+        if (callback.performed)
+        {
+            TryActivateSkillOrEnterAiming(ESkillType.Skill);
+            //hotonView.RPC(nameof(RPC_NormalAttack), RpcTarget.All);
+        }
+    }
+
+    public void OnUltimateUse(InputAction.CallbackContext callback)
+    {
+        //if (!_photonView.IsMine) return;
+        if (_inputState == ESkillInputState.Aiming)
+            return;
+
+        if (callback.performed)
+        {
+            TryActivateSkillOrEnterAiming(ESkillType.Ultimate);
+            //hotonView.RPC(nameof(RPC_NormalAttack), RpcTarget.All);
+        }
+    }
+
+    public void OnPassiveUse(InputAction.CallbackContext callback)
+    {
+        //if (!_photonView.IsMine) return;
+        if (_inputState == ESkillInputState.Aiming)
+            return;
+
+        if (callback.performed)
+        {
+            TryActivateSkillOrEnterAiming(ESkillType.Passive);
+            //hotonView.RPC(nameof(RPC_NormalAttack), RpcTarget.All);
+        }
+    }
+
 
     [PunRPC]
     private void RPC_NormalAttack()
@@ -198,6 +247,16 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour
         _selectedSkill = null;
         _inputState = ESkillInputState.None;
         //_aimIndicator.SetActive(false);
+    }
+
+    public void TakeDamage(float Damage)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void Heal(float Amount)
+    {
+        throw new System.NotImplementedException();
     }
 
     /*public void ApplyEffect(IStatusEffect newEffect)
