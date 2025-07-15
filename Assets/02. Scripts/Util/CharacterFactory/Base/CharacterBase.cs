@@ -11,6 +11,7 @@ public class CharacterBase
 
     [Header("# Datas")]
     public string Name { get; private set; }
+    public float CurrentHealth { get; private set; }
     public CharacterStats BaseStats { get; private set; } // Firebase 기반
     private bool _isDirty = true;
     private CharacterStats _cachedFinalStats;
@@ -61,7 +62,7 @@ public class CharacterBase
         _skill = skill;
         _ultimate = ultimate;
         BaseStats = baseStats;
-
+        CurrentHealth = BaseStats.MaxHealth;
         BindPassiveEvents();
     }
 
