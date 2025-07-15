@@ -108,7 +108,11 @@ public class CharacterBehaviour : /*PlayerActivity,*/MonoBehaviour, IStatusAffec
     {
         ISkill skill = _character.GetSkill(skillType);
 
-        if (skill is ISkillNoTarget noTargetSkill)
+        if(skill is IPermanentSkill permanentSkill)
+        {
+            return;
+        }
+        else if (skill is ISkillNoTarget noTargetSkill)
         {
             noTargetSkill.Activate(_character); // 즉시 발동
         }
