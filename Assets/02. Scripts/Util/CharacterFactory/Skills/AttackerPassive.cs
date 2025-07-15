@@ -3,7 +3,7 @@ using UnityEngine;
 /// <summary>
 /// 자기 자신 대쉬
 /// </summary>
-public class AttackerPassive : ISkill
+public class AttackerPassive : ISkillNoTarget
 {
     private float _timer = 0f;
     public SkillData Data { get; set; }

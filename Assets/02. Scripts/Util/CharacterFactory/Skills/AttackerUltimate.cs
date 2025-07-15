@@ -1,7 +1,7 @@
 using UnityEngine;
 
 /// <summary>
-/// 투사체 발사, 지속 데미지
+/// 투사체 발사, 장판 생성, 지속 데미지
 /// </summary>
 public class AttackerUltimate : ITargetableSkill
 {
