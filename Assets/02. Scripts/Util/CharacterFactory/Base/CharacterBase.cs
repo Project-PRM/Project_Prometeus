@@ -43,11 +43,6 @@ public class CharacterBase
         _isDirty = true;
     }
 
-    public void ForceRecalculateStats()
-    {
-        _isDirty = true;
-    }
-
     private ISkill _basicAttack;
     private ISkill _passive;
     private ISkill _skill;
@@ -134,6 +129,28 @@ public class CharacterBase
         if (_passive is IEventReactiveSkill reactive)
         {
             OnEventOccurred += reactive.OnEvent;
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        float finalDamage = DamageCalculator.CalculateDamage(damage, FinalStats.BaseArmor);
+        CurrentHealth -= finalDamage;
+        if (CurrentHealth < 0)
+        {
+            CurrentHealth = 0;
+            RaiseEvent(ECharacterEvent.OnDeath);
+            return;
+        }
+        RaiseEvent(ECharacterEvent.OnDamaged);
+    }
+
+    public void Heal(float amount)
+    {
+        CurrentHealth += amount;
+        if (CurrentHealth > FinalStats.MaxHealth)
+        {
+            CurrentHealth = FinalStats.MaxHealth;
         }
     }
 }

@@ -209,12 +209,12 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
 
     public void TakeDamage(float Damage)
     {
-        //throw new System.NotImplementedException();
+        _character.TakeDamage(Damage);
     }
 
     public void Heal(float Amount)
     {
-        //throw new System.NotImplementedException();
+        _character.Heal(Amount);
     }
 
     /*public void ApplyEffect(IStatusEffect newEffect)
