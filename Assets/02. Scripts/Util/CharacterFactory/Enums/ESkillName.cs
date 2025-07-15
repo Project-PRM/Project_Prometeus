@@ -8,4 +8,7 @@ public enum ESkillName
     AttackerPassive,
     AttackerSkill,
     AttackerUltimate,
+    BuffPassive,
+    BuffSkill,
+    BuffUltimate,
 }

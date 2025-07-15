@@ -53,7 +53,7 @@ public class AttackerSkillProjectile : MonoBehaviour, IProjectile
         Collider[] hits = Physics.OverlapSphere(transform.position, _radius);
         foreach (var hit in hits)
         {
-            if (hit.TryGetComponent<IDamageAble>(out var target))
+            if (hit.TryGetComponent<IDamageable>(out var target))
             {
                 target.TakeDamage(_damage);
             }

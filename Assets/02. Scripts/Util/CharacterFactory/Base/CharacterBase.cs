@@ -12,13 +12,40 @@ public class CharacterBase
     [Header("# Datas")]
     public string Name { get; private set; }
     public CharacterStats BaseStats { get; private set; } // Firebase 기반
-    public CharacterStats FinalStats => StatCalculator.CalculateFinalStats(BaseStats, _modifiers);
+    private bool _isDirty = true;
+    private CharacterStats _cachedFinalStats;
+    public CharacterStats FinalStats
+    {
+        get
+        {
+            if (_isDirty || _cachedFinalStats == null)
+            {
+                _cachedFinalStats = StatCalculator.CalculateFinalStats(BaseStats, _modifiers);
+                _isDirty = false;
+            }
+            return _cachedFinalStats;
+        }
+    }
 
     [Header("# INGAME")]
     public EquipmentSet Equipment { get; private set; }
     private List<StatModifier> _modifiers = new();
-    public void AddStatModifier(StatModifier mod) => _modifiers.Add(mod);
-    public void RemoveStatModifier(StatModifier mod) => _modifiers.Remove(mod);
+    public void AddStatModifier(StatModifier mod)
+    {
+        _modifiers.Add(mod);
+        _isDirty = true;
+    }
+
+    public void RemoveStatModifier(StatModifier mod)
+    {
+        _modifiers.Remove(mod);
+        _isDirty = true;
+    }
+
+    public void ForceRecalculateStats()
+    {
+        _isDirty = true;
+    }
 
     private ISkill _basicAttack;
     private ISkill _passive;
@@ -87,7 +114,6 @@ public class CharacterBase
         else
             RaiseEvent(ECharacterEvent.OnSkillUsed);
     }
-
 
     public void Update()
     {

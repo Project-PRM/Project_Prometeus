@@ -30,5 +30,8 @@ public static class SkillRegistrar
         SkillFactory.Register(ESkillName.AttackerPassive.ToString(), () => new AttackerPassive());
         SkillFactory.Register(ESkillName.AttackerSkill.ToString(), () => new AttackerSkill());
         SkillFactory.Register(ESkillName.AttackerUltimate.ToString(), () => new AttackerUltimate());
+        SkillFactory.Register(ESkillName.BuffPassive.ToString(), () => new BuffPassive());
+        SkillFactory.Register(ESkillName.BuffSkill.ToString(), () => new BuffSkill());
+        SkillFactory.Register(ESkillName.BuffUltimate.ToString(), () => new BuffUltimate());
     }
 }
