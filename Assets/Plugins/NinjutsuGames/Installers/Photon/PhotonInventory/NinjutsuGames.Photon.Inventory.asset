@@ -1,0 +1,52 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7734bdb5c6ff542a7a94b0aec1b2782c, type: 3}
+  m_Name: NinjutsuGames.Photon.Inventory
+  m_EditorClassIdentifier: 
+  m_Install:
+    m_Name: Inventory
+    m_Module: Photon
+    m_Description: 'This module seamlessly integrates Inventory 2 module from Game
+      Creator 2 with Photon Unity Networking (PUN 2) it synchronizes everything from
+      an inventory bag with a single click.
+
+
+      Key Features
+
+
+      - Keeps
+      player''s Bag in sync even with late joiners
+
+      - Synchronize Bag Items
+      automatically
+
+      - Synchronize Equipment automatically
+
+      - Synchronize
+      Wealth automatically
+
+      - Synchronize Sockets automatically
+
+      - Compatible
+      with any other Game Creator 2 module'
+    m_Author: Ninjutsu Games
+    m_Version:
+      major: 1
+      minor: 0
+      patch: 3
+    m_Complexity: 2
+    m_Dependencies:
+    - m_ID: Photon.Core
+      m_MinVersion:
+        major: 1
+        minor: 3
+        patch: 3
