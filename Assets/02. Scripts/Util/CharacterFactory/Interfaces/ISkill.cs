@@ -7,5 +7,4 @@ public interface ISkill
 {
     public void Update();
     public SkillData Data { get; set; }
-    GameObject GetIndicatorPrefab();
 }
