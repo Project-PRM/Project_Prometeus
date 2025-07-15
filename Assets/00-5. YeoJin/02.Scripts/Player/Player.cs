@@ -5,7 +5,7 @@ using Photon.Pun;
 using Unity.Cinemachine;
 using FOW;
 
-public class Player : MonoBehaviour, IDamageAble
+public class Player : MonoBehaviour
 {
     private Dictionary<Type, PlayerActivity> _cache = new();
     private PhotonView _photonView;
