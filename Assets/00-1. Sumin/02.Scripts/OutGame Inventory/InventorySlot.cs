@@ -5,12 +5,13 @@ using UnityEngine.EventSystems;
 public class InventorySlot : ItemSlotBase, IPointerClickHandler
 {
     [SerializeField] private TextMeshProUGUI _itemNameText;
+    [SerializeField] private bool _isSubSlot = false;
 
     public override void SetItem(ItemData newItem)
     {
         base.SetItem(newItem);
         // 아이콘 등 설정
-        Debug.Log($"{gameObject.name} SetItem called with item: {_item?.Name}");
+        //Debug.Log($"{gameObject.name} SetItem called with item: {_item?.Name}");
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -34,5 +35,13 @@ public class InventorySlot : ItemSlotBase, IPointerClickHandler
     {
         if (_itemNameText != null)
             _itemNameText.text = _item?.Name ?? "Empty";
+
+        if (_item == null && !_isSubSlot)
+        {
+            // InventoryPanel에서 자신을 리스트에서 제거
+            if (InventoryPanel.Instance != null)
+                InventoryPanel.Instance.RemoveSlot(this);
+            Destroy(gameObject);
+        }
     }
 }

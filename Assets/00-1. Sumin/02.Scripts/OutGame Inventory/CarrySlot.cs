@@ -1,7 +1,8 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class CarrySlot : ItemSlotBase
+public class CarrySlot : ItemSlotBase, IPointerClickHandler
 {
     [SerializeField] protected TextMeshProUGUI _itemNameText;
     [SerializeField] private EItemType _allowedType;
@@ -17,6 +18,15 @@ public class CarrySlot : ItemSlotBase
     public override bool CanAccept(ItemData item)
     {
         return item != null && item.ItemType == _allowedType;
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Right && _item != null)
+        {
+            InventoryPanel.Instance.AddItemToInventory(_item);
+            SetItem(null); // CarrySlot 비움
+        }
     }
 
     protected override void UpdateVisual()

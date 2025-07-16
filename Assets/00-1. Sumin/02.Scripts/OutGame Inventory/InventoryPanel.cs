@@ -48,4 +48,26 @@ public class InventoryPanel : Singleton<InventoryPanel>
             _slots[i].SetItem(flatItemList[i]);
         }
     }
+
+    public void RemoveSlot(InventorySlot slot)
+    {
+        _slots.Remove(slot);
+    }
+
+    public void AddItemToInventory(ItemData item)
+    {
+        // 빈 슬롯 찾기
+        foreach (var slot in _slots)
+        {
+            if (slot.IsEmpty)
+            {
+                slot.SetItem(item);
+                return;
+            }
+        }
+        // 빈 슬롯이 없으면 새로 생성
+        var newSlot = Instantiate(_slotPrefab, _slotParent);
+        _slots.Add(newSlot);
+        newSlot.SetItem(item);
+    }
 }
