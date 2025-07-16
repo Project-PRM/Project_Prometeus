@@ -10,7 +10,7 @@ public class SkillJsonEditorWindow : EditorWindow
     private string _jsonPath = "Assets/Resources/skill_data.json"; // 고정 경로
     private Vector2 _scrollPos;
 
-    [MenuItem("Tools/Skill JSON Editor")]
+    [MenuItem("Tools/Skill/Skill JSON Editor")]
     public static void ShowWindow()
     {
         var window = GetWindow<SkillJsonEditorWindow>("Skill JSON Editor");
