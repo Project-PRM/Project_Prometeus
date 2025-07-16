@@ -28,6 +28,16 @@
       "MaxStamina": 9.0,
       "StaminaRegen": 10.0,
       "SprintStaminaCost": 11.0
-    }
+    },
+    "IconSprite": null
+  },
+  "TestArmor": {
+    "Name": "TestArmor",
+    "Description": "테스트용 방어구입니다.",
+    "Rarity": 0,
+    "ItemType": 1,
+    "AdditiveStats": {},
+    "MultiplierStats": {},
+    "IconSprite": null
   }
 }
