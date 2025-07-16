@@ -16,12 +16,16 @@ public class RoomManager : PunSingleton<RoomManager>
 
     private void Start()
     {
+        // 먼저 캐릭터를 고름
+        // choosecharacter 등등
+        // 고른 후 : 
         // 팀별로 스폰 포인트를 할당
         if (PhotonNetwork.IsMasterClient)
         {
             AssignSpawnPoints();
         }
         // 스폰 포인트별로 팀 스폰
+        // 자기 고른 캐릭터를 스폰
         StartCoroutine(WaitForSpawnDataAndSpawn());
     }
 
@@ -139,9 +143,25 @@ public class RoomManager : PunSingleton<RoomManager>
         }
 
         Vector3 finalPos = basePos + _spawnOffset[myIndex];
-        // PlayerType을 받고 tostring해서
+
         // PlayerType CustomProperty를 받아오기
-        GameObject player = PhotonNetwork.Instantiate("Player", finalPos, Quaternion.identity);
-        Debug.Log($"[Spawn] Player {PhotonNetwork.LocalPlayer.UserId} at {finalPos} (Team {myTeam}, Index {myIndex})");
+        ECharacterName character = ECharacterName.Dummy;
+        if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("character", out object charObj))
+        {
+            character = (ECharacterName)(int)charObj;
+        }
+        // 해당 캐릭터 프리팹 Resources에서 로드 (예: Resources/Players/KnightPlayer.prefab)
+        string path = $"Players/{character}Player";
+        GameObject prefab = Resources.Load<GameObject>(path);
+
+        if (prefab == null)
+        {
+            Debug.LogWarning($"[Spawn] 캐릭터 프리팹을 찾을 수 없습니다: {path} → 기본 Player로 대체");
+            prefab = Resources.Load<GameObject>("Player");
+        }
+
+        GameObject player = PhotonNetwork.Instantiate(path, finalPos, Quaternion.identity);
+        Debug.Log($"[Spawn] {character}Player 스폰 완료 at {finalPos} (Team {myTeam}, Index {myIndex})");
+        // Debug.Log($"[Spawn] Player {PhotonNetwork.LocalPlayer.UserId} at {finalPos} (Team {myTeam}, Index {myIndex})");
     }
 }
