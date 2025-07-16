@@ -1,3 +1,5 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyOnPlayerCollider : MonoBehaviour
@@ -12,6 +14,13 @@ public class EnemyOnPlayerCollider : MonoBehaviour
         if(other.gameObject.CompareTag("Player"))
         {
             _enemyBTBase.TargetSetup(other.gameObject);
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.gameObject.CompareTag("Player"))
+        {
+            _enemyBTBase.TargetSetup(null);
         }
     }
 }
