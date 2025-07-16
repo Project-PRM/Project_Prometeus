@@ -4,17 +4,8 @@ using UnityEngine;
 public abstract class ItemSlotBase : MonoBehaviour
 {
     protected ItemData _item;
-    [SerializeField] protected TextMeshProUGUI _itemNameText;
 
     public bool IsEmpty => _item == null;
-
-    private void Awake()
-    {
-        if(_itemNameText == null)
-        {
-            //_itemNameText = GetComponentInChildren<TextMeshProUGUI>();
-        }
-    }
 
     public virtual bool CanAccept(ItemData item)
     {
@@ -23,6 +14,11 @@ public abstract class ItemSlotBase : MonoBehaviour
 
     public virtual void SetItem(ItemData newItem)
     {
+        if (newItem == null)
+        {
+            ClearItem();
+            return;
+        }
         _item = newItem;
         UpdateVisual();
     }
