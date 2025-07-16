@@ -25,7 +25,7 @@ public class EnemyBTBase : MonoBehaviour
 
         Init();
     }
-    private void Init()
+    public void Init()
     {
         if (PatrolPoints != null && PatrolPoints.Count > 0)
         {
@@ -49,5 +49,12 @@ public class EnemyBTBase : MonoBehaviour
         _behaviorAgent.SetVariableValue("Target", target);
         _behaviorAgent.SetVariableValue("IsTargetDetected", true);
     }
- 
+
+    public void UpdateMasterClientFlag()
+    {
+        bool isMaster = Photon.Pun.PhotonNetwork.IsMasterClient;
+        _behaviorAgent.SetVariableValue("IsMasterClient", isMaster);
+        Debug.Log($"[{gameObject.name}] IsMasterClient 갱신됨: {isMaster}");
+    }
+
 }
