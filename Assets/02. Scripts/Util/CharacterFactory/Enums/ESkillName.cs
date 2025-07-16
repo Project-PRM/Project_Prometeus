@@ -11,4 +11,10 @@ public enum ESkillName
     BuffPassive,
     BuffSkill,
     BuffUltimate,
+    HealerPassive,
+    HealerSkill,
+    HealerUltimate,
+    TankerPassive,
+    TankerSkill,
+    TankerUltimate,
 }

@@ -212,6 +212,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NicknameText: {fileID: 3537053089981676495}
+  UidText: {fileID: 7772846054458496417}
 --- !u!1 &4651957926503741908
 GameObject:
   m_ObjectHideFlags: 0
@@ -248,7 +249,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 400, y: -31.25}
-  m_SizeDelta: {x: 243.21, y: 50}
+  m_SizeDelta: {x: 0, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8668174191356419357
 CanvasRenderer:
@@ -399,7 +400,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 400, y: -81.25}
-  m_SizeDelta: {x: 92.1, y: 25}
+  m_SizeDelta: {x: 0, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1849234727237389086
 CanvasRenderer:
