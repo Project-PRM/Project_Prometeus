@@ -33,20 +33,13 @@ public static class StatCalculator
     }
 
     private static void Apply(CharacterStats stats,
-                               Dictionary<EStatType, float> add,
-                               Dictionary<EStatType, float> mul)
+                          Dictionary<EStatType, float> add,
+                          Dictionary<EStatType, float> mul)
     {
-        stats.MaxHealth = (stats.MaxHealth + add[EStatType.MaxHealth]) * mul[EStatType.MaxHealth];
-        stats.MaxMana = (stats.MaxMana + add[EStatType.MaxMana]) * mul[EStatType.MaxMana];
-        stats.BaseDamage = (stats.BaseDamage + add[EStatType.BaseDamage]) * mul[EStatType.BaseDamage];
-        stats.BaseArmor = (stats.BaseArmor + add[EStatType.BaseArmor]) * mul[EStatType.BaseArmor];
-        stats.BaseAttackCoolTime = (stats.BaseAttackCoolTime + add[EStatType.BaseAttackCoolTime]) * mul[EStatType.BaseAttackCoolTime];
-        stats.BaseAttackRange = (stats.BaseAttackRange + add[EStatType.BaseAttackRange]) * mul[EStatType.BaseAttackRange];
-        stats.MoveSpeed = (stats.MoveSpeed + add[EStatType.MoveSpeed]) * mul[EStatType.MoveSpeed];
-        stats.SprintSpeed = (stats.SprintSpeed + add[EStatType.SprintSpeed]) * mul[EStatType.SprintSpeed];
-        stats.MaxStamina = (stats.MaxStamina + add[EStatType.MaxStamina]) * mul[EStatType.MaxStamina];
-        stats.StaminaRegen = (stats.StaminaRegen + add[EStatType.StaminaRegen]) * mul[EStatType.StaminaRegen];
-        stats.SprintStaminaCost = (stats.SprintStaminaCost + add[EStatType.SprintStaminaCost]) * mul[EStatType.SprintStaminaCost];
-        stats.BaseVision = (stats.BaseVision + add[EStatType.BaseVision]) * mul[EStatType.BaseVision];
+        foreach (EStatType type in Enum.GetValues(typeof(EStatType)))
+        {
+            float baseValue = stats[type];
+            stats[type] = (baseValue + add[type]) * mul[type];
+        }
     }
 }

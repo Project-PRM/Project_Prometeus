@@ -1,0 +1,33 @@
+{
+  "TestItem": {
+    "Name": "TestItem",
+    "Description": "테스트용 아이템입니다.",
+    "Rarity": 0,
+    "ItemType": 0,
+    "AdditiveStats": {
+      "MaxMana": 2.0,
+      "BaseDamage": 3.0,
+      "BaseArmor": 4.0,
+      "BaseAttackCoolTime": 5.0,
+      "BaseAttackRange": 6.0,
+      "MoveSpeed": 7.0,
+      "SprintSpeed": 8.0,
+      "MaxStamina": 9.0,
+      "StaminaRegen": 10.0,
+      "SprintStaminaCost": 11.0,
+      "BaseVision": 12.0
+    },
+    "MultiplierStats": {
+      "MaxMana": 2.0,
+      "BaseDamage": 3.0,
+      "BaseArmor": 4.0,
+      "BaseAttackCoolTime": 5.0,
+      "BaseAttackRange": 6.0,
+      "MoveSpeed": 7.0,
+      "SprintSpeed": 8.0,
+      "MaxStamina": 9.0,
+      "StaminaRegen": 10.0,
+      "SprintStaminaCost": 11.0
+    }
+  }
+}
