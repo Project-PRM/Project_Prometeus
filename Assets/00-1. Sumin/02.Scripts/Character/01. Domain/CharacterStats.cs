@@ -1,5 +1,4 @@
 using Firebase.Firestore;
-using System;
 
 [FirestoreData]
 public class CharacterStats
@@ -64,47 +63,5 @@ public class CharacterStats
         StaminaRegen = other.StaminaRegen;
         SprintStaminaCost = other.SprintStaminaCost;
         BaseVision = other.BaseVision;
-    }
-
-    public float this[EStatType stat]
-    {
-        get
-        {
-            return stat switch
-            {
-                EStatType.MaxHealth => MaxHealth,
-                EStatType.MaxMana => MaxMana,
-                EStatType.BaseDamage => BaseDamage,
-                EStatType.BaseArmor => BaseArmor,
-                EStatType.BaseAttackCoolTime => BaseAttackCoolTime,
-                EStatType.BaseAttackRange => BaseAttackRange,
-                EStatType.MoveSpeed => MoveSpeed,
-                EStatType.SprintSpeed => SprintSpeed,
-                EStatType.MaxStamina => MaxStamina,
-                EStatType.StaminaRegen => StaminaRegen,
-                EStatType.SprintStaminaCost => SprintStaminaCost,
-                EStatType.BaseVision => BaseVision,
-                _ => throw new ArgumentOutOfRangeException(nameof(stat), stat, null)
-            };
-        }
-        set
-        {
-            switch (stat)
-            {
-                case EStatType.MaxHealth: MaxHealth = value; break;
-                case EStatType.MaxMana: MaxMana = value; break;
-                case EStatType.BaseDamage: BaseDamage = value; break;
-                case EStatType.BaseArmor: BaseArmor = value; break;
-                case EStatType.BaseAttackCoolTime: BaseAttackCoolTime = value; break;
-                case EStatType.BaseAttackRange: BaseAttackRange = value; break;
-                case EStatType.MoveSpeed: MoveSpeed = value; break;
-                case EStatType.SprintSpeed: SprintSpeed = value; break;
-                case EStatType.MaxStamina: MaxStamina = value; break;
-                case EStatType.StaminaRegen: StaminaRegen = value; break;
-                case EStatType.SprintStaminaCost: SprintStaminaCost = value; break;
-                case EStatType.BaseVision: BaseVision = value; break;
-                default: throw new ArgumentOutOfRangeException(nameof(stat), stat, null);
-            }
-        }
     }
 }

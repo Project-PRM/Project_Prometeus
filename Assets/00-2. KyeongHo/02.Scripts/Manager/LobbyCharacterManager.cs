@@ -59,9 +59,8 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
 
     /// <summary>
     /// 지정된 위치에 플레이어의 캐릭터를 생성
-    /// 잠시 빼둠 - 테스트용
     /// </summary>
-    /*private void SpawnCharacter(PhotonPlayer player, Transform spawnPos)
+    private void SpawnCharacter(PhotonPlayer player, Transform spawnPos)
     {
         if (player == null) return;
         
@@ -73,31 +72,6 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
         spawnedCharacters[player.ActorNumber] = character;
         
         // TODO: 캐릭터 외형 커스터마이징 적용
-    }*/ 
-    // 테스트용
-    private void SpawnCharacter(PhotonPlayer player, Transform spawnPos)
-    {
-        ECharacterName character = ECharacterName.Dummy; // 기본값
-
-        if (player.CustomProperties.TryGetValue("character", out object charObj))
-        {
-            character = (ECharacterName)(int)charObj;
-        }
-
-        // 해당 캐릭터 프리팹 로드 (Resources/LobbyCharacters/ 아래에 있어야 함)
-        string path = $"Players/{character}Player";
-        GameObject characterPrefab = Resources.Load<GameObject>(path);
-
-        if (characterPrefab == null)
-        {
-            Debug.LogWarning($"[LobbyCharacterManager] 캐릭터 프리팹 로드 실패: {path}");
-            characterPrefab = Resources.Load<GameObject>("Player");
-        }
-
-        GameObject characterInstance = Instantiate(characterPrefab, spawnPos.position, spawnPos.rotation);
-        spawnedCharacters[player.ActorNumber] = characterInstance;
-
-        Debug.Log($"[LobbyCharacterManager] {player.NickName} → {character} 생성");
     }
 
     /// <summary>
@@ -126,12 +100,6 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
     }
     public override void OnPlayerPropertiesUpdate(PhotonPlayer targetPlayer, Hashtable changedProps)
     {
-        // 테스트용 추가
-        if (changedProps.ContainsKey("character"))
-        {
-            UpdateCharacterDisplay();
-            return;
-        }
         // "Team" 프로퍼티가 변경되었을 때만 캐릭터 디스플레이를 업데이트
         if (changedProps.ContainsKey("team")) // "Team"은 실제 사용하는 프로퍼티 키로 변경해야 합니다.
         {

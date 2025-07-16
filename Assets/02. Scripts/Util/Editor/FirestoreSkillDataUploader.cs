@@ -11,7 +11,7 @@ public static class FirestoreSkillDataUploader
 {
     private class SkillDataMap : Dictionary<string, SkillData> { }
 
-    [MenuItem("Tools/Skill/Upload SkillData To Firestore")]
+    [MenuItem("Tools/Upload SkillData To Firestore")]
     public static void UploadSkillData()
     {
         Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWithOnMainThread(task =>

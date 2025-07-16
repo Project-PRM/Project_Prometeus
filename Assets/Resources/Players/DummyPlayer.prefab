@@ -810,8 +810,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 5}
-  m_SizeDelta: {x: 0, y: 3}
+  m_AnchoredPosition: {x: 0, y: 2}
+  m_SizeDelta: {x: 0, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &8952885184942673543
 MeshRenderer:
@@ -2689,10 +2689,10 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ac50eca27b9a8c3428a8419ba0f65f65, type: 2}
+  - {fileID: -4543942324202187308, guid: 8870ace705c146145af70e429c4643f4, type: 3}
   - {fileID: 7581895683300004476, guid: 8870ace705c146145af70e429c4643f4, type: 3}
-  - {fileID: 2100000, guid: ac50eca27b9a8c3428a8419ba0f65f65, type: 2}
-  - {fileID: 2100000, guid: ac50eca27b9a8c3428a8419ba0f65f65, type: 2}
+  - {fileID: 7707936559283315925, guid: 8870ace705c146145af70e429c4643f4, type: 3}
+  - {fileID: 6285844758225996211, guid: 8870ace705c146145af70e429c4643f4, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

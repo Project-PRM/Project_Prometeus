@@ -39,7 +39,7 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
         _playerInput.actions["Attack"].performed -= OnAttack;
     }
 
-    private async void Start()
+    protected async void Start()
     {
         if (!CharacterManager.Instance.IsInitialized)
         {
