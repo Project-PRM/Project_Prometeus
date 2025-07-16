@@ -40,16 +40,17 @@ public class UI_PanelFriendAdd : UI_PopUp
         foreach (Transform child in contentParent)
             Destroy(child.gameObject);
 
-        // 닉네임으로 UID 가져오기 (중복 없는 구조 전제)
-        string uid = await AccountManager.Instance.GetUidWithNickname(inputNickname);
-        if (string.IsNullOrEmpty(uid))
+        // 닉네임으로 UID 리스트 가져오기
+        List<string> uids = await AccountManager.Instance.GetUidsWithNickname(inputNickname);
+        if (uids.Count == 0)
             return;
 
-        // 닉네임 다시 확인 (문서 ID 말고 필드에서 가져오고 싶으면)
-        string nickname = await AccountManager.Instance.GetUserNicknameWithUid(uid);
-
-        GameObject item = Instantiate(requestItemPrefab, contentParent);
-        var panel = item.GetComponent<UI_PanelFriendUser>();
-        panel.Refresh(nickname, uid);
+        // 각 UID에 대해 항목 생성
+        foreach (string uid in uids)
+        {
+            GameObject item = Instantiate(requestItemPrefab, contentParent);
+            var panel = item.GetComponent<UI_PanelFriendUser>();
+            panel.Refresh(inputNickname, uid);
+        }
     }
 }
