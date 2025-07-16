@@ -84,8 +84,8 @@ namespace FOW
                 //Debug.Log("returning");
                 return;
             }
-            //if (renderingData.cameraData.camera.GetUniversalAdditionalCameraData().renderType == CameraRenderType.Overlay)
-            //    return;
+            if (renderingData.cameraData.camera.GetUniversalAdditionalCameraData().renderType == CameraRenderType.Overlay)
+                return;
 
             CommandBuffer cmd = CommandBufferPool.Get(m_ProfilerTag);
             renderingData.cameraData.camera.depthTextureMode = DepthTextureMode.DepthNormals;
@@ -133,8 +133,8 @@ namespace FOW
                 //Debug.Log("returning");
                 return;
             }
-            //if (cameraData.camera.GetUniversalAdditionalCameraData().renderType == CameraRenderType.Overlay)
-            //    return;
+            if (cameraData.camera.GetUniversalAdditionalCameraData().renderType == CameraRenderType.Overlay)
+                return;
 
             //This should never happen since we set m_Pass.requiresIntermediateTexture = true;
             //Unless you set the render event to AfterRendering, where we only have the BackBuffer. 
