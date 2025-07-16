@@ -810,8 +810,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 2}
-  m_SizeDelta: {x: 0, y: 5}
+  m_AnchoredPosition: {x: 0, y: 5}
+  m_SizeDelta: {x: 0, y: 3}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &8952885184942673543
 MeshRenderer:
@@ -1474,7 +1474,7 @@ GameObject:
   - component: {fileID: 6380600178584220153}
   - component: {fileID: 8631239530700257908}
   m_Layer: 0
-  m_Name: AttackPlayer
+  m_Name: HealerDummyPlayer
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1751,7 +1751,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e53f40355875f4f4da79666d07697068, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterName: 1
+  _characterName: 3
   _playerInput: {fileID: 3429739225860686163}
 --- !u!95 &3284400772661504412
 Animator:
@@ -2689,10 +2689,10 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c6785169bbdca6c4ba57a7ceef1ac68f, type: 2}
+  - {fileID: 2100000, guid: f17b0a369b4a16940bf4b7b3d41b244c, type: 2}
   - {fileID: 7581895683300004476, guid: 8870ace705c146145af70e429c4643f4, type: 3}
-  - {fileID: 2100000, guid: c6785169bbdca6c4ba57a7ceef1ac68f, type: 2}
-  - {fileID: 2100000, guid: c6785169bbdca6c4ba57a7ceef1ac68f, type: 2}
+  - {fileID: 2100000, guid: f17b0a369b4a16940bf4b7b3d41b244c, type: 2}
+  - {fileID: 2100000, guid: f17b0a369b4a16940bf4b7b3d41b244c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
