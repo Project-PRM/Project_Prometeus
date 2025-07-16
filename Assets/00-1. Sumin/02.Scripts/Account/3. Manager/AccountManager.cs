@@ -54,7 +54,7 @@ public class AccountManager : Singleton<AccountManager>
 
         return uid; // 없으면 null 반환
     }
-    public async Task<List<string>> GetUidsByNickname(string nickname)
+    public async Task<List<string>> GetUidsWithNickname(string nickname)
     {
         List<string> uidList = new List<string>();
 

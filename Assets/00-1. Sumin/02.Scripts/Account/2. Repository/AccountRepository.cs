@@ -29,13 +29,13 @@ public class AccountRepository
 
     #region Register
     // 닉네임 중복 체크
-    private async Task<bool> IsNicknameTakenAsync(string nickname)
-    {
-        var collection = _db.Collection(COLLECTION_NAME);
-        var query = collection.WhereEqualTo(NICKNAME, nickname);
-        var querySnapshot = await query.GetSnapshotAsync();
-        return querySnapshot.Count > 0; // 동일한 닉네임이 있으면 true
-    }
+    // private async Task<bool> IsNicknameTakenAsync(string nickname)
+    // {
+    //     var collection = _db.Collection(COLLECTION_NAME);
+    //     var query = collection.WhereEqualTo(NICKNAME, nickname);
+    //     var querySnapshot = await query.GetSnapshotAsync();
+    //     return querySnapshot.Count > 0; // 동일한 닉네임이 있으면 true
+    // }
 
     // 회원 가입 시도
     public async Task<AccountResult> RegisterAsync(string email, string nickname, string password)
@@ -45,10 +45,10 @@ public class AccountRepository
         try
         {
             // 닉네임 중복 체크
-            if (await IsNicknameTakenAsync(nickname))
-            {
-                return new AccountResult(false, "이미 사용중인 닉네임입니다.");
-            }
+            // if (await IsNicknameTakenAsync(nickname))
+            // {
+            //     return new AccountResult(false, "이미 사용중인 닉네임입니다.");
+            // }
 
             var result = await _auth.CreateUserWithEmailAndPasswordAsync(email, password);
 
@@ -147,10 +147,10 @@ public class AccountRepository
         }
 
         // 닉네임 중복 체크
-        if (await IsNicknameTakenAsync(newNickname))
-        {
-            return new AccountResult(false, "이미 사용중인 닉네임입니다.");
-        }
+        // if (await IsNicknameTakenAsync(newNickname))
+        // {
+        //     return new AccountResult(false, "이미 사용중인 닉네임입니다.");
+        // }
 
         var profile = new UserProfile { DisplayName = newNickname };
         
