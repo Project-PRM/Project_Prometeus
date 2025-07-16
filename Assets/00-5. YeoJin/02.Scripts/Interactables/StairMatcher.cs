@@ -22,7 +22,7 @@ public class StairMatcher : MonoBehaviour
         // 앞에서부터 매칭
         for (int i = _matchCount; i < _stairs.Length; i++)
         {
-            Debug.Log($"stair {shuffledStairs[i]} is off");
+            //Debug.Log($"stair {shuffledStairs[i]} is off");
             shuffledStairs[i].SetActive(false);
         }
     }

@@ -5219,6 +5219,63 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 86448844}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &86912044
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1150957334}
+    m_Modifications:
+    - target: {fileID: 5610948590718490194, guid: 22de88e220a98f943a067c251ae27277, type: 3}
+      propertyPath: m_Name
+      value: TempPortal
+      objectReference: {fileID: 0}
+    - target: {fileID: 9097644841824336873, guid: 22de88e220a98f943a067c251ae27277, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -30
+      objectReference: {fileID: 0}
+    - target: {fileID: 9097644841824336873, guid: 22de88e220a98f943a067c251ae27277, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 9097644841824336873, guid: 22de88e220a98f943a067c251ae27277, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -200
+      objectReference: {fileID: 0}
+    - target: {fileID: 9097644841824336873, guid: 22de88e220a98f943a067c251ae27277, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9097644841824336873, guid: 22de88e220a98f943a067c251ae27277, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9097644841824336873, guid: 22de88e220a98f943a067c251ae27277, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9097644841824336873, guid: 22de88e220a98f943a067c251ae27277, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9097644841824336873, guid: 22de88e220a98f943a067c251ae27277, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9097644841824336873, guid: 22de88e220a98f943a067c251ae27277, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9097644841824336873, guid: 22de88e220a98f943a067c251ae27277, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 22de88e220a98f943a067c251ae27277, type: 3}
 --- !u!1 &89353639
 GameObject:
   m_ObjectHideFlags: 0
@@ -13735,6 +13792,8 @@ GameObject:
   - component: {fileID: 237220514}
   - component: {fileID: 237220513}
   - component: {fileID: 237220512}
+  - component: {fileID: 237220515}
+  - component: {fileID: 237220516}
   m_Layer: 6
   m_Name: StairPoint (3)
   m_TagString: Untagged
@@ -13772,7 +13831,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -13831,6 +13890,35 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 237220510}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &237220515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 237220510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e0c9797dcdd3004b975889411457a92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _movePoint: {fileID: 867399180}
+--- !u!208 &237220516
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 237220510}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &240473489
 GameObject:
   m_ObjectHideFlags: 0
@@ -15531,6 +15619,7 @@ GameObject:
   - component: {fileID: 274121572}
   - component: {fileID: 274121571}
   - component: {fileID: 274121574}
+  - component: {fileID: 274121575}
   m_Layer: 6
   m_Name: StairPoint (3)
   m_TagString: Untagged
@@ -15641,6 +15730,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movePoint: {fileID: 405414173}
+--- !u!208 &274121575
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 274121569}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &275380810
 GameObject:
   m_ObjectHideFlags: 0
@@ -41470,6 +41575,7 @@ GameObject:
   - component: {fileID: 728034975}
   - component: {fileID: 728034974}
   - component: {fileID: 728034977}
+  - component: {fileID: 728034978}
   m_Layer: 6
   m_Name: StairPoint (2)
   m_TagString: Untagged
@@ -41580,6 +41686,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movePoint: {fileID: 1971688593}
+--- !u!208 &728034978
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 728034972}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &728497660
 GameObject:
   m_ObjectHideFlags: 0
@@ -42231,70 +42353,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 738098007}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1001 &739243274
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3549827564469134205, guid: 06cbbef3a5dbbf449a8c1f26451e2323, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -12.29
-      objectReference: {fileID: 0}
-    - target: {fileID: 3549827564469134205, guid: 06cbbef3a5dbbf449a8c1f26451e2323, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 5.047
-      objectReference: {fileID: 0}
-    - target: {fileID: 3549827564469134205, guid: 06cbbef3a5dbbf449a8c1f26451e2323, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -90.83
-      objectReference: {fileID: 0}
-    - target: {fileID: 3549827564469134205, guid: 06cbbef3a5dbbf449a8c1f26451e2323, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3549827564469134205, guid: 06cbbef3a5dbbf449a8c1f26451e2323, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3549827564469134205, guid: 06cbbef3a5dbbf449a8c1f26451e2323, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3549827564469134205, guid: 06cbbef3a5dbbf449a8c1f26451e2323, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3549827564469134205, guid: 06cbbef3a5dbbf449a8c1f26451e2323, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3549827564469134205, guid: 06cbbef3a5dbbf449a8c1f26451e2323, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3549827564469134205, guid: 06cbbef3a5dbbf449a8c1f26451e2323, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4181686743975786951, guid: 06cbbef3a5dbbf449a8c1f26451e2323, type: 3}
-      propertyPath: m_Name
-      value: AttackerDummyPlayer
-      objectReference: {fileID: 0}
-    - target: {fileID: 6612345965212137129, guid: 06cbbef3a5dbbf449a8c1f26451e2323, type: 3}
-      propertyPath: sceneViewId
-      value: 2
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2586884738557768985, guid: 06cbbef3a5dbbf449a8c1f26451e2323, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 0}
-  m_SourcePrefab: {fileID: 100100000, guid: 06cbbef3a5dbbf449a8c1f26451e2323, type: 3}
 --- !u!1 &740610544
 GameObject:
   m_ObjectHideFlags: 0
@@ -44943,6 +45001,7 @@ GameObject:
   - component: {fileID: 794532370}
   - component: {fileID: 794532369}
   - component: {fileID: 794532372}
+  - component: {fileID: 794532373}
   m_Layer: 6
   m_Name: StairPoint (5)
   m_TagString: Untagged
@@ -45053,6 +45112,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movePoint: {fileID: 691357815}
+--- !u!208 &794532373
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 794532367}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &799939730
 GameObject:
   m_ObjectHideFlags: 0
@@ -47841,6 +47916,8 @@ GameObject:
   - component: {fileID: 847921325}
   - component: {fileID: 847921324}
   - component: {fileID: 847921323}
+  - component: {fileID: 847921326}
+  - component: {fileID: 847921327}
   m_Layer: 6
   m_Name: StairPoint (4)
   m_TagString: Untagged
@@ -47878,7 +47955,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -47937,6 +48014,35 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 847921321}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &847921326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 847921321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e0c9797dcdd3004b975889411457a92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _movePoint: {fileID: 1650217099}
+--- !u!208 &847921327
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 847921321}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &851723300
 GameObject:
   m_ObjectHideFlags: 0
@@ -49035,6 +49141,7 @@ GameObject:
   - component: {fileID: 864649601}
   - component: {fileID: 864649600}
   - component: {fileID: 864649603}
+  - component: {fileID: 864649604}
   m_Layer: 6
   m_Name: StairPoint (7)
   m_TagString: Untagged
@@ -49145,6 +49252,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movePoint: {fileID: 1080623375}
+--- !u!208 &864649604
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 864649598}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &864925463
 GameObject:
   m_ObjectHideFlags: 0
@@ -54804,6 +54927,8 @@ GameObject:
   - component: {fileID: 971322271}
   - component: {fileID: 971322270}
   - component: {fileID: 971322269}
+  - component: {fileID: 971322272}
+  - component: {fileID: 971322273}
   m_Layer: 6
   m_Name: StairPoint (1)
   m_TagString: Untagged
@@ -54841,7 +54966,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -54900,6 +55025,35 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 971322267}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &971322272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971322267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e0c9797dcdd3004b975889411457a92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _movePoint: {fileID: 1413735250}
+--- !u!208 &971322273
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 971322267}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &971594416
 GameObject:
   m_ObjectHideFlags: 0
@@ -66327,6 +66481,7 @@ Transform:
   - {fileID: 1453091837}
   - {fileID: 2094951400}
   - {fileID: 2024462834}
+  - {fileID: 2126006411}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1150957335
@@ -68107,6 +68262,7 @@ GameObject:
   - component: {fileID: 1182772948}
   - component: {fileID: 1182772947}
   - component: {fileID: 1182772950}
+  - component: {fileID: 1182772951}
   m_Layer: 6
   m_Name: StairPoint (6)
   m_TagString: Untagged
@@ -68217,6 +68373,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movePoint: {fileID: 1010903076}
+--- !u!208 &1182772951
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1182772945}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1188268915
 GameObject:
   m_ObjectHideFlags: 0
@@ -83615,6 +83787,8 @@ GameObject:
   - component: {fileID: 1448958219}
   - component: {fileID: 1448958218}
   - component: {fileID: 1448958217}
+  - component: {fileID: 1448958220}
+  - component: {fileID: 1448958221}
   m_Layer: 6
   m_Name: StairPoint (7)
   m_TagString: Untagged
@@ -83652,7 +83826,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -83711,6 +83885,35 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1448958215}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1448958220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1448958215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e0c9797dcdd3004b975889411457a92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _movePoint: {fileID: 1454623837}
+--- !u!208 &1448958221
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1448958215}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1449062927
 GameObject:
   m_ObjectHideFlags: 0
@@ -85506,6 +85709,7 @@ GameObject:
   - component: {fileID: 1486651936}
   - component: {fileID: 1486651935}
   - component: {fileID: 1486651938}
+  - component: {fileID: 1486651939}
   m_Layer: 6
   m_Name: StairPoint (1)
   m_TagString: Untagged
@@ -85616,6 +85820,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movePoint: {fileID: 1713179349}
+--- !u!208 &1486651939
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1486651933}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1486952134
 GameObject:
   m_ObjectHideFlags: 0
@@ -86202,6 +86422,8 @@ GameObject:
   - component: {fileID: 1493869322}
   - component: {fileID: 1493869321}
   - component: {fileID: 1493869320}
+  - component: {fileID: 1493869323}
+  - component: {fileID: 1493869324}
   m_Layer: 6
   m_Name: StairPoint
   m_TagString: Untagged
@@ -86239,7 +86461,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -86298,6 +86520,35 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1493869318}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1493869323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493869318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e0c9797dcdd3004b975889411457a92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _movePoint: {fileID: 1725271854}
+--- !u!208 &1493869324
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493869318}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1497175503
 GameObject:
   m_ObjectHideFlags: 0
@@ -98159,7 +98410,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1698369983
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -107954,6 +108205,7 @@ GameObject:
   - component: {fileID: 1852685299}
   - component: {fileID: 1852685298}
   - component: {fileID: 1852685301}
+  - component: {fileID: 1852685302}
   m_Layer: 6
   m_Name: StairPoint
   m_TagString: Untagged
@@ -108064,6 +108316,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movePoint: {fileID: 172068910}
+--- !u!208 &1852685302
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1852685296}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1857852747
 GameObject:
   m_ObjectHideFlags: 0
@@ -108402,6 +108670,7 @@ GameObject:
   - component: {fileID: 1865100686}
   - component: {fileID: 1865100685}
   - component: {fileID: 1865100688}
+  - component: {fileID: 1865100689}
   m_Layer: 6
   m_Name: StairPoint (4)
   m_TagString: Untagged
@@ -108512,6 +108781,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movePoint: {fileID: 2071559889}
+--- !u!208 &1865100689
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1865100683}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1868892753
 GameObject:
   m_ObjectHideFlags: 0
@@ -110708,6 +110993,8 @@ GameObject:
   - component: {fileID: 1903173738}
   - component: {fileID: 1903173737}
   - component: {fileID: 1903173736}
+  - component: {fileID: 1903173739}
+  - component: {fileID: 1903173740}
   m_Layer: 6
   m_Name: StairPoint (6)
   m_TagString: Untagged
@@ -110745,7 +111032,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -110804,6 +111091,35 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1903173734}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &1903173739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903173734}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e0c9797dcdd3004b975889411457a92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _movePoint: {fileID: 1466975535}
+--- !u!208 &1903173740
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1903173734}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1904956113
 GameObject:
   m_ObjectHideFlags: 0
@@ -117486,6 +117802,8 @@ GameObject:
   - component: {fileID: 2000029345}
   - component: {fileID: 2000029344}
   - component: {fileID: 2000029343}
+  - component: {fileID: 2000029346}
+  - component: {fileID: 2000029347}
   m_Layer: 6
   m_Name: StairPoint (5)
   m_TagString: Untagged
@@ -117523,7 +117841,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -117582,6 +117900,35 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2000029341}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2000029346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000029341}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e0c9797dcdd3004b975889411457a92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _movePoint: {fileID: 1783474020}
+--- !u!208 &2000029347
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000029341}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &2000820357
 GameObject:
   m_ObjectHideFlags: 0
@@ -125183,6 +125530,8 @@ GameObject:
   - component: {fileID: 2116079664}
   - component: {fileID: 2116079663}
   - component: {fileID: 2116079662}
+  - component: {fileID: 2116079665}
+  - component: {fileID: 2116079666}
   m_Layer: 6
   m_Name: StairPoint (2)
   m_TagString: Untagged
@@ -125220,7 +125569,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -125279,6 +125628,35 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2116079660}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2116079665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2116079660}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e0c9797dcdd3004b975889411457a92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _movePoint: {fileID: 1998477820}
+--- !u!208 &2116079666
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2116079660}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &2122190285
 GameObject:
   m_ObjectHideFlags: 0
@@ -125421,6 +125799,11 @@ Transform:
   - {fileID: 755184216}
   m_Father: {fileID: 1247530166}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &2126006411 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9097644841824336873, guid: 22de88e220a98f943a067c251ae27277, type: 3}
+  m_PrefabInstance: {fileID: 86912044}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2126173521
 GameObject:
   m_ObjectHideFlags: 0
@@ -126517,6 +126900,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 7276525906401390965, guid: bad8097bab740cb4b8b17763fcf75dea, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -126549,4 +126936,3 @@ SceneRoots:
   - {fileID: 892127025}
   - {fileID: 229481663839018045}
   - {fileID: 1698369985}
-  - {fileID: 739243274}
