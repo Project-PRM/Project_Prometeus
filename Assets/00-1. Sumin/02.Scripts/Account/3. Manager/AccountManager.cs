@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 
 public class AccountManager : Singleton<AccountManager>
 {
@@ -45,20 +46,37 @@ public class AccountManager : Singleton<AccountManager>
         return result.Success;
     }
 
-    //TODO : GetUserIdWithNickname(string nickname)
+    public async Task<string> GetUidWithNickname(string nickname)
+    {
+        string uid = string.Empty;
+
+        uid = await _repository.GetUidWithNicknameAsync(nickname);
+
+        return uid; // 없으면 null 반환
+    }
+    public async Task<List<string>> GetUidsByNickname(string nickname)
+    {
+        List<string> uidList = new List<string>();
+
+        uidList = await _repository.GetUidsWithNicknameAsync(nickname);
+
+        return uidList; // 없으면 null 반환
+        
+       
+    }
     public async Task<string> GetUserNicknameWithEmail(string email)
     {
         string nickname = string.Empty;
 
-        nickname = await _repository.GetNicknameByEmailAsync(email);
+        nickname = await _repository.GetUserNicknameWithEmailAsync(email);
 
         return nickname; // 없으면 null 반환
     }
-    public async Task<string> GetUserNicknameWithUID(string uid)
+    public async Task<string> GetUserNicknameWithUid(string uid)
     {
         string nickname = string.Empty;
 
-        nickname = await _repository.GetNicknameByUIDAsync(uid);
+        nickname = await _repository.GetUserNicknameWithUidAsync(uid);
 
         return nickname; // 없으면 null 반환
     }
