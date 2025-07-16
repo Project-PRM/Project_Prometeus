@@ -1,0 +1,32 @@
+using Firebase.Firestore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine;
+
+public class UserInventoryItemManager : Singleton<UserInventoryItemManager>
+{
+    private UserInventoryItemRepository _repository;
+    private List<UserInventoryItem> _items;
+    public List<UserInventoryItem> Items => _items;
+
+    protected async override void Awake()
+    {
+        _repository = new UserInventoryItemRepository();
+        await GetInventoryAsync("InventoryTestUser");
+    }
+
+    public async Task GetInventoryAsync(string userId)
+    {
+        _items = await _repository.GetInventoryAsync(userId);
+
+        foreach(var item in _items)
+        {
+            Debug.Log($"ItemId: {item.ItemId}, Count: {item.Count}");
+        }
+    }
+
+    public async Task SetInventoryAsync(string itemId, int count)
+    {
+        await _repository.SetInventoryAsync(AccountManager.Instance.MyAccount.UserId, _items);
+    }
+}
