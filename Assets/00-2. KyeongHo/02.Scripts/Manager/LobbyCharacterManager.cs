@@ -126,13 +126,14 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
     }
     public override void OnPlayerPropertiesUpdate(PhotonPlayer targetPlayer, Hashtable changedProps)
     {
-        // "Team" 프로퍼티가 변경되었을 때만 캐릭터 디스플레이를 업데이트
-        if (changedProps.ContainsKey("team")) // "Team"은 실제 사용하는 프로퍼티 키로 변경해야 합니다.
-        {
-            UpdateCharacterDisplay();
-        }
         // 테스트용 추가
         if (changedProps.ContainsKey("character"))
+        {
+            UpdateCharacterDisplay();
+            return;
+        }
+        // "Team" 프로퍼티가 변경되었을 때만 캐릭터 디스플레이를 업데이트
+        if (changedProps.ContainsKey("team")) // "Team"은 실제 사용하는 프로퍼티 키로 변경해야 합니다.
         {
             UpdateCharacterDisplay();
         }
