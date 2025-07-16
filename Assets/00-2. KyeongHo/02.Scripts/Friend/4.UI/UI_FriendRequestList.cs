@@ -27,7 +27,7 @@ public class UI_FriendRequestList : UI_PopUp
         {
             GameObject item = Instantiate(requestItemPrefab, contentParent);
             // TODO : Icon....
-            item.GetComponent<UI_FriendRequest>().NicknameText.text = await AccountManager.Instance.GetUserNicknameWithUid(request.SenderUid);
+            item.GetComponent<UI_FriendRequest>().NicknameText.text = await AccountManager.Instance.GetUserNicknameWithUID(request.SenderUid);
         }
     }
 }
