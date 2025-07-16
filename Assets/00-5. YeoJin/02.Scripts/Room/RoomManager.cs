@@ -5,6 +5,8 @@ using System.Collections;
 using System.Linq;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Random = UnityEngine.Random;
+using UnityEngine.InputSystem;
+using static Photon.Pun.UtilityScripts.PunTeams;
 
 public class RoomManager : PunSingleton<RoomManager>
 {
@@ -75,12 +77,47 @@ public class RoomManager : PunSingleton<RoomManager>
         Debug.Log("스폰포인트 할당 및 저장완료.");
     }
 
+    private bool TryGetSpawnPoint(string teamKey, out Vector3 spawnPoint)
+    {
+        spawnPoint = Vector3.zero;
+
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(teamKey, out object spawnData))
+        {
+            string[] split = spawnData.ToString().Split(',');
+            if (split.Length == 3 &&
+                float.TryParse(split[0], out float x) &&
+                float.TryParse(split[1], out float y) &&
+                float.TryParse(split[2], out float z))
+            {
+                spawnPoint = new Vector3(x, y, z);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private int TryGetIndexOfTeam(string myTeam)
+    {
+        var teamMembers = PhotonNetwork.PlayerList
+            .Where(p => PhotonServerManager.Instance.GetPlayerTeam(p) == myTeam)
+            .OrderBy(p => p.ActorNumber)
+            .ToList();
+
+        Debug.Log($"Team members ({myTeam}): {string.Join(", ", teamMembers.Select(p => p.ActorNumber))}");
+
+        int myIndex = teamMembers.IndexOf(PhotonNetwork.LocalPlayer);
+        Debug.Log($"My index in team {myTeam}: {myIndex}");
+
+        return myIndex;
+    }
+
     private IEnumerator WaitForSpawnDataAndSpawn()
     {
         string myTeam = PhotonServerManager.Instance.GetPlayerTeam(PhotonNetwork.LocalPlayer);
         string key = $"spawn_{myTeam}";
 
-        // 최대 3초까지 기다리기
+        // 최대 3초 대기
         float timeout = 3f;
         while (!PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey(key) && timeout > 0f)
         {
@@ -88,42 +125,23 @@ public class RoomManager : PunSingleton<RoomManager>
             yield return null;
         }
 
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(key, out object spawnData))
+        if (!TryGetSpawnPoint(key, out Vector3 basePos))
         {
-            string[] split = spawnData.ToString().Split(',');
-            if (split.Length == 3 && float.TryParse(split[0], out float x) && float.TryParse(split[1], out float y) && float.TryParse(split[2], out float z))
-            {
-                // 기본 스폰포인트 위치
-                Vector3 basePos = new Vector3(x, y, z);
-
-                // 현재 팀의 모든 멤버 수집 및 정렬
-                List<Photon.Realtime.PhotonPlayer> teamMembers = PhotonNetwork.PlayerList.Where(p => PhotonServerManager.Instance.GetPlayerTeam(p) == myTeam).ToList();
-                Debug.Log($"teammembers are {teamMembers[0].ActorNumber}, {teamMembers[1].ActorNumber}, {teamMembers[2].ActorNumber}");
-                teamMembers = teamMembers.OrderBy(p => p.ActorNumber).ToList(); // StringComparer.Ordinal을 사용하여 안정적인 정렬 보장
-
-                int myIndex = teamMembers.IndexOf(PhotonNetwork.LocalPlayer);
-                Debug.Log($"my index is {myIndex}");
-
-                // 각각 위치에 스폰하기
-                if (myIndex >= 0 && myIndex < _spawnOffset.Length)
-                {
-                    Vector3 finalPos = basePos + _spawnOffset[myIndex];
-                    GameObject player = PhotonNetwork.Instantiate("Player", finalPos, Quaternion.identity);
-                    Debug.Log($"[Spawn] Player {PhotonNetwork.LocalPlayer.UserId} at {finalPos} (Team {myTeam}, Index {myIndex})");
-                }
-                else
-                {
-                    Debug.LogError($"[Spawn Error] Invalid spawn offset index {myIndex} (Team size: {teamMembers.Count})");
-                }
-            }
-            else
-            {
-                Debug.LogError("Invalid spawn data format.");
-            }
+            Debug.LogError($"[Spawn] Invalid or missing spawn data for team {myTeam}");
+            yield break;
         }
-        else
+
+        int myIndex = TryGetIndexOfTeam(myTeam);
+        if (myIndex < 0 || myIndex >= _spawnOffset.Length)
         {
-            Debug.LogError($"No spawn data found for team {myTeam}");
+            Debug.LogError($"[Spawn Error] Invalid spawn offset index {myIndex}");
+            yield break;
         }
+
+        Vector3 finalPos = basePos + _spawnOffset[myIndex];
+        // PlayerType을 받고 tostring해서
+        // PlayerType CustomProperty를 받아오기
+        GameObject player = PhotonNetwork.Instantiate("Player", finalPos, Quaternion.identity);
+        Debug.Log($"[Spawn] Player {PhotonNetwork.LocalPlayer.UserId} at {finalPos} (Team {myTeam}, Index {myIndex})");
     }
 }

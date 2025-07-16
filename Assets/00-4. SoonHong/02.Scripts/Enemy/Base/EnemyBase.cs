@@ -4,22 +4,30 @@ public class EnemyBase : MonoBehaviour, IDamageable
 {
     public EnemyStat EnemyStat;
 
-    private float _helath;
+    private float _health;
 
     private void Awake()
     {
-        _helath = EnemyStat.MaxHelath;
+        _health = EnemyStat.MaxHelath;
     }
-
+    public void UpdateMasterFlag()
+    {
+        EnemyBTBase bt = GetComponent<EnemyBTBase>();
+        bt?.UpdateMasterClientFlag();
+    }
     public void TakeDamage(float Damage)
     {
-        _helath -= Damage;
+        _health -= Damage;
+        if (_health <= 0.0f)
+        {
+            EnemyManager.Instance.Unregister(this);
+        }
     }
 
     public void Heal(float Amount)
     {
-        _helath += Amount;
-        if (_helath > EnemyStat.MaxHelath)
-            _helath = EnemyStat.MaxHelath;
+        _health += Amount;
+        if (_health > EnemyStat.MaxHelath)
+            _health = EnemyStat.MaxHelath;
     }
 }

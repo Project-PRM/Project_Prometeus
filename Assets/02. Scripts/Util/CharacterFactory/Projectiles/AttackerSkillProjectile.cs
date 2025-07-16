@@ -62,7 +62,7 @@ public class AttackerSkillProjectile : MonoBehaviour, IProjectile
         /*PhotonNetwork.*/Destroy(gameObject);
     }
 
-    public void SetData(SkillData data, CharacterBase character, Vector3? direction)
+    public void SetData(SkillData data, CharacterBase character, Vector3? direction, CharacterBase target = null)
     {
         _owner = character;
         _speed = data.Speed;

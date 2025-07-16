@@ -5,5 +5,5 @@ using UnityEngine;
 /// </summary>
 public interface IProjectile
 {
-    public void SetData(SkillData data, CharacterBase character, Vector3? direction = null);
+    public void SetData(SkillData data, CharacterBase character, Vector3? direction = null, CharacterBase target = null);
 }
