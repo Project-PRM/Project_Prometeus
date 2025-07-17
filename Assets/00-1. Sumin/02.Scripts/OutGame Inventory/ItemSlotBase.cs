@@ -1,11 +1,24 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class ItemSlotBase : MonoBehaviour
 {
+    [SerializeField] protected TextMeshProUGUI _itemNameText;
+    [SerializeField] protected Image _icon;
+
     protected ItemData _item;
 
     public bool IsEmpty => _item == null;
+
+    private void Awake()
+    {
+        if(_icon == null)
+        {
+            _icon = GetComponentInChildren<Image>();
+        }
+        _itemNameText = GetComponentInChildren<TextMeshProUGUI>();
+    }
 
     public virtual bool CanAccept(ItemData item)
     {
@@ -20,7 +33,7 @@ public abstract class ItemSlotBase : MonoBehaviour
             return;
         }
         _item = newItem;
-        UpdateVisual();
+        Refresh();
     }
 
     public virtual ItemData GetItem() => _item;
@@ -28,9 +41,9 @@ public abstract class ItemSlotBase : MonoBehaviour
     public virtual void ClearItem()
     {
         _item = null;
-        UpdateVisual();
+        Refresh();
     }
 
     // 슬롯에 따른 UI 처리 방식은 하위에서 구현
-    protected abstract void UpdateVisual();
+    protected abstract void Refresh();
 }

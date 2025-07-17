@@ -2,17 +2,16 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class CarrySlot : ItemSlotBase, IPointerClickHandler
+public class MyInventoryEquipSlot : ItemSlotBase, IPointerClickHandler
 {
-    [SerializeField] protected TextMeshProUGUI _itemNameText;
     [SerializeField] private EItemType _allowedType;
     public EItemType AllowedType => _allowedType;
 
     public override void SetItem(ItemData newItem)
     {
         base.SetItem(newItem);
-        if (CarryPanel.Instance != null)
-            CarryPanel.Instance.SyncCarryAndSubCarrySlots();
+
+        Refresh();
     }
 
     public override bool CanAccept(ItemData item)
@@ -20,19 +19,30 @@ public class CarrySlot : ItemSlotBase, IPointerClickHandler
         return item != null && item.ItemType == _allowedType;
     }
 
-    public virtual void OnPointerClick(PointerEventData eventData)
+    public void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Right && _item != null)
         {
-            InventoryPanel.Instance.AddItemToInventory(_item);
-            SetItem(null); // CarrySlot 비움
+            if (MyInventoryPanel.Instance.TryMoveToInventory(_item))
+                ClearItem();
         }
     }
 
-    protected override void UpdateVisual()
+    protected override void Refresh()
     {
         // 아이콘 및 희귀도 테두리
         if (_itemNameText != null)
             _itemNameText.text = _item?.Name ?? "Empty";
+
+        if(_item != null)
+        {
+            _icon.sprite = _item.IconSprite;
+        }
+        else
+        {
+            // 빈 슬롯 처리
+            _icon.sprite = null;
+            _icon.color = Color.white;
+        }
     }
 }
