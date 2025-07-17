@@ -133,4 +133,14 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
     {
         _character.Heal(Amount);
     }
+
+    public void AddStatModifier(StatModifier mod)
+    {
+        _character.AddStatModifier(mod);
+    }
+
+    public void RemoveStatModifier(StatModifier mod)
+    {
+        _character.RemoveStatModifier(mod);
+    }
 }

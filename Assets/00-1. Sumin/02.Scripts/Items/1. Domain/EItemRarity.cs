@@ -4,4 +4,5 @@ public enum EItemRarity
     Rare,
     Epic,
     Legendary,
+    Mythic,
 }
