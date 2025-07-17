@@ -10,21 +10,28 @@ using UnityEngine.InputSystem;
 public class CharacterBehaviour : MonoBehaviour, IDamageable
 {
     [SerializeField] private ECharacterName _characterName;
+    [SerializeField] private UI_NicknameIngame _nickname;
 
     private CharacterBase _character;
     public CharacterBase GetCharacterBase() => _character;
     private CharacterAimingController _aimingController;
+    private CharacterMove _characterMove;
 
     private bool _isInitialized = false;
 
     [Header("# Components")]
     public Animator Animator { get; private set; }
     public CharacterController Controller { get; private set; }
+    public PhotonView PhotonView { get; private set; }
 
     private void Awake()
     {
         Animator = GetComponent<Animator>();
         Controller = GetComponent<CharacterController>();
+        PhotonView = GetComponent<PhotonView>();
+
+        _characterMove = GetComponent<CharacterMove>();
+
         _aimingController = new CharacterAimingController(this);
     }
 
@@ -81,6 +88,7 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
 
         _character.Update();
         _aimingController.Update();
+        _characterMove?.Tick();
     }
 
     // 스킬 타입에 따라 즉발 스킬은 즉시 실행, 아니면 조준 모드로 진입

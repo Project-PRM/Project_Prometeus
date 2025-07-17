@@ -4,23 +4,26 @@ using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(PhotonView))]
 [RequireComponent(typeof(CharacterController))]
-public class PlayerMove : PlayerActivity
+public class CharacterMove : MonoBehaviour
 {
     private Vector2 _movement;
-    private CharacterController _controller;
-
-    private const float GRAVITY = -9.81f;
-    private float _yVelocity = 0;
-
+    private float _yVelocity = 0f;
     private bool _isSprinting = false;
 
+    private const float GRAVITY = -9.81f;
+
+    private PhotonView _photonView;
+    private CharacterController _controller;
     private Camera _mainCamera;
 
-    protected override void Start()
+    private CharacterBehaviour _characterBehaviour;
+
+    private void Awake()
     {
-        base.Start();
+        _photonView = GetComponent<PhotonView>();
         _controller = GetComponent<CharacterController>();
-        _mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        _mainCamera = Camera.main;
+        _characterBehaviour = GetComponent<CharacterBehaviour>();
     }
 
     public void OnMove(InputAction.CallbackContext callback)
@@ -29,26 +32,22 @@ public class PlayerMove : PlayerActivity
 
         if (callback.performed || callback.canceled)
         {
-            Vector2 input = callback.ReadValue<Vector2>();
-            _movement = input;
-            _owner.Animator.SetFloat("Move", _movement.magnitude);
+            _movement = callback.ReadValue<Vector2>();
+            _characterBehaviour.Animator.SetFloat("Move", _movement.magnitude);
         }
     }
 
     public void OnSprint(InputAction.CallbackContext callback)
     {
-        // 대시/스프린트 추가할 경우 사용
         if (!_photonView.IsMine) return;
 
         if (callback.started || callback.performed)
         {
             _isSprinting = true;
-            Debug.Log("Sprint ON");
         }
         else if (callback.canceled)
         {
             _isSprinting = false;
-            Debug.Log("Sprint OFF");
         }
     }
 
@@ -79,18 +78,12 @@ public class PlayerMove : PlayerActivity
         }
     }
 
-    private void Update()
+    // CharacterBehaviour에서 매 프레임 호출
+    public void Tick()
     {
         if (!_photonView.IsMine) return;
 
         Vector3 move = new Vector3(_movement.x, 0, _movement.y);
-
-        // 회전 (입력 방향이 있을 때만)
-        //if (move.sqrMagnitude > 0.001f)
-        //{
-        //    Quaternion targetRotation = Quaternion.LookRotation(move);
-        //    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 30f * Time.deltaTime);
-        //}
 
         // 중력
         if (_controller.isGrounded)
@@ -104,15 +97,7 @@ public class PlayerMove : PlayerActivity
 
         move.y = _yVelocity;
 
-        // 이동
-        if (_isSprinting)
-        {
-            // 매직넘버 : 임시 (PlayerStat 관련 미구현
-            _controller.Move(move * 10f * Time.deltaTime);
-        }
-        else
-        {
-            _controller.Move(move * 5f * Time.deltaTime);
-        }
+        float speed = _isSprinting ? 10f : 5f;
+        _controller.Move(move * speed * Time.deltaTime);
     }
 }
