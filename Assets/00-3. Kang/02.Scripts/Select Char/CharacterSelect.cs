@@ -98,8 +98,6 @@ public class CharacterSelect : PunSingleton<CharacterSelect>
     [PunRPC]
     public void SelectCharacter(int index)
     {
-        if (_isSelectCharacter[index]) return;
-
         // ToDo:캐릭터 생성(인게임 캐릭터 오브젝트)
         _isSelect = true;
 
