@@ -503,7 +503,7 @@
                 {
                     "name": "",
                     "id": "a8685490-c787-4790-8990-4c9dd22014e5",
-                    "path": "<Keyboard>/q",
+                    "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -514,7 +514,7 @@
                 {
                     "name": "",
                     "id": "c4174b65-1dbd-477d-8160-416d17e41af5",
-                    "path": "<Keyboard>/z",
+                    "path": "<Keyboard>/r",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
