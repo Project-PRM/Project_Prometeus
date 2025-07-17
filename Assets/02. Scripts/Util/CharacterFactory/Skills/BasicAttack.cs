@@ -1,4 +1,7 @@
+using System.Collections.Generic;
+using Unity.AppUI.UI;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 [Skill("BasicAttack")]
 public class BasicAttack : ISkillNoTarget
@@ -21,8 +24,29 @@ public class BasicAttack : ISkillNoTarget
     {
         // BasicAttack 스킬의 동작을 구현합니다.
         // 예시로, 공격력과 범위 등을 설정할 수 있습니다.
-        Debug.Log($"{user.Name}이(가) 기본 공격을 사용했습니다!");
+        if (_timer < Data.Cooltime)
+        {
+            Debug.Log($"{user.Name} Skill is on cooldown.");
+            return;
+        }
+        _timer = 0f;
 
+        Vector3 center = user.Behaviour.transform.position;
+        float radius = Data.MaxRange;
+
+        Collider[] hits = Physics.OverlapSphere(center, radius);
+        List<CharacterBase> targets = new();
+
+
+        user.Behaviour.Animator.SetTrigger("BasicAttack");
+
+        bool current = user.Behaviour.Animator.GetBool("IsFirstAttack");
+        bool next = !current;
+
+        user.Behaviour.Animator.SetBool("IsFirstAttack", next);
+
+
+        Debug.Log($"{user.Name}이(가) 기본 공격을 사용했습니다!");
         // 실제 게임 로직에 맞게 공격력, 범위 등을 적용하는 코드를 추가해야 합니다.
     }
 }
