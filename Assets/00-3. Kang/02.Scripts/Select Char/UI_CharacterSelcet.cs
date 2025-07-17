@@ -34,7 +34,8 @@ public class UI_CharacterSelcet : MonoBehaviourPunCallbacks
     public void BT_SelectCharacter(int index)
     {
         if (CharacterSelect.Instance.IsSelect
-        || CharacterSelect.Instance.MyPhase != CharacterSelect.Instance.SelectPhase) return;
+        || CharacterSelect.Instance.MyPhase != CharacterSelect.Instance.SelectPhase
+        || CharacterSelect.Instance.IsSelectCharacter[index]) return;
 
         CharacterSelect.Instance.SelectCharacter(index);
 
