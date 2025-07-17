@@ -7,19 +7,16 @@ using FOW;
 public class CharacterInGameView : MonoBehaviour
 {
     [SerializeField] private UI_NicknameIngame _nickname;
-
     private CharacterBehaviour _characterBehaviour;
-    private PhotonView _photonView;
 
     private void Awake()
     {
         _characterBehaviour = GetComponent<CharacterBehaviour>();
-        _photonView = GetComponent<PhotonView>();
     }
 
     private void Start()
     {
-        if (_photonView.IsMine)
+        if (_characterBehaviour.PhotonView.IsMine)
         {
             SetupCamera();
         }
@@ -28,7 +25,7 @@ public class CharacterInGameView : MonoBehaviour
 
         if (_nickname != null)
         {
-            _nickname.SetName(_photonView.Owner.NickName);
+            _nickname.SetName(_characterBehaviour.PhotonView.Owner.NickName);
         }
     }
 
@@ -47,14 +44,14 @@ public class CharacterInGameView : MonoBehaviour
         var revealer = GetComponent<FogOfWarRevealer3D>();
         if (revealer == null) return;
 
-        if (_photonView.IsMine)
+        if (_characterBehaviour.PhotonView.IsMine)
         {
             revealer.enabled = true;
             return;
         }
 
         var myTeam = PhotonServerManager.Instance.GetPlayerTeam(PhotonNetwork.LocalPlayer);
-        var team = PhotonServerManager.Instance.GetPlayerTeam(_photonView.Owner);
+        var team = PhotonServerManager.Instance.GetPlayerTeam(_characterBehaviour.PhotonView.Owner);
 
         if (myTeam == team)
         {

@@ -1463,8 +1463,8 @@ GameObject:
   - component: {fileID: 3549827564469134205}
   - component: {fileID: 8314054269847694398}
   - component: {fileID: 3429739225860686163}
-  - component: {fileID: 7011826955886075382}
   - component: {fileID: 3180342013625804560}
+  - component: {fileID: 3503419635692502054}
   - component: {fileID: 3177763884507239518}
   - component: {fileID: 3284400772661504412}
   - component: {fileID: 6612345965212137129}
@@ -1472,6 +1472,7 @@ GameObject:
   - component: {fileID: 946712415500831582}
   - component: {fileID: 6380600178584220153}
   - component: {fileID: 8631239530700257908}
+  - component: {fileID: 242060853411088520}
   m_Layer: 0
   m_Name: TankerDummyPlayer
   m_TagString: Player
@@ -1702,19 +1703,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &7011826955886075382
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4181686743975786951}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f5f880d5974dae48bcb14672da71188, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _nickname: {fileID: 8117357185280395661}
 --- !u!114 &3180342013625804560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1727,6 +1715,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b7fe5bc293ba5349b852acf9f86f9ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3503419635692502054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4181686743975786951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8dbcaaa181140c24592d9dee832c910a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _nickname: {fileID: 8117357185280395661}
 --- !u!114 &3177763884507239518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1734,13 +1735,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4181686743975786951}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e53f40355875f4f4da79666d07697068, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _characterName: 4
-  _playerInput: {fileID: 3429739225860686163}
 --- !u!95 &3284400772661504412
 Animator:
   serializedVersion: 7
@@ -1888,6 +1888,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 487797654dbb96c4fa4f05638e392521, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &242060853411088520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4181686743975786951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05538c262a8ab5a4ea352f726012b9b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4438556986761831740

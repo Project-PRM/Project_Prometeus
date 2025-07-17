@@ -10,7 +10,6 @@ using UnityEngine.InputSystem;
 public class CharacterBehaviour : MonoBehaviour, IDamageable
 {
     [SerializeField] private ECharacterName _characterName;
-    [SerializeField] private UI_NicknameIngame _nickname;
 
     private CharacterBase _character;
     public CharacterBase GetCharacterBase() => _character;

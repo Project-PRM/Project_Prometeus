@@ -12,23 +12,19 @@ public class CharacterMove : MonoBehaviour
 
     private const float GRAVITY = -9.81f;
 
-    private PhotonView _photonView;
-    private CharacterController _controller;
     private Camera _mainCamera;
 
     private CharacterBehaviour _characterBehaviour;
 
     private void Awake()
     {
-        _photonView = GetComponent<PhotonView>();
-        _controller = GetComponent<CharacterController>();
         _mainCamera = Camera.main;
         _characterBehaviour = GetComponent<CharacterBehaviour>();
     }
 
     public void OnMove(InputAction.CallbackContext callback)
     {
-        if (!_photonView.IsMine) return;
+        if (!_characterBehaviour.PhotonView.IsMine) return;
 
         if (callback.performed || callback.canceled)
         {
@@ -39,7 +35,7 @@ public class CharacterMove : MonoBehaviour
 
     public void OnSprint(InputAction.CallbackContext callback)
     {
-        if (!_photonView.IsMine) return;
+        if (!_characterBehaviour.PhotonView.IsMine) return;
 
         if (callback.started || callback.performed)
         {
@@ -53,7 +49,7 @@ public class CharacterMove : MonoBehaviour
 
     public void OnLook(InputAction.CallbackContext callback)
     {
-        if (!_photonView.IsMine) return;
+        if (!_characterBehaviour.PhotonView.IsMine) return;
 
         Vector2 screenPos = callback.ReadValue<Vector2>();
         RotateTowardsScreenPosition(screenPos);
@@ -81,12 +77,12 @@ public class CharacterMove : MonoBehaviour
     // CharacterBehaviour에서 매 프레임 호출
     public void Tick()
     {
-        if (!_photonView.IsMine) return;
+        if (!_characterBehaviour.PhotonView.IsMine) return;
 
         Vector3 move = new Vector3(_movement.x, 0, _movement.y);
 
         // 중력
-        if (_controller.isGrounded)
+        if (_characterBehaviour.Controller.isGrounded)
         {
             _yVelocity = -1f;
         }
@@ -98,6 +94,6 @@ public class CharacterMove : MonoBehaviour
         move.y = _yVelocity;
 
         float speed = _isSprinting ? 10f : 5f;
-        _controller.Move(move * speed * Time.deltaTime);
+        _characterBehaviour.Controller.Move(move * speed * Time.deltaTime);
     }
 }
