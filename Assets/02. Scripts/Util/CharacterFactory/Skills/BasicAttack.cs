@@ -31,13 +31,9 @@ public class BasicAttack : ISkillNoTarget
         }
         _timer = 0f;
 
-        Vector3 center = user.Behaviour.transform.position;
-        float radius = Data.MaxRange;
+        // collider 및 collider 관련 키기
 
-        Collider[] hits = Physics.OverlapSphere(center, radius);
-        List<CharacterBase> targets = new();
-
-
+        // 애니메이션
         user.Behaviour.Animator.SetTrigger("BasicAttack");
 
         bool current = user.Behaviour.Animator.GetBool("IsFirstAttack");

@@ -21211,6 +21211,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3177763884507239518, guid: 9db1220bb82e42e469f1952be967746f, type: 3}
+      propertyPath: _characterName
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3549827564469134205, guid: 9db1220bb82e42e469f1952be967746f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -12.29
@@ -89850,6 +89854,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1559648584}
   - component: {fileID: 1559648585}
+  - component: {fileID: 1559648586}
   m_Layer: 0
   m_Name: Collider
   m_TagString: Untagged
@@ -89889,10 +89894,22 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1.3, y: 2.7999997, z: 1.3}
   m_Center: {x: 0, y: 1.3, z: 0.5}
+--- !u!114 &1559648586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1559648583}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0db054bec985a4438a5dc97b375e016, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1562292735
 GameObject:
   m_ObjectHideFlags: 0

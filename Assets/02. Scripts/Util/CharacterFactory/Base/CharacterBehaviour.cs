@@ -19,10 +19,12 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
 
     [Header("# Components")]
     public Animator Animator { get; private set; }
+    public CharacterController Controller { get; private set; }
 
     private void Awake()
     {
         Animator = GetComponent<Animator>();
+        Controller = GetComponent<CharacterController>();
         _aimingController = new CharacterAimingController(this);
     }
 
