@@ -40,6 +40,8 @@ MonoBehaviour:
   - Fire
   - RespawnSpaceship
   - RPC_NormalAttack
+  - SelectCharacterRPC
+  - SelectCharacter
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 0
