@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InventoryPanel : Singleton<InventoryPanel>
+public class Out_UserInventoryPanel : Singleton<Out_UserInventoryPanel>
 {
     [SerializeField] private Transform _slotParent; // 슬롯들을 넣을 부모 오브젝트
-    [SerializeField] private InventorySlot _slotPrefab; // 슬롯 프리팹
-    private readonly List<InventorySlot> _slots = new(); // 동적으로 관리
+    [SerializeField] private Out_UserInventorySlot _slotPrefab; // 슬롯 프리팹
+    private readonly List<Out_UserInventorySlot> _slots = new(); // 동적으로 관리
 
     private void OnEnable()
     {
@@ -49,7 +49,7 @@ public class InventoryPanel : Singleton<InventoryPanel>
         }
     }
 
-    public void RemoveSlot(InventorySlot slot)
+    public void RemoveSlot(Out_UserInventorySlot slot)
     {
         _slots.Remove(slot);
     }

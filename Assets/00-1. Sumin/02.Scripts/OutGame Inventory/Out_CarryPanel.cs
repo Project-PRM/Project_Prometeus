@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CarryPanel : Singleton<CarryPanel>
+public class Out_CarryPanel : Singleton<Out_CarryPanel>
 {
-    [SerializeField] private List<CarrySlot> _carrySlots;
-    public List<CarrySlot> CarrySlots => _carrySlots;
-    [SerializeField] private EquipmentPanelRootController _panelRoot;
+    [SerializeField] private List<Out_CarrySlot> _carrySlots;
+    public List<Out_CarrySlot> CarrySlots => _carrySlots;
+    [SerializeField] private Out_EquipmentSubPanelController _panelRoot;
     [SerializeField] private RectTransform _canvasRectTransform;
 
     public RectTransform CanvasRectTransform => _canvasRectTransform;

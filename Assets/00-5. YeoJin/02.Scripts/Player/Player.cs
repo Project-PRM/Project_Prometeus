@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
         }
 
         TurnOnRevealer();
-        _nickname.SetName(_photonView.Owner.NickName);
+        //_nickname.SetName(_photonView.Owner.NickName);
     }
 
     public T GetActivity<T>() where T : PlayerActivity
