@@ -20,7 +20,7 @@ public class CarrySlot : ItemSlotBase, IPointerClickHandler
         return item != null && item.ItemType == _allowedType;
     }
 
-    public void OnPointerClick(PointerEventData eventData)
+    public virtual void OnPointerClick(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Right && _item != null)
         {

@@ -14,22 +14,9 @@ public class CarryPanel : Singleton<CarryPanel>
     {
         _panelRoot.gameObject.SetActive(true);
         _panelRoot.SetLocation(canvasLocalClickPos, item);
-        // 위치 설정: 캔버스 기준 좌표로 패널 위치 지정
-        //RectTransform panelRect = _panelRoot.GetComponent<RectTransform>();
-        //panelRect.anchoredPosition = canvasLocalClickPos + new Vector2(150f, 0f);
-
-        // 아이템 배치
-        //foreach (var slot in _carrySlots)
-        //{
-        //    if (slot.CanAccept(item) && slot.IsEmpty)
-        //    {
-        //        slot.SetItem(item);
-        //        break;
-        //    }
-        //}
     }
 
-    public void Hide()
+    public void HideSubPanel()
     {
         _panelRoot.gameObject.SetActive(false);
     }
