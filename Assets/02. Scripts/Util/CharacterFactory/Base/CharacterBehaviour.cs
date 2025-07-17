@@ -22,15 +22,16 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
     public Animator Animator { get; private set; }
     public CharacterController Controller { get; private set; }
     public PhotonView PhotonView { get; private set; }
+    public DamageTrigger DamageTrigger { get; private set; }
 
     private void Awake()
     {
         Animator = GetComponent<Animator>();
         Controller = GetComponent<CharacterController>();
         PhotonView = GetComponent<PhotonView>();
+        DamageTrigger = GetComponentInChildren<DamageTrigger>();
 
         _characterMove = GetComponent<CharacterMove>();
-
         _aimingController = new CharacterAimingController(this);
     }
 
@@ -51,7 +52,7 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
             SkillFactory.Create(skills.Ultimate),
             CharacterManager.Instance.CharacterStats
         );
-
+        DamageTrigger.Owner = _character;
         _isInitialized = true;
     }
 
