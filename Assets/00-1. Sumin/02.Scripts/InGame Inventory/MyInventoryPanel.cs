@@ -76,8 +76,8 @@ public class MyInventoryPanel : Singleton<MyInventoryPanel>
     {
         if (_currentInventory.TryEquipItem(item))
         {
-            SetEquipSlots(_currentInventory.EquippedItems);
-            SetInventorySlots(_currentInventory.HavingItems);
+            OpenPanel(_currentInventory); // 인벤토리 갱신
+
             if (item.ItemType == EItemType.Bag)
                 OnBagEquipped(item);
             return true;
@@ -89,8 +89,7 @@ public class MyInventoryPanel : Singleton<MyInventoryPanel>
     {
         if (_currentInventory.TryUnequipItem(item))
         {
-            SetEquipSlots(_currentInventory.EquippedItems);
-            SetInventorySlots(_currentInventory.HavingItems);
+            OpenPanel(_currentInventory); // 인벤토리 갱신
             UpdateBagSlotCount(); // 가방 해제 시
             return true;
         }

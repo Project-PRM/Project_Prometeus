@@ -7,13 +7,6 @@ public class MyInventoryEquipSlot : ItemSlotBase, IPointerClickHandler
     [SerializeField] private EItemType _allowedType;
     public EItemType AllowedType => _allowedType;
 
-    public override void SetItem(ItemData newItem)
-    {
-        base.SetItem(newItem);
-
-        Refresh();
-    }
-
     public override bool CanAccept(ItemData item)
     {
         return item != null && item.ItemType == _allowedType;

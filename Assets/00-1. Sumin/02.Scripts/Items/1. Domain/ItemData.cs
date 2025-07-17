@@ -28,6 +28,18 @@ public class ItemData
 
     public ItemData() { }
 
+    public ItemData(ItemData other)
+    {
+        Name = other.Name;
+        Description = other.Description;
+        IconName = other.IconName;
+        Rarity = other.Rarity;
+        ItemType = other.ItemType;
+
+        AdditiveStats = new Dictionary<string, float>(other.AdditiveStats);
+        MultiplierStats = new Dictionary<string, float>(other.MultiplierStats);
+    }
+
     public Color GetRarityColor()
     {
         return Rarity switch

@@ -4,17 +4,9 @@ using UnityEngine.EventSystems;
 
 public class MyInventorySlot : ItemSlotBase, IPointerClickHandler
 {
-    private MyInventoryPanel _panel;
-
-    public override void SetItem(ItemData newItem)
-    {
-        base.SetItem(newItem);
-
-        Refresh();
-    }
-
     public virtual void OnPointerClick(PointerEventData eventData)
     {
+        Debug.Log(gameObject.name + " clicked with button: " + eventData.button);
         if (eventData.button == PointerEventData.InputButton.Right && _item != null)
         {
             if (MyInventoryPanel.Instance.TryEquipItem(_item))
