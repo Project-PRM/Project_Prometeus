@@ -20,7 +20,7 @@ public class EquipmentPanelRootController : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.Escape))
         {
-            CarryPanel.Instance.Hide();
+            CarryPanel.Instance.HideSubPanel();
         }
     }
 
