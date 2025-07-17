@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+/// <summary>
+/// 모든 아이템들에 대한 데이터베이스
+/// </summary>
 public class ItemManager : Singleton<ItemManager>
 {
     private ItemRepository _itemRepository;

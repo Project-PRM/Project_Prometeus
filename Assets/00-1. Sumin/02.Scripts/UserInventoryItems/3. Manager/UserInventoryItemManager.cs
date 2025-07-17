@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
+/// <summary>
+/// 유저가 보유중인 아이템 데이터베이스
+/// </summary>
 public class UserInventoryItemManager : Singleton<UserInventoryItemManager>
 {
     private UserInventoryItemRepository _repository;

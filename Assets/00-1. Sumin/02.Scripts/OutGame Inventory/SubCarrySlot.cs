@@ -13,14 +13,11 @@ public class SubCarrySlot : CarrySlot, IPointerClickHandler
         _itemNameText.text = _item != null ? _item.Name : "Empty";
         _controller = controller;
         if (slotIndex >= 0) SlotIndex = slotIndex;
-
-        // 안전하게 null 확인 후 디버그
-        //Debug.Log($"{gameObject.name} SetItem called with item: {(_item != null ? _item.Name : "null")}");
     }
 
-
-    public void OnPointerClick(PointerEventData eventData)
+    public override void OnPointerClick(PointerEventData eventData)
     {
         _controller.SwapWithOrigin(this);
+        CarryPanel.Instance.HideSubPanel();
     }
 }
