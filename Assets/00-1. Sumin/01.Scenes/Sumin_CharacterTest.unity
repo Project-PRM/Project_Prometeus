@@ -83019,7 +83019,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e53f40355875f4f4da79666d07697068, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterName: 0
+  _characterName: 1
   _playerInput: {fileID: 1491331378}
 --- !u!114 &1491331376
 MonoBehaviour:
