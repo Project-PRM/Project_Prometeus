@@ -5,10 +5,11 @@ using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterStatusEffect))]
 [RequireComponent(typeof(PhotonView))]
+[RequireComponent(typeof(CharacterInputHandler))]
+[RequireComponent(typeof(Animator))]
 public class CharacterBehaviour : MonoBehaviour, IDamageable
 {
     [SerializeField] private ECharacterName _characterName;
-    [SerializeField] private PlayerInput _playerInput; // PlayerInput 컴포넌트 연결 필요
 
     private CharacterBase _character;
     public CharacterBase GetCharacterBase() => _character;
@@ -29,27 +30,6 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
     private void Awake()
     {
         Animator = GetComponent<Animator>();
-        _playerInput = GetComponent<PlayerInput>();
-        if (_playerInput == null)
-        {
-            Debug.LogError("PlayerInput component is missing on CharacterBehaviour.");
-        }
-    }
-
-    private void OnEnable()
-    {
-        _playerInput.actions["Passive"].performed += OnPassiveUse;
-        _playerInput.actions["Skill"].performed += OnSkillUse;
-        _playerInput.actions["Ultimate"].performed += OnUltimateUse;
-        _playerInput.actions["Attack"].performed += OnAttack;
-    }
-
-    private void OnDisable()
-    {
-        _playerInput.actions["Passive"].performed -= OnPassiveUse;
-        _playerInput.actions["Skill"].performed -= OnSkillUse;
-        _playerInput.actions["Ultimate"].performed -= OnUltimateUse;
-        _playerInput.actions["Attack"].performed -= OnAttack;
     }
 
     private async void Start()
