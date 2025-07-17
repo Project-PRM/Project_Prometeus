@@ -23,6 +23,19 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
     private ESkillType? _selectedSkill = null;
     private Vector3 _aimDirection = Vector3.zero;
 
+    [Header("# Components")]
+    public Animator Animator { get; private set; }
+
+    private void Awake()
+    {
+        Animator = GetComponent<Animator>();
+        _playerInput = GetComponent<PlayerInput>();
+        if (_playerInput == null)
+        {
+            Debug.LogError("PlayerInput component is missing on CharacterBehaviour.");
+        }
+    }
+
     private void OnEnable()
     {
         _playerInput.actions["Passive"].performed += OnPassiveUse;
