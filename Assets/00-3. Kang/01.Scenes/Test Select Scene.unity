@@ -1084,7 +1084,7 @@ MonoBehaviour:
   DelayTime: 0.5
   _selectPhase: 0
   _myPhase: 2
-  _isSelectCharacter: 0000000000
+  _isSelectCharacter: 0101000101
 --- !u!1 &456225452
 GameObject:
   m_ObjectHideFlags: 0
