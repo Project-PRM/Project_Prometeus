@@ -40,7 +40,11 @@ public class CharacterInventory : MonoBehaviour
         HavingItems.Clear();
         EquippedItems.Clear();
 
-        if (ItemManager.Instance.TryGetItemData("TestItem", out var item))
+        HavingItems = CarryManager.Instance.CarryItems;
+
+        Debug.Log($"CharacterInventory initialized with {HavingItems.Count} items.");
+
+        /*if (ItemManager.Instance.TryGetItemData("TestItem", out var item))
         {
             AddItem(item);
         }
@@ -50,7 +54,7 @@ public class CharacterInventory : MonoBehaviour
             {
                 AddItem(armor);
             }
-        }
+        }*/
     }
 
     public void AddItem(ItemData item)

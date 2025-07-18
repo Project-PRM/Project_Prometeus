@@ -31,5 +31,14 @@ public class Out_CarryPanel : Singleton<Out_CarryPanel>
             var item = _carrySlots[i].GetItem();
             _panelRoot.CarrySlots[i].SetItem(item, _panelRoot, i);
         }
+
+        List<ItemData> carryingItems = new List<ItemData>();
+        foreach(var slot in _carrySlots)
+        {
+            if (slot.GetItem() == null)
+                continue;
+            carryingItems.Add(slot.GetItem());
+        }
+        CarryManager.Instance.SetCarryingList(carryingItems);
     }
 }

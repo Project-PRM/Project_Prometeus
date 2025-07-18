@@ -85,6 +85,10 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
     private void Update()
     {
         if (!_isInitialized) return;
+        if(!PhotonView.IsMine)
+        {
+            return;
+        }
 
         _character.Update();
         _aimingController.Update();

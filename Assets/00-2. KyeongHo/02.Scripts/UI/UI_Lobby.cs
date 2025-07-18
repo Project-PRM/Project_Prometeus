@@ -41,7 +41,7 @@ public class UI_Lobby : MonoBehaviour
       // TODO : 지금은 그냥 GameScene으로 넘어가지만, 나중엔 인원이 꽉 차면 알아서 게임 시작
       
       // 15명이 모두 모이면 게임 시작 (마스터 클라이언트가)
-      if(PhotonNetwork.IsMasterClient && PhotonServerManager.Instance.MaxPlayers == PhotonNetwork.CurrentRoom.PlayerCount)
+      if(PhotonNetwork.IsMasterClient /*&& PhotonServerManager.Instance.MaxPlayers == PhotonNetwork.CurrentRoom.PlayerCount*/)
       {
          //방이 꽉차면 더 이상 새로운 플레이어가 들어오지 못함
          PhotonNetwork.CurrentRoom.IsOpen = false;
