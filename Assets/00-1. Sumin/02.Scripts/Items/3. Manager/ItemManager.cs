@@ -27,7 +27,14 @@ public class ItemManager : Singleton<ItemManager>
 
     public bool TryGetItemData(string itemName, out ItemData itemData)
     {
-        return _itemRepository.Items.TryGetValue(itemName, out itemData);
+        if (_itemRepository.Items.TryGetValue(itemName, out var original))
+        {
+            itemData = new ItemData(original); // 깊은 복사된 객체 반환
+            return true;
+        }
+
+        itemData = null;
+        return false;
     }
 
     public List<ItemData> GetAllItems()
