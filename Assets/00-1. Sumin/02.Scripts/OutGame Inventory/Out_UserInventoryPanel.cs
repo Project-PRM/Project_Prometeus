@@ -5,7 +5,8 @@ public class Out_UserInventoryPanel : Singleton<Out_UserInventoryPanel>
 {
     [SerializeField] private Transform _slotParent; // 슬롯들을 넣을 부모 오브젝트
     [SerializeField] private Out_UserInventorySlot _slotPrefab; // 슬롯 프리팹
-    private readonly List<Out_UserInventorySlot> _slots = new(); // 동적으로 관리
+
+    private List<Out_UserInventorySlot> _slots = new();
 
     private void OnEnable()
     {

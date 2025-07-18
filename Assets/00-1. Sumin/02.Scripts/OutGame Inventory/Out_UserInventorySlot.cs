@@ -33,25 +33,12 @@ public class Out_UserInventorySlot : ItemSlotBase, IPointerClickHandler
     protected override void Refresh()
     {
         // 아이콘 및 희귀도 테두리
-        if (_itemNameText != null)
-            _itemNameText.text = _item?.Name ?? "Empty";
-
-        if (_item != null)
-        {
-            _icon.sprite = _item.IconSprite;
-        }
-        else
-        {
-            // 빈 슬롯 처리
-            _icon.sprite = null;
-            _icon.color = Color.white;
-        }
+        base.Refresh();
 
         if (_item == null && !_isSubSlot)
         {
             // InventoryPanel에서 자신을 리스트에서 제거
-            if (Out_UserInventoryPanel.Instance != null)
-                Out_UserInventoryPanel.Instance.RemoveSlot(this);
+            Out_UserInventoryPanel.Instance.RemoveSlot(this);
             Destroy(gameObject);
         }
     }
