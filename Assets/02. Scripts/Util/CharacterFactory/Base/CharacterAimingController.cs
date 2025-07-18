@@ -27,6 +27,10 @@ public class CharacterAimingController
     public void Update()
     {
         if (!IsAiming) return;
+        if (!_owner.PhotonView.IsMine)
+        {
+            return;
+        }
 
         UpdateAimingUI();
 
