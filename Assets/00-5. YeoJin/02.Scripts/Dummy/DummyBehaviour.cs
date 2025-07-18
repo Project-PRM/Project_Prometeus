@@ -16,6 +16,10 @@ public class DummyBehaviour : MonoBehaviour, IDamageable
     public Animator Animator { get; private set; }
     public PhotonView PhotonView { get; private set; }
 
+    [Header("Dummy Attributes")]
+    [SerializeField] private string _team;
+    [SerializeField] private string _nickname;
+
     private void Awake()
     {
         Animator = GetComponent<Animator>();
@@ -37,6 +41,11 @@ public class DummyBehaviour : MonoBehaviour, IDamageable
         );
     }
 
+    public void SetDummy(string team, string nickname)
+    {
+        _team = team;
+        _nickname = nickname;
+    }
 
     public void TakeDamage(float Damage)
     {
