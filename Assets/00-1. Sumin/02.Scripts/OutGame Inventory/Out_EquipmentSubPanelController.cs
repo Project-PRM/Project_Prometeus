@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EquipmentPanelRootController : MonoBehaviour
+public class Out_EquipmentSubPanelController : MonoBehaviour
 {
     public GameObject Panel;
-    public List<SubCarrySlot> CarrySlots;
-    public InventorySlot OriginSlot;
-    private InventorySlot _realOriginInventorySlot; // 실제 인벤토리 슬롯 참조
+    public List<Out_SubCarrySlot> CarrySlots;
+    public Out_UserInventorySlot OriginSlot;
+    private Out_UserInventorySlot _realOriginInventorySlot; // 실제 인벤토리 슬롯 참조
 
     private void OnEnable()
     {
@@ -20,7 +20,7 @@ public class EquipmentPanelRootController : MonoBehaviour
     {
         if(Input.GetKey(KeyCode.Escape))
         {
-            CarryPanel.Instance.HideSubPanel();
+            Out_CarryPanel.Instance.HideSubPanel();
         }
     }
 
@@ -35,7 +35,7 @@ public class EquipmentPanelRootController : MonoBehaviour
                 CarrySlots[i].gameObject.SetActive(flag);
                 if (flag)
                 {
-                    CarrySlots[i].SetItem(CarryPanel.Instance.CarrySlots[i].GetItem(), this, i);
+                    CarrySlots[i].SetItem(Out_CarryPanel.Instance.CarrySlots[i].GetItem(), this, i);
                 }
             }
         }
@@ -43,14 +43,14 @@ public class EquipmentPanelRootController : MonoBehaviour
     }
 
     // InventorySlot을 Origin으로 지정
-    public void SetOriginSlot(InventorySlot slot)
+    public void SetOriginSlot(Out_UserInventorySlot slot)
     {
         _realOriginInventorySlot = slot;
         OriginSlot.SetItem(slot.GetItem());
     }
 
     // SubCarrySlot 클릭 시 OriginSlot과 스왑 및 CarrySlot 동기화
-    public void SwapWithOrigin(SubCarrySlot subSlot)
+    public void SwapWithOrigin(Out_SubCarrySlot subSlot)
     {
         int idx = subSlot.SlotIndex;
         var originItem = OriginSlot.GetItem();
@@ -61,7 +61,7 @@ public class EquipmentPanelRootController : MonoBehaviour
         subSlot.SetItem(originItem, this, idx);
 
         // CarrySlot 동기화
-        CarryPanel.Instance.CarrySlots[idx].SetItem(originItem);
+        Out_CarryPanel.Instance.CarrySlots[idx].SetItem(originItem);
 
         // InventorySlot 동기화
         if (_realOriginInventorySlot != null)

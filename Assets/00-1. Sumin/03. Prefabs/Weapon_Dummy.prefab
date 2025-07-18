@@ -86,10 +86,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1089255625313367887}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f301552865c28d149ad56db84ddbe47c, type: 3}
+  m_Script: {fileID: 11500000, guid: 7592a595c9d15614bad65e4ca8a94484, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _itemNameText: {fileID: 5658814018133333614}
+  _isSubSlot: 0
 --- !u!1 &8151693798462492399
 GameObject:
   m_ObjectHideFlags: 0
