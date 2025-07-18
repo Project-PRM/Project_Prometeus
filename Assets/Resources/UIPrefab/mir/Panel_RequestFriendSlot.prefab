@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3990386975541507351}
   - component: {fileID: 750142096332835476}
   - component: {fileID: 2878077863071208426}
+  - component: {fileID: 8971553987935378303}
   m_Layer: 5
   m_Name: Panel_RequestFriendSlot
   m_TagString: Untagged
@@ -78,6 +79,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &8971553987935378303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 909611823922315178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c13d29318cb45914b9bd840d2657a0af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SenderNickname: {fileID: 4178386123309317284}
+  AcceptButton: {fileID: 1753436747237434805}
+  DenyButton: {fileID: 3735734472019429816}
 --- !u!1 &1166256031438470438
 GameObject:
   m_ObjectHideFlags: 0
@@ -198,7 +214,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7903168630397347126}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8971553987935378303}
+        m_TargetAssemblyTypeName: UI_RequestFriendslot, Assembly-CSharp
+        m_MethodName: OnClickDeny
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1260991871581311011
 GameObject:
   m_ObjectHideFlags: 0
@@ -606,7 +634,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 4886264131546242321}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8971553987935378303}
+        m_TargetAssemblyTypeName: UI_RequestFriendslot, Assembly-CSharp
+        m_MethodName: OnClickAccept
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4970092812845620944
 GameObject:
   m_ObjectHideFlags: 0

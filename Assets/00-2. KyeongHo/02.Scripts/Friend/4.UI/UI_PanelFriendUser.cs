@@ -15,8 +15,8 @@ public class UI_PanelFriendUser : MonoBehaviour
         _uid = uid;
     }
     // TODO : 친구 목록은 검색하면 잘 뜨니 Panel 클릭하면 친구추가 요청 보내는거 구현
-    public void OnRequestFriendSendButtonClicked()
+    public async void OnRequestFriendSendButtonClicked()
     {
-        FriendManager.Instance.SendFriendRequest(AccountManager.Instance.MyAccount.UserId, NicknameText.text);
+        await FriendManager.Instance.SendFriendRequest(AccountManager.Instance.MyAccount.UserId, NicknameText.text);
     }
 }
