@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-[RequireComponent(typeof(CharacterStatusEffect))]
 [RequireComponent(typeof(PhotonView))]
 [RequireComponent(typeof(Animator))]
 public class DummyBehaviour : MonoBehaviour, IDamageable
@@ -11,7 +10,7 @@ public class DummyBehaviour : MonoBehaviour, IDamageable
     [SerializeField] private ECharacterName _characterName;
 
     private DummyBase _character;
-    public DummyBase GetCharacterBase() => _character;
+    public DummyBase GetDummyBase() => _character;
 
     [Header("# Components")]
     public Animator Animator { get; private set; }
