@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 들고가는 장비 판넬
+/// </summary>
 public class Out_CarryPanel : Singleton<Out_CarryPanel>
 {
     [SerializeField] private List<Out_CarrySlot> _carrySlots;
@@ -10,6 +13,9 @@ public class Out_CarryPanel : Singleton<Out_CarryPanel>
 
     public RectTransform CanvasRectTransform => _canvasRectTransform;
 
+    /// <summary>
+    /// 서브 슬롯 띄우기
+    /// </summary>
     public void ShowNear(Vector2 canvasLocalClickPos, ItemData item)
     {
         _panelRoot.gameObject.SetActive(true);
@@ -21,6 +27,9 @@ public class Out_CarryPanel : Singleton<Out_CarryPanel>
         _panelRoot.gameObject.SetActive(false);
     }
 
+    /// <summary>
+    /// 들고있는 슬롯, 서브 슬롯 동기화
+    /// </summary>
     public void SyncCarryAndSubCarrySlots()
     {
         if (_panelRoot == null || _carrySlots == null || _panelRoot.CarrySlots == null)

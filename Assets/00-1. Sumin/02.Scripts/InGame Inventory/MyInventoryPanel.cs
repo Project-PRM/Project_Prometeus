@@ -1,9 +1,12 @@
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class MyInventoryPanel : Singleton<MyInventoryPanel>
 {
+    private const int DEFAULT_INVENTORY_SIZE = 10;
+
     private CharacterInventory _currentInventory;
 
     [Header("장비 슬롯")]
@@ -11,6 +14,8 @@ public class MyInventoryPanel : Singleton<MyInventoryPanel>
     [SerializeField] private List<MyInventoryEquipSlot> _armorSlots;
     [SerializeField] private MyInventoryEquipSlot _bagSlot;
     [SerializeField] private MyInventoryEquipSlot _lightSlot;
+    [SerializeField] private RectTransform _equipSlotsContainer;
+    [SerializeField] private RectTransform _inventorySlotsContainer;
 
     [Header("소지품 슬롯")]
     [SerializeField] private List<MyInventorySlot> _inventorySlots;
@@ -30,14 +35,12 @@ public class MyInventoryPanel : Singleton<MyInventoryPanel>
         SetEquipSlots(inventory.EquippedItems);
         SetInventorySlots(inventory.HavingItems);
 
-        // 가방이 있는 경우 슬롯 수 조절
-        var bagItem = inventory.EquippedItems.FirstOrDefault(i => i.ItemType == EItemType.Bag);
-        if (bagItem != null)
-            OnBagEquipped(bagItem);
-        else
-            UpdateInventorySize(10); // 기본 슬롯 수 예시
+        UpdateBagSlotCount(); // 여기에만 한 번
     }
 
+    /// <summary>
+    /// 인벤토리에서 불러와서 UI 할당
+    /// </summary>
     public void SetEquipSlots(List<ItemData> equipItems)
     {
         _weaponSlot.ClearItem();
@@ -59,8 +62,12 @@ public class MyInventoryPanel : Singleton<MyInventoryPanel>
                     break;
             }
         }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_equipSlotsContainer);
     }
 
+    /// <summary>
+    /// 인벤토리에서 불러와서 UI 할당
+    /// </summary>
     public void SetInventorySlots(List<ItemData> inventoryItems)
     {
         for (int i = 0; i < _inventorySlots.Count; ++i)
@@ -68,33 +75,39 @@ public class MyInventoryPanel : Singleton<MyInventoryPanel>
             if (i < inventoryItems.Count)
                 _inventorySlots[i].SetItem(inventoryItems[i]);
             else
-                _inventorySlots[i].ClearItem(); // 명시적으로 null 처리
+                _inventorySlots[i].ClearItem();
         }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_inventorySlotsContainer);
     }
 
+    /// <summary>
+    /// 장착 시도
+    /// </summary>
     public bool TryEquipItem(ItemData item)
     {
         if (_currentInventory.TryEquipItem(item))
         {
-            OpenPanel(_currentInventory); // 인벤토리 갱신
-
-            if (item.ItemType == EItemType.Bag)
-                OnBagEquipped(item);
+            OpenPanel(_currentInventory);
+            UpdateBagSlotCount();
             return true;
         }
         return false;
     }
 
-    public bool TryMoveToInventory(ItemData item)
+    /// <summary>
+    /// 해제 시도
+    /// </summary>
+    public bool TryUnequipItem(ItemData item)
     {
         if (_currentInventory.TryUnequipItem(item))
         {
-            OpenPanel(_currentInventory); // 인벤토리 갱신
-            UpdateBagSlotCount(); // 가방 해제 시
+            OpenPanel(_currentInventory);
+            UpdateBagSlotCount();
             return true;
         }
         return false;
     }
+
 
     private void UpdateBagSlotCount()
     {
@@ -102,7 +115,7 @@ public class MyInventoryPanel : Singleton<MyInventoryPanel>
         if (bagItem != null)
             OnBagEquipped(bagItem);
         else
-            UpdateInventorySize(10);
+            UpdateInventorySize(DEFAULT_INVENTORY_SIZE);
     }
 
     public void UpdateInventorySize(int maxSlotCount)
@@ -115,7 +128,12 @@ public class MyInventoryPanel : Singleton<MyInventoryPanel>
 
     public void OnBagEquipped(ItemData bagItem)
     {
-        //int newSlotCount = bagItem.BagSlotCount;
-        //UpdateInventorySize(newSlotCount);
+        int finalSlot = DEFAULT_INVENTORY_SIZE;
+        if (bagItem.ItemType == EItemType.Bag && bagItem.InventorySlotCount.HasValue && bagItem.InventorySlotCount.Value > 0)
+        {
+            finalSlot = bagItem.InventorySlotCount.Value;
+        }
+
+        UpdateInventorySize(finalSlot);
     }
 }

@@ -41,18 +41,25 @@ public abstract class ItemSlotBase : MonoBehaviour
     public void ClearItem()
     {
         _item = null;
-        if(_icon != null)
-        {
-            _icon.color = Color.white; // 빈 슬롯의 아이콘 색상 초기화
-            _icon.sprite = null;
-        }    
-        if(_itemNameText != null)
-            _itemNameText.text = "";
 
         Refresh();
     }
 
+    protected virtual void Refresh()
+    {
+        // 아이콘 및 희귀도 테두리
+        if (_itemNameText != null)
+            _itemNameText.text = _item?.Name ?? "Empty";
 
-    // 슬롯에 따른 UI 처리 방식은 하위에서 구현
-    protected abstract void Refresh();
+        if (_item != null)
+        {
+            _icon.sprite = _item.IconSprite;
+        }
+        else
+        {
+            // 빈 슬롯 처리
+            _icon.sprite = null;
+            _icon.color = Color.white;
+        }
+    }
 }

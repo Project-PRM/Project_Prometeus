@@ -2,6 +2,7 @@
   "TestItem": {
     "Name": "TestItem",
     "Description": "테스트용 아이템입니다.",
+    "IconName": null,
     "Rarity": 0,
     "ItemType": 0,
     "AdditiveStats": {
@@ -29,15 +30,29 @@
       "StaminaRegen": 10.0,
       "SprintStaminaCost": 11.0
     },
+    "InventorySlotCount": null,
     "IconSprite": null
   },
   "TestArmor": {
     "Name": "TestArmor",
     "Description": "테스트용 방어구입니다.",
+    "IconName": null,
     "Rarity": 0,
     "ItemType": 1,
     "AdditiveStats": {},
     "MultiplierStats": {},
+    "InventorySlotCount": null,
+    "IconSprite": null
+  },
+  "TestBag": {
+    "Name": "TestBag",
+    "Description": "테스트 가방입니다.",
+    "IconName": null,
+    "Rarity": 0,
+    "ItemType": 3,
+    "AdditiveStats": {},
+    "MultiplierStats": {},
+    "InventorySlotCount": null,
     "IconSprite": null
   }
 }

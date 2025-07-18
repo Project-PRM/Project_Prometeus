@@ -1,20 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// 교체용 서브 판넬
+/// </summary>
 public class Out_EquipmentSubPanelController : MonoBehaviour
 {
     public GameObject Panel;
     public List<Out_SubCarrySlot> CarrySlots;
     public Out_UserInventorySlot OriginSlot;
     private Out_UserInventorySlot _realOriginInventorySlot; // 실제 인벤토리 슬롯 참조
-
-    private void OnEnable()
-    {
-        /*for(int i=0; i<CarrySlots.Count; ++i)
-        {
-            CarrySlots[i].SetItem(CarryPanel.Instance.CarrySlots[i].GetItem(), this, i);
-        }*/
-    }
 
     public void Update()
     {
