@@ -56,5 +56,9 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Project_Prometeus.sln"
+    "dotnet.defaultSolution": "Project_Prometeus.sln",
+    "dotrush.roslyn.projectOrSolutionFiles": [
+        "c:\\PK\\02.Project\\Github\\Project_Prometeus\\Project_Prometeus.sln",
+        "c:\\PK\\02.Project\\Github\\Project_Prometeus\\Library\\com.singularitygroup.hotreload\\Solution\\Project_Prometeus.sln"
+    ]
 }
