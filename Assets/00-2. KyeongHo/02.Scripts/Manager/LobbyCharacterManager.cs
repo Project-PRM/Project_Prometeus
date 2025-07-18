@@ -20,23 +20,17 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
     /// </summary>
     public void UpdateCharacterDisplay()
     {
-        /*ClearAllCharacters(); // 일단 모든 캐릭터 삭제
-
-        // 룸에 들어가 있지 않다면 내 캐릭터만 표시
-        if (!PhotonNetwork.InRoom)
-        {
-            SpawnCharacter(PhotonNetwork.LocalPlayer, centerPos);
-            return;
-        }
-
-        // 룸에 있지만 아직 팀이 없다면 내 캐릭터만 표시
+        ClearAllCharacters(); // 일단 모든 캐릭터 삭제
         string myTeam = PhotonServerManager.Instance.GetPlayerTeam(PhotonNetwork.LocalPlayer);
-        if (string.IsNullOrEmpty(myTeam) || myTeam == "None")
+        
+        if (!PhotonNetwork.InRoom || // 룸에 들어가 있지 않다면 내 캐릭터만 표시  
+            string.IsNullOrEmpty(myTeam) ||  
+            myTeam == "None") // 룸에 있지만 아직 팀이 없다면 내 캐릭터만 표시
         {
             SpawnCharacter(PhotonNetwork.LocalPlayer, centerPos);
             return;
         }
-
+        
         // 팀이 정해졌다면, 우리 팀원들을 모두 찾아서 표시
         var myTeammates = PhotonNetwork.PlayerList
             .Where(p => PhotonServerManager.Instance.GetPlayerTeam(p) == myTeam)
@@ -46,15 +40,9 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
         SpawnCharacter(PhotonNetwork.LocalPlayer, centerPos);
 
         // 나를 제외한 팀원들을 배치
-        var otherTeammates = myTeammates.Where(p => !p.IsLocal).ToList();
-        if (otherTeammates.Count > 0)
-        {
-            SpawnCharacter(otherTeammates[0], leftPos);
-        }
-        if (otherTeammates.Count > 1)
-        {
-            SpawnCharacter(otherTeammates[1], rightPos);
-        }*/
+        var others = myTeammates.Where(p => !p.IsLocal).ToList();
+        if (others.Count > 0) SpawnCharacter(others[0], leftPos);
+        if (others.Count > 1) SpawnCharacter(others[1], rightPos);
     }
 
     /// <summary>
@@ -123,7 +111,12 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
     {
         base.OnDisable();
         PhotonNetwork.RemoveCallbackTarget(this);
+    } 
+    protected override void OnDestroy()
+    {
+        ClearAllCharacters();
     }
+
     public override void OnPlayerPropertiesUpdate(PhotonPlayer targetPlayer, Hashtable changedProps)
     {
         // 테스트용 추가
@@ -138,6 +131,15 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
             UpdateCharacterDisplay();
         }
     }
+    public override void OnJoinedLobby()
+    {
+        UpdateCharacterDisplay();
+        
+    }
+    public override void OnJoinedRoom()
+    {
+        UpdateCharacterDisplay();
+    }
     public override void OnPlayerEnteredRoom(PhotonPlayer newPlayer)
     {
         UpdateCharacterDisplay();
@@ -148,4 +150,9 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
         // 약간의 지연을 주어 안정성을 높일 수 있습니다.
         Invoke(nameof(UpdateCharacterDisplay), 0.1f);
     }
+    public override void OnLeftRoom()
+    {
+        UpdateCharacterDisplay();
+    }
+
 }
