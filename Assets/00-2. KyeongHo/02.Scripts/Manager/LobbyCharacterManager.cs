@@ -20,7 +20,7 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
     /// </summary>
     public void UpdateCharacterDisplay()
     {
-        ClearAllCharacters(); // 일단 모든 캐릭터 삭제
+        /*ClearAllCharacters(); // 일단 모든 캐릭터 삭제
 
         // 룸에 들어가 있지 않다면 내 캐릭터만 표시
         if (!PhotonNetwork.InRoom)
@@ -54,7 +54,7 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
         if (otherTeammates.Count > 1)
         {
             SpawnCharacter(otherTeammates[1], rightPos);
-        }
+        }*/
     }
 
     /// <summary>
