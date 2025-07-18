@@ -138,7 +138,7 @@ public class CharacterInventory : MonoBehaviour
     {
         HavingItems = HavingItems
             .OrderBy(i => i.ItemType)
-            .ThenBy(i => i.Name) // 이름도 같이 정렬하면 더 깔끔
+            .ThenBy(i => i.Name)
             .ToList();
     }
 }
