@@ -52,7 +52,7 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
             SkillFactory.Create(skills.Ultimate),
             CharacterManager.Instance.CharacterStats
         );
-        DamageTrigger.Owner = _character;
+        DamageTrigger.Owner = this;
         _isInitialized = true;
     }
 
