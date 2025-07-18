@@ -58,7 +58,10 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
 
     public void OnAttack(InputAction.CallbackContext callback)
     {
-        //if (!_photonView.IsMine) return;
+        if(!PhotonView.IsMine)
+        {
+            return;
+        }
         if (_aimingController.IsAiming)
             return;
         TryActivateSkillOrEnterAiming(ESkillType.BasicAttack);

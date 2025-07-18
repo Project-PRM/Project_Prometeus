@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Photon.Pun;
+using Photon.Realtime;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -27,7 +28,8 @@ public class UI_Lobby : MonoBehaviour
    {
       if (evt != null)
       {
-         TeamNameText.text = $"TeamName : {evt.TeamName}";  
+         // TeamNameText.text = $"TeamName : {evt.TeamName}";  
+         TeamNameText.text = $"TeamName : {PhotonNetwork.NickName} / {PhotonNetwork.LocalPlayer.UserId}" ;  
       }
       RoomPlayerCountText.text = $"{PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}";
    }
