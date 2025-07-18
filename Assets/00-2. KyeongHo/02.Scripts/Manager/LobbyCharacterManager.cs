@@ -85,7 +85,7 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
         }
 
         // 해당 캐릭터 프리팹 로드 (Resources/LobbyCharacters/ 아래에 있어야 함)
-        string path = $"Players/{character}Player";
+        string path = $"LobbyPlayers/{character}Player";
         GameObject characterPrefab = Resources.Load<GameObject>(path);
 
         if (characterPrefab == null)
