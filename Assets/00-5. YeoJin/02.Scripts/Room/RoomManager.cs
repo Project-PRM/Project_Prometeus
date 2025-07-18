@@ -28,7 +28,8 @@ public class RoomManager : PunSingleton<RoomManager>
         // 자기 고른 캐릭터를 스폰
         StartCoroutine(WaitForSpawnDataAndSpawn());
     }
-
+    
+    // 팀을 찾아옴
     private HashSet<string> GetActiveTeams()
     {
         HashSet<string> teamSet = new HashSet<string>();
@@ -48,6 +49,7 @@ public class RoomManager : PunSingleton<RoomManager>
         return teamSet;
     }
 
+    // 각 팀에 스폰포인트 할당
     private void AssignSpawnPoints()
     {
         if (!PhotonNetwork.IsMasterClient) return;
@@ -81,6 +83,7 @@ public class RoomManager : PunSingleton<RoomManager>
         Debug.Log("스폰포인트 할당 및 저장완료.");
     }
 
+    // 자신 팀에 맞는 스폰포인트를 찾음
     private bool TryGetSpawnPoint(string teamKey, out Vector3 spawnPoint)
     {
         spawnPoint = Vector3.zero;
@@ -101,6 +104,7 @@ public class RoomManager : PunSingleton<RoomManager>
         return false;
     }
 
+    // 자기가 팀에서 몇번째 플레이어인지
     private int TryGetIndexOfTeam(string myTeam)
     {
         var teamMembers = PhotonNetwork.PlayerList

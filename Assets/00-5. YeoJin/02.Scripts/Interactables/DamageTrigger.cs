@@ -19,6 +19,8 @@ public class DamageTrigger : MonoBehaviour
         {
             _base = Owner.GetCharacterBase();
             _curTeam = _base.Team;
+            Debug.Log($"current team of {Owner.gameObject} is {_curTeam}");
+            _isInitialized = true;
         }
         AttackRange.enabled = check;
         _damagedThisActivation.Clear();
