@@ -5,8 +5,12 @@ public class DamageTrigger : MonoBehaviour
 {
     public CharacterBehaviour Owner;
     private CharacterBase _base;
+    private string _curTeam;
     public Collider AttackRange;
+
     private HashSet<IDamageable> _damagedThisActivation = new();
+    private Dictionary<GameObject, CharacterBase> _cachedTargets = new();
+
     private bool _isInitialized = false;
 
     public void TurnOnOrOff(bool check)
@@ -14,6 +18,7 @@ public class DamageTrigger : MonoBehaviour
         if (!_isInitialized)
         {
             _base = Owner.GetCharacterBase();
+            _curTeam = _base.Team;
         }
         AttackRange.enabled = check;
         _damagedThisActivation.Clear();
@@ -23,6 +28,12 @@ public class DamageTrigger : MonoBehaviour
     {
         Debug.Log($"collided with {other.gameObject.name}");
         IDamageable target = other.gameObject.GetComponent<IDamageable>();
+        CharacterBase otherchar = other.gameObject.GetComponent<CharacterBehaviour>().GetCharacterBase();
+        if (otherchar.Team == _curTeam)
+        {
+            Debug.Log(" is the same team");
+        }
+
         if (target != null && target != (IDamageable)Owner && !_damagedThisActivation.Contains(target))
         {
             Debug.Log($"Hit {target}, damage {_base.BaseStats.BaseDamage}");

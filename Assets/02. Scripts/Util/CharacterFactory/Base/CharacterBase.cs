@@ -11,6 +11,7 @@ public class CharacterBase
 
     [Header("# Datas")]
     public string Name { get; private set; }
+    public string Team { get; private set; }
     public float CurrentHealth { get; private set; }
     public CharacterStats BaseStats { get; private set; } // Firebase 기반
     private bool _isDirty = true;
@@ -48,10 +49,11 @@ public class CharacterBase
     private ISkill _skill;
     private ISkill _ultimate;
 
-    public CharacterBase(CharacterBehaviour behaviour, string name, ISkill basicAttack, ISkill passive, ISkill skill, ISkill ultimate, CharacterStats baseStats)
+    public CharacterBase(CharacterBehaviour behaviour, string name, string team, ISkill basicAttack, ISkill passive, ISkill skill, ISkill ultimate, CharacterStats baseStats)
     {
         Behaviour = behaviour;
         Name = name;
+        Team = team;
         _basicAttack = basicAttack;
         _passive = passive;
         _skill = skill;

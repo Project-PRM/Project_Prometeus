@@ -46,6 +46,7 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
         _character = new CharacterBase(
             this,
             _characterName.ToString(),
+            PhotonServerManager.Instance.GetPlayerTeam(PhotonNetwork.LocalPlayer),
             SkillFactory.Create(ESkillType.BasicAttack.ToString()),
             SkillFactory.Create(skills.Passive),
             SkillFactory.Create(skills.Skill),
