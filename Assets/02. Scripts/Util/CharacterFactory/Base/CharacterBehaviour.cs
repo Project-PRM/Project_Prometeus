@@ -69,19 +69,19 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
 
     public void OnSkillUse(InputAction.CallbackContext callback)
     {
-        //if (!_photonView.IsMine) return;
+        if (!PhotonView.IsMine) return;
         TryActivateSkillOrEnterAiming(ESkillType.Skill);
     }
 
     public void OnUltimateUse(InputAction.CallbackContext callback)
     {
-        //if (!_photonView.IsMine) return;
+        if (!PhotonView.IsMine) return;
         TryActivateSkillOrEnterAiming(ESkillType.Ultimate);
     }
 
     public void OnPassiveUse(InputAction.CallbackContext callback)
     {
-        //if (!_photonView.IsMine) return;
+        if (!PhotonView.IsMine) return;
         TryActivateSkillOrEnterAiming(ESkillType.Passive);
     }
 
