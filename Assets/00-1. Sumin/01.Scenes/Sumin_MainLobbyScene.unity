@@ -3536,6 +3536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   NextSceneName: Sumin_Main_copied
+  InventoryUI: {fileID: 1286391240}
 --- !u!4 &501558164
 Transform:
   m_ObjectHideFlags: 0

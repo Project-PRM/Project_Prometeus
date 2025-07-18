@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class MyInventoryPanel : Singleton<MyInventoryPanel>
 {
@@ -11,6 +12,8 @@ public class MyInventoryPanel : Singleton<MyInventoryPanel>
     [SerializeField] private List<MyInventoryEquipSlot> _armorSlots;
     [SerializeField] private MyInventoryEquipSlot _bagSlot;
     [SerializeField] private MyInventoryEquipSlot _lightSlot;
+    [SerializeField] private RectTransform _equipSlotsContainer;
+    [SerializeField] private RectTransform _inventorySlotsContainer;
 
     [Header("소지품 슬롯")]
     [SerializeField] private List<MyInventorySlot> _inventorySlots;
@@ -59,6 +62,7 @@ public class MyInventoryPanel : Singleton<MyInventoryPanel>
                     break;
             }
         }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_equipSlotsContainer);
     }
 
     public void SetInventorySlots(List<ItemData> inventoryItems)
@@ -70,6 +74,7 @@ public class MyInventoryPanel : Singleton<MyInventoryPanel>
             else
                 _inventorySlots[i].ClearItem(); // 명시적으로 null 처리
         }
+        LayoutRebuilder.ForceRebuildLayoutImmediate(_inventorySlotsContainer);
     }
 
     public bool TryEquipItem(ItemData item)

@@ -16,8 +16,7 @@ public class MyInventoryEquipSlot : ItemSlotBase, IPointerClickHandler
     {
         if (eventData.button == PointerEventData.InputButton.Right && _item != null)
         {
-            if (MyInventoryPanel.Instance.TryMoveToInventory(_item))
-                ClearItem();
+            MyInventoryPanel.Instance.TryMoveToInventory(_item);
         }
     }
 

@@ -21,10 +21,10 @@ public class CharacterInventory : MonoBehaviour
 
     private void Update()
     {
-        if (_character.PhotonView.IsMine)
+        /*if (_character.PhotonView.IsMine)
         {
             return;
-        }
+        }*/
         if (Input.GetKeyDown(KeyCode.Tab))
         {
             var panel = MyInventoryPanel.Instance;
@@ -44,31 +44,48 @@ public class CharacterInventory : MonoBehaviour
         HavingItems.Clear();
         EquippedItems.Clear();
 
-        HavingItems = CarryManager.Instance.CarryItems;
+        // 캐리 아이템 불러오기
+        var initialItems = CarryManager.Instance.CarryItems;
 
-        Debug.Log($"CharacterInventory initialized with {HavingItems.Count} items.");
-
-        /*if (ItemManager.Instance.TryGetItemData("TestItem", out var item))
+        foreach (var item in initialItems)
         {
             AddItem(item);
+            // 장비 아이템이면 자동 장착 시도
+            if (item.ItemType == EItemType.Weapon || item.ItemType == EItemType.Armor)
+            {
+                // TryEquipItem 내부에서 HavingItems를 다시 넣기 때문에 예외 처리 필요 없음
+                TryEquipItem(item);
+            }
         }
-        for(int i=0; i<4; i++)
+
+        // 예시용 추가 아이템 (테스트 목적)
+        if (ItemManager.Instance.TryGetItemData("TestItem", out var testItem))
         {
-            if(ItemManager.Instance.TryGetItemData("TestArmor", out var armor))
+            AddItem(testItem);
+        }
+
+        for (int i = 0; i < 4; i++)
+        {
+            if (ItemManager.Instance.TryGetItemData("TestArmor", out var armor))
             {
                 AddItem(armor);
             }
-        }*/
+        }
+
+        Debug.Log($"CharacterInventory initialized with {HavingItems.Count} items in bag, {EquippedItems.Count} equipped.");
     }
+
 
     public void AddItem(ItemData item)
     {
         HavingItems.Add(item);
+        SortHavingItems();
     }
 
     public void RemoveItem(ItemData item)
     {
         HavingItems.Remove(item);
+        SortHavingItems();
     }
 
     public bool TryEquipItem(ItemData item)
@@ -90,6 +107,7 @@ public class CharacterInventory : MonoBehaviour
 
         HavingItems.Remove(item);
         EquippedItems.Add(item);
+        SortHavingItems();
         _character.AddStatModifier(item.ToStatModifier());
         return true;
     }
@@ -111,8 +129,16 @@ public class CharacterInventory : MonoBehaviour
 
         EquippedItems.Remove(item);
         HavingItems.Add(item);
-
+        SortHavingItems();
         _character.RemoveStatModifier(item.ToStatModifier());
         return true;
+    }
+
+    private void SortHavingItems()
+    {
+        HavingItems = HavingItems
+            .OrderBy(i => i.ItemType)
+            .ThenBy(i => i.Name) // 이름도 같이 정렬하면 더 깔끔
+            .ToList();
     }
 }

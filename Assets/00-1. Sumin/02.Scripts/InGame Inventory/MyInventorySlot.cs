@@ -9,8 +9,7 @@ public class MyInventorySlot : ItemSlotBase, IPointerClickHandler
         Debug.Log(gameObject.name + " clicked with button: " + eventData.button);
         if (eventData.button == PointerEventData.InputButton.Right && _item != null)
         {
-            if (MyInventoryPanel.Instance.TryEquipItem(_item))
-                ClearItem();
+            MyInventoryPanel.Instance.TryEquipItem(_item);
         }
     }
 

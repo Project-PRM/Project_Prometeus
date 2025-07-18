@@ -23,6 +23,7 @@ public class RoomManager : PunSingleton<RoomManager>
         {
             AssignSpawnPoints();
         }
+        Debug.Log($"[RoomManager] Start - PhotonNetwork.IsMasterClient: {PhotonNetwork.IsMasterClient}");
         // 스폰 포인트별로 팀 스폰
         // 자기 고른 캐릭터를 스폰
         StartCoroutine(WaitForSpawnDataAndSpawn());
@@ -117,6 +118,7 @@ public class RoomManager : PunSingleton<RoomManager>
 
     private IEnumerator WaitForSpawnDataAndSpawn()
     {
+        Debug.LogWarning("1");
         string myTeam = PhotonServerManager.Instance.GetPlayerTeam(PhotonNetwork.LocalPlayer);
         string key = $"spawn_{myTeam}";
 
