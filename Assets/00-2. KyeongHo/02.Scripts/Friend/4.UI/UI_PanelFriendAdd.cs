@@ -11,25 +11,25 @@ public class UI_PanelFriendAdd : UI_PopUp
 
     private async void Start()
     {
-        await LoadFriendRequestList();
+        // await LoadFriendRequestList();
     }
 
-    private async Task LoadFriendRequestList()
-    {
-        string myUid = AccountManager.Instance.MyAccount.UserId;
-
-        List<FriendRequest> requests = await FriendManager.Instance.GetFriendRequests(myUid);
-
-        foreach (Transform child in contentParent)
-            Destroy(child.gameObject);
-
-        foreach (var request in requests)
-        {
-            GameObject item = Instantiate(requestItemPrefab, contentParent);
-            // TODO : Icon....
-            item.GetComponent<UI_FriendRequest>().NicknameText.text = await AccountManager.Instance.GetUserNicknameWithUid(request.SenderUid);
-        }
-    }
+    // private async Task LoadFriendRequestList()
+    // {
+    //     string myUid = AccountManager.Instance.MyAccount.UserId;
+    //
+    //     List<FriendRequest> requests = await FriendManager.Instance.GetFriendRequests(myUid);
+    //
+    //     foreach (Transform child in contentParent)
+    //         Destroy(child.gameObject);
+    //
+    //     foreach (var request in requests)
+    //     {
+    //         GameObject item = Instantiate(requestItemPrefab, contentParent);
+    //         // TODO : Icon....
+    //         item.GetComponent<UI_FriendRequest>().NicknameText.text = await AccountManager.Instance.GetUserNicknameWithUid(request.SenderUid);
+    //     }
+    // }
     public async void OnClickFriendSearchButton()
     {
         string inputNickname = NicknameInputField.text;

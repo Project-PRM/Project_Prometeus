@@ -162,6 +162,7 @@ GameObject:
   - component: {fileID: 4971097143874115302}
   - component: {fileID: 2105871505852493208}
   - component: {fileID: 4943623106732181453}
+  - component: {fileID: 6274163831808760508}
   m_Layer: 5
   m_Name: Panel_FriendSlot
   m_TagString: Untagged
@@ -229,6 +230,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6274163831808760508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5149620933775317732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd14f7c5062046f4082a0a5f5b752a5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FriendName: {fileID: 1316149047619594593}
+  FriendConnectState: {fileID: 7501796624194082997}
 --- !u!1 &7938337285870268966
 GameObject:
   m_ObjectHideFlags: 0
