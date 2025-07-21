@@ -2,16 +2,21 @@ using Photon.Pun;
 using UnityEngine;
 using Unity.Cinemachine;
 using FOW;
+using UnityEngine.TextCore.Text;
+using WebSocketSharp;
 
 [RequireComponent(typeof(PhotonView))]
 public class CharacterInGameView : MonoBehaviour
 {
     [SerializeField] private UI_NicknameIngame _nickname;
+    [SerializeField] private UI_HealthBar _healthBar;
     private CharacterBehaviour _characterBehaviour;
+    private CharacterBase _character;
 
     private void Awake()
     {
         _characterBehaviour = GetComponent<CharacterBehaviour>();
+        _character = _characterBehaviour.GetCharacterBase();
     }
 
     private void Start()
@@ -23,9 +28,23 @@ public class CharacterInGameView : MonoBehaviour
 
         TurnOnRevealer();
 
-        if (_nickname != null)
+        /*if (_nickname != null)
         {
             _nickname.SetName(_characterBehaviour.PhotonView.Owner.NickName);
+        }*/
+
+        if (_healthBar != null && _character != null)
+        {
+            _character.OnEventOccurred += OnTakenDamage;
+            _healthBar.SetValue(1); // 초기값 세팅
+        }
+    }
+
+    private void OnTakenDamage(ECharacterEvent characterEvent)
+    {
+        if (characterEvent == ECharacterEvent.OnDamaged || characterEvent == ECharacterEvent.OnDeath)
+        {
+            _healthBar.SetValue(_character.CurrentHealth / _character.BaseStats.MaxHealth);
         }
     }
 

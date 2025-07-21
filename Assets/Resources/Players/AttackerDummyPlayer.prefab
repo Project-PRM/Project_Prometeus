@@ -1781,6 +1781,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nickname: {fileID: 8117357185280395661}
+  _healthBar: {fileID: 1327708646749674069}
 --- !u!114 &3177763884507239518
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ public static class DamageCalculator
         float damage;
         if (armor >= 0)
         {
-            damage = baseDamage * (1f - 1 / (1 + effectiveArmor * 0.01f));
+            damage = baseDamage * (1 / (1 + effectiveArmor * 0.01f));
         }
         // 피해 계산: 피해량 * (2 - 방어력 / (1 - (방어력 * 0.01f)))
         else

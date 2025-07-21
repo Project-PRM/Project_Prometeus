@@ -86,6 +86,13 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
         TryActivateSkillOrEnterAiming(ESkillType.Passive);
     }
 
+    // for debug
+    public void OnTakeDamage(InputAction.CallbackContext callback)
+    {
+        //if (!PhotonView.IsMine) return;
+        _character.TakeDamage(10);
+    }
+
     private void Update()
     {
         if (!_isInitialized) return;

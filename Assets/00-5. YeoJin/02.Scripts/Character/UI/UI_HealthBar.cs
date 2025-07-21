@@ -12,7 +12,7 @@ public class UI_HealthBar : MonoBehaviour
     public void SetValue(float currenthealth)
     {
         Vector3 scale = Fill.localScale;
-        scale.x = currenthealth / 5f;
+        scale.x = currenthealth * 5f;
         Fill.localScale = scale;
     }
 
