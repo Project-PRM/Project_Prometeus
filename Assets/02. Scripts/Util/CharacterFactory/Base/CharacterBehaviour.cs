@@ -118,19 +118,7 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
         }
     }
 
-    // 마우스 위치에 있는 캐릭터를 찾아 반환 (없으면 null)
-    public CharacterBase GetTargetUnderMouse(Vector3 worldPoint)
-    {
-        Collider[] hits = Physics.OverlapSphere(worldPoint, 0.5f);
-        foreach (var hit in hits)
-        {
-            if (hit.TryGetComponent<CharacterBehaviour>(out var behaviour))
-            {
-                return behaviour.GetCharacterBase();
-            }
-        }
-        return null;
-    }
+    
 
     public void TakeDamage(float Damage)
     {
