@@ -21,7 +21,7 @@ public class UI_PanelFriendAccpet : UI_PopUp
         }
 
         string myUid = AccountManager.Instance.MyAccount.UserId;
-        List<FriendRequest> requests = await FriendManager.Instance.GetFriendRequests(myUid);
+        List<FriendRequestDto> requests = await FriendManager.Instance.GetFriendRequests(myUid);
 
         foreach (var request in requests)
         {
