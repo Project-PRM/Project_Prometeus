@@ -33,5 +33,11 @@ public static class SkillRegistrar
         SkillFactory.Register(ESkillName.BuffPassive.ToString(), () => new BuffPassive());
         SkillFactory.Register(ESkillName.BuffSkill.ToString(), () => new BuffSkill());
         SkillFactory.Register(ESkillName.BuffUltimate.ToString(), () => new BuffUltimate());
+        SkillFactory.Register(ESkillName.HealerSkill.ToString(), () => new HealerSkill());
+        SkillFactory.Register(ESkillName.HealerPassive.ToString(), () => new HealerPassive());
+        SkillFactory.Register(ESkillName.HealerUltimate.ToString(), () => new HealerUltimate());
+        SkillFactory.Register(ESkillName.TankerSkill.ToString(), () => new TankerSkill());
+        SkillFactory.Register(ESkillName.TankerPassive.ToString(), () => new TankerPassive());
+        SkillFactory.Register(ESkillName.TankerUltimate.ToString(), () => new TankerUltimate());
     }
 }
