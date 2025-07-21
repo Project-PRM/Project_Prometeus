@@ -8,12 +8,13 @@ public static class DamageCalculator
         //float effectiveArmor = Mathf.Max(armor - armorPenetration, 0f);
         float effectiveArmor = armor;
 
-        // 피해 계산: 피해량 * (1 - 방어력 / (방어력 + 100))
+        // 피해 계산: 피해량 * (1 - 방어력 / (1 + (방어력 * 0.01f)))
         float damage;
         if (armor >= 0)
         {
             damage = baseDamage * (1f - 1 / (1 + effectiveArmor * 0.01f));
         }
+        // 피해 계산: 피해량 * (2 - 방어력 / (1 - (방어력 * 0.01f)))
         else
         {
             damage = baseDamage * (2f - 1 / (1 - effectiveArmor * 0.01f));

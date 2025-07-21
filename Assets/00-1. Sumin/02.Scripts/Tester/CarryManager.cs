@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class CarryManager : Singleton<CarryManager>
 {
+    // 인-아웃게임을 넘나드는 아이템들
     public List<ItemData> CarryItems { get; private set; } = new List<ItemData>();
 
     public void SetCarryingList(List<ItemData> items)
