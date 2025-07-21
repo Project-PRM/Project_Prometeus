@@ -1,42 +1,39 @@
 using System.Collections.Generic;
 
-namespace Party.Domain
+public class Party
 {
-    public class Party
+    public string PartyId { get; private set; }
+    public string LeaderUid { get; private set; }
+    public List<string> Members { get; private set; }
+    public int MaxSize { get; private set; }
+    public string State { get; private set; }
+
+    public Party(string partyId, string leaderUid, int maxSize = 3)
     {
-        public string PartyId { get; private set; }
-        public string LeaderUid { get; private set; }
-        public List<string> Members { get; private set; }
-        public int MaxSize { get; private set; }
-        public string State { get; private set; }
+        PartyId = partyId;
+        LeaderUid = leaderUid;
+        Members = new List<string> { leaderUid };
+        MaxSize = maxSize;
+        State = "Forming";
+    }
 
-        public Party(string partyId, string leaderUid, int maxSize = 3)
+    public bool AddMember(string uid)
+    {
+        if (Members.Count >= MaxSize || Members.Contains(uid))
         {
-            PartyId = partyId;
-            LeaderUid = leaderUid;
-            Members = new List<string> { leaderUid };
-            MaxSize = maxSize;
-            State = "Forming";
+            return false;
         }
+        Members.Add(uid);
+        return true;
+    }
 
-        public bool AddMember(string uid)
-        {
-            if (Members.Count >= MaxSize || Members.Contains(uid))
-            {
-                return false;
-            }
-            Members.Add(uid);
-            return true;
-        }
+    public void RemoveMember(string uid)
+    {
+        Members.Remove(uid);
+    }
 
-        public void RemoveMember(string uid)
-        {
-            Members.Remove(uid);
-        }
-
-        public void ChangeState(string newState)
-        {
-            State = newState;
-        }
+    public void ChangeState(string newState)
+    {
+        State = newState;
     }
 }
