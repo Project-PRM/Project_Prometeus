@@ -5527,10 +5527,10 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2105406540}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 0
+      - m_Target: {fileID: 1804013465}
+        m_TargetAssemblyTypeName: UI_BottomMainBar, Assembly-CSharp
+        m_MethodName: OnClickDeadbodyButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -7942,6 +7942,7 @@ GameObject:
   - component: {fileID: 610282367}
   - component: {fileID: 610282369}
   - component: {fileID: 610282368}
+  - component: {fileID: 610282370}
   m_Layer: 5
   m_Name: Panel_Menu_Character
   m_TagString: Untagged
@@ -8010,6 +8011,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 610282366}
   m_CullTransparentMesh: 1
+--- !u!114 &610282370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610282366}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87f98b892691dae468ba2884ae863b6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _showDuration: 0.3
 --- !u!1 &618890674
 GameObject:
   m_ObjectHideFlags: 0
@@ -17118,6 +17132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1274557024}
   - component: {fileID: 1274557025}
+  - component: {fileID: 1274557026}
   m_Layer: 5
   m_Name: Panel_Menu_Market
   m_TagString: Untagged
@@ -17156,6 +17171,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1274557023}
   m_CullTransparentMesh: 1
+--- !u!114 &1274557026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1274557023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca2555e92b31f30469a311591ea139dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _showDuration: 0.3
 --- !u!1 &1279418614
 GameObject:
   m_ObjectHideFlags: 0
@@ -22896,6 +22924,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1640211969}
   - component: {fileID: 1640211971}
+  - component: {fileID: 1640211972}
   m_Layer: 5
   m_Name: Panel_Menu_Deadbody
   m_TagString: Untagged
@@ -22931,6 +22960,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1640211968}
   m_CullTransparentMesh: 1
+--- !u!114 &1640211972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1640211968}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0343d53e8ff1ce847b7d445503ef37f9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _showDuration: 0.3
 --- !u!1 &1640721524
 GameObject:
   m_ObjectHideFlags: 0
@@ -24347,25 +24389,13 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1752913638}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: 
+      - m_Target: {fileID: 1804013465}
+        m_TargetAssemblyTypeName: UI_BottomMainBar, Assembly-CSharp
+        m_MethodName: OnClickMarketButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -26001,10 +26031,10 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 338161209}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 0
+      - m_Target: {fileID: 1804013465}
+        m_TargetAssemblyTypeName: UI_BottomMainBar, Assembly-CSharp
+        m_MethodName: OnClickGameplayButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -26391,6 +26421,7 @@ GameObject:
   - component: {fileID: 1804013462}
   - component: {fileID: 1804013461}
   - component: {fileID: 1804013464}
+  - component: {fileID: 1804013465}
   m_Layer: 5
   m_Name: Panel_BottomMainBar
   m_TagString: Untagged
@@ -26499,6 +26530,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AllowSwitchOff: 0
+--- !u!114 &1804013465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1804013459}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e403bd4e8fcd1364c80c29d37b142930, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  deadbodyPanel: {fileID: 1640211972}
+  marketPanel: {fileID: 1274557026}
+  characterPanel: {fileID: 610282370}
+  gameplayPanel: {fileID: 1964754927}
+  eventPanel: {fileID: 0}
 --- !u!1 &1806974141
 GameObject:
   m_ObjectHideFlags: 0
@@ -27077,10 +27125,10 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1309674425}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 0
+      - m_Target: {fileID: 1804013465}
+        m_TargetAssemblyTypeName: UI_BottomMainBar, Assembly-CSharp
+        m_MethodName: OnClickCharacterButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -28004,10 +28052,10 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 945046277}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 0
+      - m_Target: {fileID: 1804013465}
+        m_TargetAssemblyTypeName: UI_BottomMainBar, Assembly-CSharp
+        m_MethodName: OnClickEventButton
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -29408,6 +29456,7 @@ GameObject:
   - component: {fileID: 1964754924}
   - component: {fileID: 1964754925}
   - component: {fileID: 1964754926}
+  - component: {fileID: 1964754927}
   m_Layer: 5
   m_Name: Panel_Menu_Gameplay
   m_TagString: Untagged
@@ -29462,6 +29511,19 @@ MonoBehaviour:
   RoomPlayerCountText: {fileID: 2894652563007265669}
   SystemMessageText: {fileID: 7801557968688904179}
   FriendListPopup: {fileID: 1244032834}
+--- !u!114 &1964754927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1964754923}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 998e37cc1038a2845af0983683756a03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _showDuration: 0.3
 --- !u!1 &1968746494
 GameObject:
   m_ObjectHideFlags: 0
