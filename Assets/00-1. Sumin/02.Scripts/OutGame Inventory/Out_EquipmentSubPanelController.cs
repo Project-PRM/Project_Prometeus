@@ -57,7 +57,7 @@ public class Out_EquipmentSubPanelController : MonoBehaviour
 
         // CarrySlot 동기화
         Out_CarryPanel.Instance.CarrySlots[idx].SetItem(originItem);
-
+        
         // InventorySlot 동기화
         if (_realOriginInventorySlot != null)
             _realOriginInventorySlot.SetItem(subItem);

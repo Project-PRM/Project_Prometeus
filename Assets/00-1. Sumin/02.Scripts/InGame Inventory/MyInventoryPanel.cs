@@ -129,9 +129,9 @@ public class MyInventoryPanel : Singleton<MyInventoryPanel>
     public void OnBagEquipped(ItemData bagItem)
     {
         int finalSlot = DEFAULT_INVENTORY_SIZE;
-        if (bagItem.ItemType == EItemType.Bag && bagItem.InventorySlotCount.HasValue && bagItem.InventorySlotCount.Value > 0)
+        if (bagItem.ItemType == EItemType.Bag && bagItem.InventorySlotCount > 0)
         {
-            finalSlot = bagItem.InventorySlotCount.Value;
+            finalSlot = bagItem.InventorySlotCount;
         }
 
         UpdateInventorySize(finalSlot);

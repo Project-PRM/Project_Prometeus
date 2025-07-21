@@ -13,7 +13,7 @@ public class ItemData
     [FirestoreProperty] public EItemType ItemType { get; set; }
     [FirestoreProperty] public Dictionary<string, float> AdditiveStats { get; set; } = new();
     [FirestoreProperty] public Dictionary<string, float> MultiplierStats { get; set; } = new();
-    [FirestoreProperty] public int? InventorySlotCount { get; set; } // Bag일 때만 의미 있음
+    [FirestoreProperty] public int InventorySlotCount { get; set; } // Bag일 때만 의미 있음
     private Sprite _iconSprite;
     public Sprite IconSprite
     {
@@ -26,6 +26,8 @@ public class ItemData
             return _iconSprite;
         }
     }
+
+    private StatModifier _statModifier;
 
     public ItemData() { }
 
@@ -55,6 +57,11 @@ public class ItemData
 
     public StatModifier ToStatModifier()
     {
+        if(_statModifier != null)
+        {
+            return _statModifier;
+        }
+
         var mod = new StatModifier();
 
         foreach (var kvp in AdditiveStats)
@@ -72,6 +79,8 @@ public class ItemData
                 mod.Multiply(statType, kvp.Value);
             }
         }
+
+        _statModifier = mod;
 
         return mod;
     }

@@ -29,7 +29,19 @@ public class Out_UserInventoryPanel : Singleton<Out_UserInventoryPanel>
             }
         }
 
-        // 2. 슬롯 개수 동기화
+        // 2. CarryManager에서 이미 선택된 아이템은 제거
+        var carryItems = new List<ItemData>(CarryManager.Instance.CarryItems); // 수정 방지용 복사
+
+        foreach (var carryItem in carryItems)
+        {
+            var match = flatItemList.Find(i => i.Name == carryItem.Name);
+            if (match != null)
+            {
+                flatItemList.Remove(match); // 같은 Id 하나 제거
+            }
+        }
+
+        // 3. 슬롯 개수 동기화
         while (_slots.Count < flatItemList.Count)
         {
             var newSlot = Instantiate(_slotPrefab, _slotParent);
@@ -43,7 +55,7 @@ public class Out_UserInventoryPanel : Singleton<Out_UserInventoryPanel>
             DestroyImmediate(lastSlot.gameObject);
         }
 
-        // 3. 슬롯에 아이템 할당
+        // 4. 슬롯에 아이템 할당
         for (int i = 0; i < flatItemList.Count; i++)
         {
             _slots[i].SetItem(flatItemList[i]);

@@ -50,9 +50,9 @@ public class FriendManager : Singleton<FriendManager>
         return await _repository.GetFriendsAsync(userUid);
     }
 
-    public async Task<List<FriendRequest>> GetFriendRequests(string userUid)
+    public async Task<List<FriendRequestDto>> GetFriendRequests(string userUid)
     {
         var dtos = await _repository.GetFriendRequestsAsync(userUid);
-        return dtos.Select(dto => new FriendRequest(dto.SenderUid)).ToList();
+        return dtos.Select(dto => new FriendRequestDto(dto.SenderUid)).ToList();
     }
 }
