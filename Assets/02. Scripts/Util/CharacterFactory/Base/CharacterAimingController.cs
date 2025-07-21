@@ -37,7 +37,7 @@ public class CharacterAimingController
         if (Input.GetMouseButtonDown(0)) // 좌클릭
         {
             Vector3 targetPoint = GetMouseWorldPosition();
-            var target = _owner.GetTargetUnderMouse(targetPoint);
+            var target = GetTargetUnderMouse(targetPoint);
             _owner.GetCharacterBase().UseSkill(_selectedSkill.Value, target, targetPoint);
             Reset();
         }
@@ -73,5 +73,19 @@ public class CharacterAimingController
         _selectedSkill = null;
         _state = ESkillInputState.None;
         // TODO: 에임 UI 끄기
+    }
+
+    // 마우스 위치에 있는 캐릭터를 찾아 반환 (없으면 null)
+    public CharacterBase GetTargetUnderMouse(Vector3 worldPoint)
+    {
+        Collider[] hits = Physics.OverlapSphere(worldPoint, 0.5f);
+        foreach (var hit in hits)
+        {
+            if (hit.TryGetComponent<CharacterBehaviour>(out var behaviour))
+            {
+                return behaviour.GetCharacterBase();
+            }
+        }
+        return null;
     }
 }
