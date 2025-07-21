@@ -15,6 +15,7 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
     public CharacterBase GetCharacterBase() => _character;
     private CharacterAimingController _aimingController;
     private CharacterMove _characterMove;
+    private CharacterInGameView _gameView;
 
     private bool _isInitialized = false;
 
@@ -32,6 +33,7 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
         DamageTrigger = GetComponentInChildren<DamageTrigger>();
 
         _characterMove = GetComponent<CharacterMove>();
+        _gameView = GetComponent<CharacterInGameView>();
         _aimingController = new CharacterAimingController(this);
     }
 
@@ -54,6 +56,7 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
             CharacterManager.Instance.CharacterStats
         );
         DamageTrigger.Owner = this;
+        _character.OnEventOccurred += _gameView.OnTakenDamage;
         _isInitialized = true;
     }
 

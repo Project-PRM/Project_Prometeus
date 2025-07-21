@@ -9,10 +9,11 @@ public class UI_HealthBar : MonoBehaviour
         Fill.localScale = new Vector3(5, 0.2f, 1);
     }
 
-    public void SetValue(float currenthealth)
+    public void SetValue(float value)
     {
         Vector3 scale = Fill.localScale;
-        scale.x = currenthealth * 5f;
+        scale.x = value * 5f;
+        Debug.Log(value);
         Fill.localScale = scale;
     }
 

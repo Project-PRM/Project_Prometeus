@@ -16,7 +16,6 @@ public class CharacterInGameView : MonoBehaviour
     private void Awake()
     {
         _characterBehaviour = GetComponent<CharacterBehaviour>();
-        _character = _characterBehaviour.GetCharacterBase();
     }
 
     private void Start()
@@ -33,15 +32,12 @@ public class CharacterInGameView : MonoBehaviour
             _nickname.SetName(_characterBehaviour.PhotonView.Owner.NickName);
         }*/
 
-        if (_healthBar != null && _character != null)
-        {
-            _character.OnEventOccurred += OnTakenDamage;
-            _healthBar.SetValue(1); // 초기값 세팅
-        }
+        _healthBar.SetValue(1); // 초기값 세팅
     }
 
-    private void OnTakenDamage(ECharacterEvent characterEvent)
+    public void OnTakenDamage(ECharacterEvent characterEvent)
     {
+        if (_character == null) _character = _characterBehaviour.GetCharacterBase();
         if (characterEvent == ECharacterEvent.OnDamaged || characterEvent == ECharacterEvent.OnDeath)
         {
             _healthBar.SetValue(_character.CurrentHealth / _character.BaseStats.MaxHealth);
