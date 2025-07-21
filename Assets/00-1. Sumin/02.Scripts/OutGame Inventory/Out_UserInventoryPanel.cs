@@ -13,43 +13,6 @@ public class Out_UserInventoryPanel : Singleton<Out_UserInventoryPanel>
         Refresh();
     }
 
-    /*public void Refresh()
-    {
-        var flatItemList = new List<ItemData>();
-
-        // 1. 유저 인벤토리에서 아이템을 개수만큼 풀어냄
-        foreach (var invItem in UserInventoryItemManager.Instance.Items)
-        {
-            if (ItemManager.Instance.TryGetItemData(invItem.ItemId, out var itemData))
-            {
-                for (int i = 0; i < invItem.Count; i++)
-                {
-                    flatItemList.Add(itemData);
-                }
-            }
-        }
-
-        // 2. 슬롯 개수 동기화
-        while (_slots.Count < flatItemList.Count)
-        {
-            var newSlot = Instantiate(_slotPrefab, _slotParent);
-            _slots.Add(newSlot);
-        }
-
-        while (_slots.Count > flatItemList.Count)
-        {
-            var lastSlot = _slots[_slots.Count - 1];
-            _slots.RemoveAt(_slots.Count - 1);
-            DestroyImmediate(lastSlot.gameObject);
-        }
-
-        // 3. 슬롯에 아이템 할당
-        for (int i = 0; i < flatItemList.Count; i++)
-        {
-            _slots[i].SetItem(flatItemList[i]);
-        }
-    }*/
-
     public void Refresh()
     {
         var flatItemList = new List<ItemData>();
@@ -98,7 +61,6 @@ public class Out_UserInventoryPanel : Singleton<Out_UserInventoryPanel>
             _slots[i].SetItem(flatItemList[i]);
         }
     }
-
 
     public void RemoveSlot(Out_UserInventorySlot slot)
     {

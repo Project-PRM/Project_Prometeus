@@ -27,6 +27,8 @@ public class ItemData
         }
     }
 
+    private StatModifier _statModifier;
+
     public ItemData() { }
 
     public ItemData(ItemData other)
@@ -55,6 +57,11 @@ public class ItemData
 
     public StatModifier ToStatModifier()
     {
+        if(_statModifier != null)
+        {
+            return _statModifier;
+        }
+
         var mod = new StatModifier();
 
         foreach (var kvp in AdditiveStats)
@@ -72,6 +79,8 @@ public class ItemData
                 mod.Multiply(statType, kvp.Value);
             }
         }
+
+        _statModifier = mod;
 
         return mod;
     }

@@ -28,8 +28,9 @@ public class UserInventoryItemManager : Singleton<UserInventoryItemManager>
         }
     }
 
-    public async Task SetInventoryAsync(string itemId, int count)
+    public async Task SetInventoryAsync(List<UserInventoryItem> itemsToSave)
     {
-        await _repository.SetInventoryAsync(AccountManager.Instance.MyAccount.UserId, _items);
+        await _repository.SetInventoryAsync(AccountManager.Instance.MyAccount.UserId, itemsToSave);
+        await GetInventoryAsync(AccountManager.Instance.MyAccount.UserId); // 저장 후 다시 로드
     }
 }

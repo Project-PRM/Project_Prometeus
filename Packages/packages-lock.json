@@ -9,6 +9,14 @@
       },
       "hash": "38fecf55e4fd94ccfe58a92ed8ad1a529ba1694e"
     },
+    "com.heathen.ballistics": {
+      "version": "file:com.heathen.ballistics",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.mathematics": "1.2.5"
+      }
+    },
     "com.singularitygroup.hotreload": {
       "version": "file:com.singularitygroup.hotreload",
       "depth": 0,
