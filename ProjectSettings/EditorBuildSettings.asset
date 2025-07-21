@@ -6,20 +6,14 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/00-5. YeoJin/01.Scenes/Login_copied.unity
-    guid: e91efba3ca047df4bbc96545445973e4
+    path: Assets/00-2. KyeongHo/01.Scenes/KyoungHo_LoginTest.unity
+    guid: c1d33bb78d046294d9f9816dccd20463
   - enabled: 1
-    path: Assets/00-5. YeoJin/01.Scenes/Lobby_copied.unity
-    guid: 74391b2a06d281341b21272b8970550b
+    path: Assets/00-2. KyeongHo/01.Scenes/KyoungHo_LobbyTest.unity
+    guid: 5453cd3b4c9dfb84a81cf0dea80f205b
   - enabled: 1
     path: Assets/00-5. YeoJin/01.Scenes/Main_copied.unity
     guid: 46051e9e55a53dd4aa9a53ecea27466a
-  - enabled: 1
-    path: Assets/00-1. Sumin/01.Scenes/Sumin_MainLobbyScene.unity
-    guid: a9d78a44b59465d4394182ab09b62f4f
-  - enabled: 1
-    path: Assets/00-1. Sumin/01.Scenes/Sumin_Main_copied.unity
-    guid: 6d7f97fa589a3a048911c5a59886797a
   m_configObjects:
     com.unity.dt.app-ui: {fileID: 11400000, guid: 99f9c9493070a9d4c979a8fec7c5a8d3, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

@@ -27,7 +27,6 @@ public class UI_FriendList : UI_PopUp
         {
             GameObject item = Instantiate(friendItemPrefab, contentParent);
             item.GetComponent<UI_PanelFriendSlot>().Refresh(await AccountManager.Instance.GetUserNicknameWithUid(uid));
-            item.GetComponentInChildren<TMP_Text>().text = uid;
         }
     }
 }

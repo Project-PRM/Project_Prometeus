@@ -1614,6 +1614,7 @@ GameObject:
   - component: {fileID: 6380600178584220153}
   - component: {fileID: 8631239530700257908}
   - component: {fileID: 242060853411088520}
+  - component: {fileID: 4144933786073553633}
   m_Layer: 0
   m_Name: HealerDummyPlayer
   m_TagString: Player
@@ -2055,6 +2056,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05538c262a8ab5a4ea352f726012b9b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!136 &4144933786073553633
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4181686743975786951}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.6
+  m_Height: 2.4
+  m_Direction: 1
+  m_Center: {x: 0, y: 1.3, z: 0}
 --- !u!1 &4365223810366295844
 GameObject:
   m_ObjectHideFlags: 0
@@ -2121,6 +2145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0db054bec985a4438a5dc97b375e016, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Owner: {fileID: 0}
   AttackRange: {fileID: 474269594127930039}
 --- !u!1 &4388759190304409254
 GameObject:

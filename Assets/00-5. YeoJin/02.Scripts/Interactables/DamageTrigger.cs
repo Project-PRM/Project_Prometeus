@@ -3,12 +3,25 @@ using UnityEngine;
 
 public class DamageTrigger : MonoBehaviour
 {
-    public CharacterBase Owner;
+    public CharacterBehaviour Owner;
+    private CharacterBase _base;
+    private string _curTeam;
     public Collider AttackRange;
+
     private HashSet<IDamageable> _damagedThisActivation = new();
+    private Dictionary<GameObject, CharacterBase> _cachedTargets = new();
+
+    private bool _isInitialized = false;
 
     public void TurnOnOrOff(bool check)
     {
+        if (!_isInitialized)
+        {
+            _base = Owner.GetCharacterBase();
+            _curTeam = _base.Team;
+            Debug.Log($"current team of {Owner.gameObject} is {_curTeam}");
+            _isInitialized = true;
+        }
         AttackRange.enabled = check;
         _damagedThisActivation.Clear();
     }
@@ -17,10 +30,16 @@ public class DamageTrigger : MonoBehaviour
     {
         Debug.Log($"collided with {other.gameObject.name}");
         IDamageable target = other.gameObject.GetComponent<IDamageable>();
-        if (target != null && target != Owner && !_damagedThisActivation.Contains(target))
+        CharacterBase otherchar = other.gameObject.GetComponent<CharacterBehaviour>().GetCharacterBase();
+        if (otherchar.Team == _curTeam)
         {
-            Debug.Log($"Hit {target}, damage {Owner.BaseStats.BaseDamage}");
-            target.TakeDamage(Owner.BaseStats.BaseDamage);
+            Debug.Log(" is the same team");
+        }
+
+        if (target != null && target != (IDamageable)Owner && !_damagedThisActivation.Contains(target))
+        {
+            Debug.Log($"Hit {target}, damage {_base.BaseStats.BaseDamage}");
+            target.TakeDamage(_base.BaseStats.BaseDamage);
             _damagedThisActivation.Add(target);
         }
     }

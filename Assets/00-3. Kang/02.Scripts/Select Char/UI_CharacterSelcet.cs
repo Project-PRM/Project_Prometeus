@@ -1,95 +1,84 @@
+using System;
 using Photon.Pun;
 using UnityEngine;
 using UnityEngine.UI;
 
+[Serializable]
+public class UI_CharacterSample
+{
+    public GameObject CharacterVisual;
+    public Color CharacterColor;
+}
+
+[RequireComponent(typeof(PhotonView))]
 public class UI_CharacterSelcet : MonoBehaviourPunCallbacks
 {
-    [SerializeField] private Image _firstTimerBar;
-    [SerializeField] private Image _secondTimerBar;
-    [SerializeField] private Image _thirdTimerBar;
+    private PhotonView _photonView;
 
-    [SerializeField] private Image _firstCharacterImage;
-    [SerializeField] private Image _secondCharacterImage;
-    [SerializeField] private Image _thirdCharacterImage;
-
-    [SerializeField] private GameObject[] _character;
-
-    //지금은 컬러로 해놧는데 나중에 캐릭터별 이미지로 바꿔야함
-    [SerializeField] private Color[] _characterImage;
+    [SerializeField] private UI_CharacterSample[] _UI_characterSamples;
+    [SerializeField] private Image[] _playerTimerBars;
+    [SerializeField] private Image[] _playerProfiles;
 
     private void Start()
     {
+        _photonView = GetComponent<PhotonView>();
         CharacterSelect.Instance.OnTimerUpdate += TimerUIUpdate;
         CharacterSelect.Instance.OnTimeOver += AutoRandomSelectCharacter;
-        foreach (var item in _character) { item.SetActive(false); }
     }
 
     private void TimerUIUpdate()
     {
-        _firstTimerBar.fillAmount = CharacterSelect.Instance.FirstTimer / CharacterSelect.Instance.SelectTime;
-        _secondTimerBar.fillAmount = CharacterSelect.Instance.SecondTimer / CharacterSelect.Instance.SelectTime;
-        _thirdTimerBar.fillAmount = CharacterSelect.Instance.ThirdTimer / CharacterSelect.Instance.SelectTime;
+        _playerTimerBars[0].fillAmount = CharacterSelect.Instance.FirstTimer / CharacterSelect.Instance.SelectTime;
+        _playerTimerBars[1].fillAmount = CharacterSelect.Instance.SecondTimer / CharacterSelect.Instance.SelectTime;
+        _playerTimerBars[2].fillAmount = CharacterSelect.Instance.ThirdTimer / CharacterSelect.Instance.SelectTime;
     }
 
     public void BT_SelectCharacter(int index)
     {
-        if (CharacterSelect.Instance.IsSelect
-        || CharacterSelect.Instance.MyPhase != CharacterSelect.Instance.SelectPhase
-        || CharacterSelect.Instance.IsSelectCharacter[index]) return;
+        if (CharacterSelect.Instance.IsSelect) return;
+        if (CharacterSelect.Instance.SelectPhase != CharacterSelect.Instance.MyPhase) return;
+        if (CharacterSelect.Instance.CharacterSamples[index].IsCharacterSelect) return;
 
-        CharacterSelect.Instance.SelectCharacter(index);
-
-        SelectCharacterRPC(index);
+        _photonView.RPC(nameof(CharacterSelect.SelectCharacter), RpcTarget.All, index);
+        _photonView.RPC(nameof(SelectCharacter), RpcTarget.All, index);
     }
 
-
-    [PunRPC]
-    private void SelectCharacterRPC(int index)
-    {
-        Image myCharacterImage = null;
-
-        switch (CharacterSelect.Instance.MyPhase)
-        {
-            case SelectPhase.First:
-                myCharacterImage = _firstCharacterImage;
-                break;
-            case SelectPhase.Second:
-                myCharacterImage = _secondCharacterImage;
-                break;
-            case SelectPhase.Third:
-                myCharacterImage = _thirdCharacterImage;
-                break;
-        }
-
-        switch (CharacterSelect.Instance.MyPhase)
-        {
-            case SelectPhase.First:
-                myCharacterImage.color = _characterImage[index];
-                break;
-            case SelectPhase.Second:
-                myCharacterImage.color = _characterImage[index];
-                break;
-            case SelectPhase.Third:
-                myCharacterImage.color = _characterImage[index];
-                break;
-        }
-
-        foreach (var item in _character) { item.SetActive(false); }
-        _character[index].SetActive(true);
-        CharacterSelect.Instance.IsSelectCharacter[index] = true;
-    }
-
+    
     private void AutoRandomSelectCharacter()
     {
-        if (CharacterSelect.Instance.MyPhase != CharacterSelect.Instance.SelectPhase) return;
+        if (CharacterSelect.Instance.IsSelect) return;
+        if (CharacterSelect.Instance.SelectPhase != CharacterSelect.Instance.MyPhase) return;
 
         while (!CharacterSelect.Instance.IsSelect)
         {
-            int randomIndex = Random.Range(0, _character.Length);
+            int randomIndex = UnityEngine.Random.Range(0, _UI_characterSamples.Length);
 
-            if (CharacterSelect.Instance.IsSelectCharacter[randomIndex]) continue;
+            if (CharacterSelect.Instance.CharacterSamples[randomIndex].IsCharacterSelect) continue;
 
-            BT_SelectCharacter(randomIndex);
+            _photonView.RPC(nameof(CharacterSelect.SelectCharacter), RpcTarget.All, randomIndex);
+            _photonView.RPC(nameof(SelectCharacter), RpcTarget.All, randomIndex);
+        }
+    }
+
+    [PunRPC]
+    private void SelectCharacter(int index)
+    {
+        Image myCharacterImage = GetCharacterImage();
+        myCharacterImage.color = _UI_characterSamples[index].CharacterColor;
+        _UI_characterSamples[index].CharacterVisual.SetActive(true);
+    }
+    private Image GetCharacterImage()
+    {
+        switch (CharacterSelect.Instance.SelectPhase)
+        {
+            case SelectPhase.First:
+                return _playerProfiles[0];
+            case SelectPhase.Second:
+                return _playerProfiles[1];
+            case SelectPhase.Third:
+                return _playerProfiles[2];
+            default:
+                return null;
         }
     }
 }

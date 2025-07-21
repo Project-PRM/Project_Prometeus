@@ -27,7 +27,8 @@ public class UI_PanelFriendAccpet : UI_PopUp
         {
             GameObject go = Instantiate(requestFriendPrefab, content);
             var ui = go.GetComponent<UI_RequestFriendslot>();
-            ui.Refresh(request.SenderUid);
+            string senderNickname = await AccountManager.Instance.GetUserNicknameWithUid(request.SenderUid);
+            ui.Refresh(senderNickname, request.SenderUid);
         }
     }
 }
