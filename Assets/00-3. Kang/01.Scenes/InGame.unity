@@ -96856,10 +96856,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: HealerDummyPlayer
       objectReference: {fileID: 0}
-    - target: {fileID: 4181686743975786951, guid: 8d1573974487e854f9d8962083d239f0, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 4329688994483852888, guid: 8d1573974487e854f9d8962083d239f0, type: 3}
       propertyPath: _nickname
       value: 
@@ -126511,7 +126507,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3549827564469134205, guid: 06cbbef3a5dbbf449a8c1f26451e2323, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -19.023048
+      value: -12.29
       objectReference: {fileID: 0}
     - target: {fileID: 3549827564469134205, guid: 06cbbef3a5dbbf449a8c1f26451e2323, type: 3}
       propertyPath: m_LocalPosition.y
@@ -126519,7 +126515,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3549827564469134205, guid: 06cbbef3a5dbbf449a8c1f26451e2323, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6.6553097
+      value: -90.83
       objectReference: {fileID: 0}
     - target: {fileID: 3549827564469134205, guid: 06cbbef3a5dbbf449a8c1f26451e2323, type: 3}
       propertyPath: m_LocalRotation.w
