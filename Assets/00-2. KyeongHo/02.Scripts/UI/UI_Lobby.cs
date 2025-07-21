@@ -56,6 +56,38 @@ public class UI_Lobby : MonoBehaviour
       PhotonServerManager.Instance.JoinRandomRoom();
       Debug.Log("매칭 시작...........");
    }
+   public void OnClickMatchingStartButtonNew()
+   {
+      TeamNameText.gameObject.SetActive(true);
+      RoomPlayerCountText.gameObject.SetActive(true);
+
+      if (PhotonNetwork.CurrentRoom.Name == AccountManager.Instance.MyAccount.UserId)
+      {
+         // 파티방이라면 파티 인원 체크 후 매칭
+         int partySize = PhotonNetwork.CurrentRoom.PlayerCount;
+         if (partySize >= 1 && partySize <= 3)
+         {
+            Debug.Log($"파티 인원: {partySize}명 → 매칭 시도");
+            PartyManager.Instance.MatchFromParty();
+         }
+         else
+         {
+            Debug.Log("1~3인 파티만 매칭 가능합니다.");
+            ShowSystemMessage("1~3인 파티만 매칭 가능합니다.");
+         }
+      }
+      else
+      {
+         // 일반 매칭
+         PhotonServerManager.Instance.JoinRandomRoom();
+      }
+   }
+   public void OnClickInviteButton(string targetUID)
+   {
+      PartyManager.Instance.InviteFriend(targetUID);
+      ShowSystemMessage($"{targetUID} 에게 초대 전송 완료");
+   }
+   
    public void ShowSystemMessage(string msg)
    {
       SystemMessageText.gameObject.SetActive(true);

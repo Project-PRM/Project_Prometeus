@@ -21,6 +21,22 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
 
     public Dictionary<int, int> TeamIndex = new();
     
+    
+    public void StartMatchingFromParty()
+    {
+        int partySize = PhotonNetwork.CurrentRoom.PlayerCount;
+        PhotonNetwork.LeaveRoom();
+        StartCoroutine(DelayedMatching(partySize));
+    }
+
+    private IEnumerator DelayedMatching(int partySize)
+    {
+        while (PhotonNetwork.InRoom)
+            yield return null;
+
+        PhotonNetwork.JoinRandomRoom(null, (byte)(15 - partySize + 1)); // 최소 partySize 이상 빈 슬롯 필요
+    }
+    
     private void Init()
     {
         PhotonNetwork.SendRate = 60;
@@ -144,8 +160,8 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     {
         Debug.Log("로비(채널) 입장 완료!");
         Debug.Log($"InLobby : {PhotonNetwork.InLobby}");
-        
-        // 로비 입장 후 자동으로 매치 찾기 시작
+
+        PartyManager.Instance.CreateMyPartyRoom();
     }
     public override void OnJoinedRoom()
     {
@@ -168,27 +184,14 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     }
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        Debug.Log($"랜덤 방 입장 실패: {message}");
-        Debug.Log("새로운 방을 생성합니다.");
-        
-        // 랜덤 방 입장 실패 시 새로운 방 생성
+        Debug.Log("랜덤 방 입장 실패, 새로운 방 생성");
         RoomOptions roomOptions = new RoomOptions
         {
             MaxPlayers = MaxPlayers,
             IsVisible = true,
             IsOpen = true
         };
-        
-        PhotonNetwork.JoinRandomOrCreateRoom(
-            expectedCustomRoomProperties: null,
-            expectedMaxPlayers: (byte)MaxPlayers,
-            matchingType: MatchmakingMode.FillRoom,
-            typedLobby: null,
-            sqlLobbyFilter: null,
-            roomName: null,
-            roomOptions: roomOptions,
-            expectedUsers: null
-        );
+        PhotonNetwork.CreateRoom(null, roomOptions);
     }
     public override void OnCreateRoomFailed(short returnCode, string message)
     {

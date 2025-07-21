@@ -1,89 +1,50 @@
+using System.Collections;
 using UnityEngine;
-using System.Threading.Tasks;
-using Firebase.Firestore;
+using Photon.Pun;
+using Photon.Realtime;
 
-public class PartyManager : Singleton<PartyManager>
+public class PartyManager : PunSingleton<PartyManager>
 {
-    private PartyRepository _partyRepository;
-    private PartyDTO _currentPartyDto;
-    private string _currentPartyId;
-    private string _userUid;
+    private const byte MaxPartySize = 3;
 
-    public void Initialize(FirebaseFirestore firestore, string userUid)
+    public void CreateMyPartyRoom()
     {
-        _partyRepository = new PartyRepository(firestore);
-        _userUid = userUid;
-    }
-
-    public async Task CreateParty()
-    {
-        if (_currentPartyDto != null) return;
-
-        _currentPartyDto = new PartyDTO
+        RoomOptions options = new RoomOptions
         {
-            LeaderUid = _userUid,
-            Members = new System.Collections.Generic.List<string> { _userUid },
-            MaxSize = 3,
-            State = "Forming"
+            IsVisible = false,
+            IsOpen = true,
+            MaxPlayers = MaxPartySize,
+            PlayerTtl = 60000,
+            EmptyRoomTtl = 30000
         };
-
-        _currentPartyId = await _partyRepository.CreatePartyAsync(_currentPartyDto);
+        PhotonNetwork.CreateRoom(AccountManager.Instance.MyAccount.UserId, options);
     }
 
-    public async Task InviteFriend(string friendUid)
+    public void InviteFriend(string targetUID)
     {
-        if (_currentPartyDto == null || _currentPartyDto.LeaderUid != _userUid) return;
-
-        await _partyRepository.SendPartyInvitationAsync(friendUid, _currentPartyId, _userUid);
+        // 친구에게 UID 전송은 외부 채널 (Firebase, UI 등) 통해 처리
+        Debug.Log($"친구 초대: {targetUID}에게 방 이름 {PhotonNetwork.CurrentRoom.Name} 전달");
     }
 
-    public async Task AcceptInvitation(string partyId, string inviterUid)
+    public void JoinParty(string targetUID)
     {
-        if (_currentPartyDto != null) return;
-
-        _currentPartyDto = await _partyRepository.GetPartyAsync(partyId);
-        if (_currentPartyDto == null || _currentPartyDto.Members.Count >= _currentPartyDto.MaxSize) 
-        {
-            _currentPartyDto = null;
-            return;
-        }
-
-        _currentPartyId = partyId;
-        _currentPartyDto.Members.Add(_userUid);
-        await _partyRepository.UpdatePartyAsync(_currentPartyId, _currentPartyDto);
-        await _partyRepository.RemovePartyInvitationAsync(_userUid, partyId);
+        PhotonNetwork.JoinRoom(targetUID);
     }
 
-    public async Task LeaveParty()
+    public void MatchFromParty()
     {
-        if (_currentPartyDto == null) return;
+        if (!PhotonNetwork.IsMasterClient) return;
 
-        _currentPartyDto.Members.Remove(_userUid);
-
-        if (_currentPartyDto.Members.Count == 0)
-        {
-            await _partyRepository.DeletePartyAsync(_currentPartyId);
-        }
-        else
-        {
-            if (_currentPartyDto.LeaderUid == _userUid)
-            {
-                _currentPartyDto.LeaderUid = _currentPartyDto.Members[0];
-            }
-            await _partyRepository.UpdatePartyAsync(_currentPartyId, _currentPartyDto);
-        }
-        _currentPartyDto = null;
-        _currentPartyId = null;
+        int partySize = PhotonNetwork.CurrentRoom.PlayerCount;
+        PhotonNetwork.LeaveRoom();
+        MonoBehaviourPunCallbacks mono = PhotonServerManager.Instance;
+        mono.StartCoroutine(DelayedMatch(partySize));
     }
 
-    public async Task StartMatchmaking()
+    private IEnumerator DelayedMatch(int partySize)
     {
-        if (_currentPartyDto == null || _currentPartyDto.LeaderUid != _userUid) return;
-
-        _currentPartyDto.State = "InQueue";
-        await _partyRepository.UpdatePartyAsync(_currentPartyId, _currentPartyDto);
-
-        // TODO: Implement actual matchmaking logic here
+        while (PhotonNetwork.InRoom)
+            yield return null;
+        PhotonNetwork.JoinRandomRoom(null, (byte)(15 - partySize + 1));
     }
 }
-
