@@ -12,7 +12,6 @@ public class UI_Lobby : MonoBehaviour
    public TextMeshProUGUI TeamNameText;
    public TextMeshProUGUI RoomPlayerCountText;
    public TextMeshProUGUI SystemMessageText;
-   public UI_FriendList FriendListPopup;
    
      
    private void Start()
@@ -56,10 +55,6 @@ public class UI_Lobby : MonoBehaviour
       RoomPlayerCountText.gameObject.SetActive(true);
       PhotonServerManager.Instance.JoinRandomRoom();
       Debug.Log("매칭 시작...........");
-   }
-   public void OnClickFriendsPopupButton()
-   {
-      FriendListPopup.Show();
    }
    public void ShowSystemMessage(string msg)
    {
