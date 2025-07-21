@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4686389875251633639}
   - component: {fileID: -3669027015715077612}
   - component: {fileID: 549843721892290126}
-  - component: {fileID: -3816926450243870234}
+  - component: {fileID: -1013459406042154182}
   m_Layer: 0
   m_Name: AttackerSkillProjectile
   m_TagString: Untagged
@@ -122,21 +122,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa7ab7bf83103484c9726924d6075985, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-3816926450243870234
-MonoBehaviour:
+--- !u!54 &-1013459406042154182
+Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 86818363959794609}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 178d6be72e3e29b4cad2cd18e53e5ea1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  initialSpeed: 0
-  constantAcceleration: {x: 0, y: -9.81, z: 0}
-  yPivot: {fileID: 0}
-  xPivot: {fileID: 0}
-  yLimit: {x: -180, y: 180}
-  xLimit: {x: -180, y: 180}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0

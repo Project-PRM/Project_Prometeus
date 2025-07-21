@@ -21,7 +21,7 @@ public class UI_PartyInvitePopup : MonoBehaviour
 
     private void OnAccept()
     {
-        PartyManager.Instance.AcceptInvitation(_partyId, _inviterUid);
+        // PartyManager.Instance.AcceptInvitation(_partyId, _inviterUid);
         Destroy(gameObject);
     }
 
