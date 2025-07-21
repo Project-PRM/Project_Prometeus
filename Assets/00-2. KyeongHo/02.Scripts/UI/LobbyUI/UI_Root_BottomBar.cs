@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class UI_BottomMainBar : MonoBehaviour
+public class UI_Root_BottomBar : MonoBehaviour
 {
     [Header("UI Panels")]
     [SerializeField] private UI_DeadbodyPanel deadbodyPanel;
@@ -8,6 +8,7 @@ public class UI_BottomMainBar : MonoBehaviour
     [SerializeField] private UI_CharacterPanel characterPanel;
     [SerializeField] private UI_GameplayPanel gameplayPanel;
     [SerializeField] private UI_EventPanel eventPanel;
+    [SerializeField] private UI_CharacterList characterListPanel;
 
     public void OnClickDeadbodyButton()
     {
@@ -25,8 +26,8 @@ public class UI_BottomMainBar : MonoBehaviour
     public void OnClickCharacterButton()
     {
         UI_PopUpManager.Instance.ShowPopUp(characterPanel);
-
     }
+    
 
     public void OnClickEventButton()
     {
