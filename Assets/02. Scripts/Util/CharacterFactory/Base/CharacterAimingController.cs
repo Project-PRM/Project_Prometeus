@@ -26,8 +26,20 @@ public class CharacterAimingController
 
     public void Update()
     {
-        if (!IsAiming) return;
-        /*if (!_owner.PhotonView.IsMine)
+        if (!IsAiming)
+        {
+            if (Input.GetMouseButtonDown(0)) // 좌클릭
+            {
+                Vector3 mousePos = GetMouseWorldPosition();
+
+                // 1. 클릭한 위치에서 아이템 있는지 먼저 체크
+                if (TryPickupItemAt(mousePos))
+                {
+                    return; // 아이템 주웠으면 끝
+                }
+            }
+            return;
+        }        /*if (!_owner.PhotonView.IsMine)
         {
             return;
         }*/
@@ -87,5 +99,24 @@ public class CharacterAimingController
             }
         }
         return null;
+    }
+
+    private bool TryPickupItemAt(Vector3 position)
+    {
+        Collider[] hits = Physics.OverlapSphere(position, 0.5f);
+        foreach (var hit in hits)
+        {
+            if (hit.TryGetComponent<IPickupable>(out var pickupable))
+            {
+                /*var inventory = _owner.GetCharacterBase().Inventory;
+                if (pickupable.Pickup(inventory))
+                {
+                    // 아이템 주웠으면 오브젝트 파괴하거나 비활성화
+                    GameObject.Destroy(hit.gameObject);
+                    return true;
+                }*/
+            }
+        }
+        return false;
     }
 }

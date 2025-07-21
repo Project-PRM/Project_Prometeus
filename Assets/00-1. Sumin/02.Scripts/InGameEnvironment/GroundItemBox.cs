@@ -9,9 +9,22 @@ public class GroundItemBox : MonoBehaviour, IDamageable
     private List<ItemData> _itemList;
     private List<GameObject> _itemObjects = new List<GameObject>();
 
-    public void Start()
+    public void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            List<ItemData> datas = new();
+            //Test
+            if (ItemManager.Instance.TryGetItemData("TestItem", out var itemData))
+            {
+                datas.Add(itemData);
+            }
+            if (ItemManager.Instance.TryGetItemData("TestArmor", out var data))
+            {
+                datas.Add(data);
+            }
+            SetItem(datas);
+        }   
     }
 
     /// <summary>
@@ -23,7 +36,9 @@ public class GroundItemBox : MonoBehaviour, IDamageable
 
         foreach(var item in _itemList)
         {
-            GameObject itemObject = PhotonNetwork.Instantiate(item.Name, transform.position, Quaternion.identity);
+            GameObject temp = Resources.Load<GameObject>(item.Name);
+            GameObject itemObject = Instantiate(temp, transform.position, Quaternion.identity);
+            //GameObject itemObject = PhotonNetwork.Instantiate(item.Name, transform.position, Quaternion.identity);
             _itemObjects.Add(itemObject);
             itemObject.SetActive(false);
         }
@@ -31,7 +46,7 @@ public class GroundItemBox : MonoBehaviour, IDamageable
 
     public void TakeDamage(float Damage)
     {
-        _health -= Damage;
+        _health -= DamageCalculator.CalculateDamage(Damage, 0);
         if (_health <= 0f)
         {
             DestroyAndSpreadItems();
@@ -59,11 +74,11 @@ public class GroundItemBox : MonoBehaviour, IDamageable
                 if (itemObject.TryGetComponent<Rigidbody>(out var rb))
                 {
                     Vector3 force = new Vector3(
-                        Random.Range(-1f, 1f),           // x
-                        Random.Range(1f, 2f),            // y 항상 양수
-                        Random.Range(-1f, 1f)            // z
+                        Random.Range(-0.5f, 0.5f),  // x
+                        Random.Range(0.3f, 0.6f),   // y (낮게 튀도록)
+                        Random.Range(-0.5f, 0.5f)   // z
                     );
-                    rb.AddForce(force * 3f, ForceMode.Impulse);
+                    rb.AddForce(force * 1.5f, ForceMode.Impulse); // 힘도 약하게
                 }
             }
         }
