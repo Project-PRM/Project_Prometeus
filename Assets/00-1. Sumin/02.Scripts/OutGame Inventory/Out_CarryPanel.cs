@@ -13,6 +13,11 @@ public class Out_CarryPanel : Singleton<Out_CarryPanel>
 
     public RectTransform CanvasRectTransform => _canvasRectTransform;
 
+    private void OnDisable()
+    {
+        HideSubPanel();
+    }
+
     /// <summary>
     /// 서브 슬롯 띄우기
     /// </summary>
