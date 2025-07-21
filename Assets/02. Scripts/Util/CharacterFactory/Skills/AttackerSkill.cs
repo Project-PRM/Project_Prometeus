@@ -27,8 +27,7 @@ public class AttackerSkill : ITargetableSkill
             return;
         }
 
-        Debug.Log("created cube");
-        Vector3 origin = character.Behaviour.transform.position + character.Behaviour.transform.forward * 1.5f;
+        Vector3 origin = character.Behaviour.transform.position + character.Behaviour.transform.forward * 1.5f + Vector3.up;
         target.y = 1.5f; // Y축 고정하여 2D 발사 느낌을 주기 위함
         Vector3 dir = (target - origin).normalized;
 
