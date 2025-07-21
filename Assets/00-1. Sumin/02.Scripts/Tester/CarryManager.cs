@@ -12,4 +12,16 @@ public class CarryManager : Singleton<CarryManager>
         CarryItems.AddRange(items);
         Debug.Log($"Carrying items updated. Total items: {CarryItems.Count}");
     }
+
+    public List<ItemData> GetCarryableItemsExcludingEquipped(CharacterInventory inventory)
+    {
+        var carryableItems = new List<ItemData>(inventory.HavingItems);
+
+        foreach (var equipped in inventory.EquippedItems)
+        {
+            carryableItems.Remove(equipped); // 같은 참조일 경우 동작
+        }
+
+        return carryableItems;
+    }
 }
