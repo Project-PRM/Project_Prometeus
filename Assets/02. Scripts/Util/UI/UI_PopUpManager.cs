@@ -11,6 +11,7 @@ public class UI_PopUpManager : Singleton<UI_PopUpManager>
     private void OnEnable()
     {
         // "Cancel" 액션에 이벤트 연결
+        
         _playerInput.actions["Cancel"].performed += OnCancel;
     }
 
@@ -19,17 +20,25 @@ public class UI_PopUpManager : Singleton<UI_PopUpManager>
         _playerInput.actions["Cancel"].performed -= OnCancel;
     }
 
-    private void OnCancel(InputAction.CallbackContext context)
+    public void OnCancel(InputAction.CallbackContext context)
     {
         HidePopUp();
     }
 
+    private bool ContainsPopUp(UI_PopUp popUp)
+    {
+        foreach (var p in _popUps)
+        {
+            if (p == popUp) return true;
+        }
+        return false;
+    }
+
     public void ShowPopUp(UI_PopUp popUp)
     {
-        if (_popUps.Count > 0)
-        {
-            _popUps.Peek().Hide();
-        }
+        if (ContainsPopUp(popUp))
+            return;
+
         _popUps.Push(popUp);
         popUp.Show();
     }
