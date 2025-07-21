@@ -1,4 +1,5 @@
 using Photon.Pun;
+using Photon.Pun.Demo.SlotRacer.Utils;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
@@ -16,6 +17,17 @@ public class UltimateProjectile : MonoBehaviour, IProjectile
     private float _traveledDistance = 0f;
     private bool _isInitialized = false;
 
+    // Bezier
+    private Vector3 _startPosition;
+    private Vector3 _endPosition;
+    private Vector3 _controlPoint1;
+    private Vector3 _controlPoint2;
+    private float _bezierT = 0f; // 베지어 곡선 상의 현재 위치 (0 ~ 1)
+    public float bezierSpeedMultiplier = 0.1f; // 베지어 곡선 속도 조절
+
+    private float _elapsedTime = 0f;
+    public AnimationCurve speedCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+
     public void Update()
     {
         if (!_isInitialized)
@@ -23,21 +35,29 @@ public class UltimateProjectile : MonoBehaviour, IProjectile
             return;
         }
 
-        float moveDistance = _speed * Time.deltaTime;
-        Vector3 move = _direction.normalized * moveDistance;
+        _elapsedTime += Time.deltaTime;
+        // 전체 이동 시간 계산
+        float totalTime = _maxRange / (_speed * bezierSpeedMultiplier);
 
-        // 이동: Y는 무시, 현재 위치의 y는 고정 -> 직선으로 가게 하고싶을때 사용
-        transform.position += new Vector3(move.x, 0f, move.z);
+        // 경과 시간 → 0~1 구간의 t
+        float normalizedTime = Mathf.Clamp01(_elapsedTime / totalTime);
 
-        Vector3 pos = transform.position;
-        pos.y = 1.5f;
-        transform.position = pos;
+        // 가속 곡선에 따라 t 보정
+        _bezierT = speedCurve.Evaluate(normalizedTime);
 
-        _traveledDistance += moveDistance;
-        if (_traveledDistance >= _maxRange)
+        if (_bezierT >= 1f)
         {
+            _bezierT = 1f;
             SpawnAoEField();
+            return;
         }
+
+        Vector3 newPosition = Bezier.GetPoint(_startPosition, _controlPoint1, _controlPoint2, _endPosition, _bezierT);
+        transform.position = newPosition;
+
+        _traveledDistance = Vector3.Distance(_startPosition, transform.position);
+
+        DrawBezierDebugLine();
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -62,6 +82,9 @@ public class UltimateProjectile : MonoBehaviour, IProjectile
     {
         GameObject field = Resources.Load<GameObject>("AttackerAoEField");
         /*PhotonNetwork.*/GameObject.Instantiate(field, transform.position, Quaternion.identity);
+        AttackerAoEField aoeField = field.GetComponent<AttackerAoEField>();
+
+        aoeField.StartAoEField(_owner, _duration, _damage);
         /*PhotonNetwork.*/Destroy(gameObject);
     }
 
@@ -76,6 +99,37 @@ public class UltimateProjectile : MonoBehaviour, IProjectile
         _direction = direction ?? Vector3.forward;
         _traveledDistance = 0f;
 
+        _direction = direction ?? Vector3.forward;
+        _traveledDistance = 0f;
+
+        // 베지어 곡선 초기화
+        _startPosition = transform.position;
+        _endPosition = _startPosition + _direction.normalized * _maxRange; // 목표 위치 계산
+        _endPosition.y = -1f;
+
+        // 제어점 설정 (예시: 시작점과 끝점 사이에 적절히 배치)
+        _controlPoint1 = _startPosition + _direction.normalized * (_maxRange * 0.3f) + Vector3.up * 2f;
+        _controlPoint2 = _endPosition - _direction.normalized * (_maxRange * 0.3f) + Vector3.up * 1f;
+
+        _bezierT = 0f; // 베지어 곡선 시작 위치 초기화
+
         _isInitialized = true;
     }
+
+    private void DrawBezierDebugLine()
+    {
+        if (!_isInitialized) return;
+
+        int resolution = 20; // 샘플 수
+        Vector3 prev = _startPosition;
+
+        for (int i = 1; i <= resolution; i++)
+        {
+            float t = i / (float)resolution;
+            Vector3 point = Bezier.GetPoint(_startPosition, _controlPoint1, _controlPoint2, _endPosition, t);
+            Debug.DrawLine(prev, point, Color.cyan, 0f, false);
+            prev = point;
+        }
+    }
+
 }
