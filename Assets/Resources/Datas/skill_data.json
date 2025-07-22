@@ -11,6 +11,7 @@
     "MaxRange": 1.0,
     "Speed": 0.0,
     "ProjectilePrefabName": null,
+    "SummonPrefabName": null,
     "IndicatorPrefabName": null
   },
   "DummyPassive": {
@@ -25,6 +26,7 @@
     "MaxRange": 1.0,
     "Speed": 0.0,
     "ProjectilePrefabName": null,
+    "SummonPrefabName": null,
     "IndicatorPrefabName": null
   },
   "DummyUltimate": {
@@ -39,6 +41,7 @@
     "MaxRange": 1.0,
     "Speed": 0.0,
     "ProjectilePrefabName": null,
+    "SummonPrefabName": null,
     "IndicatorPrefabName": null
   },
   "NewSkill3": {
@@ -53,6 +56,7 @@
     "MaxRange": 1.0,
     "Speed": 0.0,
     "ProjectilePrefabName": null,
+    "SummonPrefabName": null,
     "IndicatorPrefabName": null
   },
   "NewSkill4": {
@@ -67,6 +71,7 @@
     "MaxRange": 0.0,
     "Speed": 25.0,
     "ProjectilePrefabName": null,
+    "SummonPrefabName": null,
     "IndicatorPrefabName": null
   },
   "NewSkill5": {
@@ -81,6 +86,7 @@
     "MaxRange": 15.0,
     "Speed": 10.0,
     "ProjectilePrefabName": "AttackerSkillCube",
+    "SummonPrefabName": null,
     "IndicatorPrefabName": "LineIndicator"
   },
   "NewSkill6": {
@@ -95,6 +101,7 @@
     "MaxRange": 12.0,
     "Speed": 10.0,
     "ProjectilePrefabName": "AttackerUltimateCube",
+    "SummonPrefabName": null,
     "IndicatorPrefabName": "LineIndicator"
   },
   "NewSkill7": {
@@ -109,6 +116,7 @@
     "MaxRange": 0.0,
     "Speed": 0.0,
     "ProjectilePrefabName": null,
+    "SummonPrefabName": null,
     "IndicatorPrefabName": null
   },
   "NewSkill8": {
@@ -123,6 +131,7 @@
     "MaxRange": 0.0,
     "Speed": 0.0,
     "ProjectilePrefabName": null,
+    "SummonPrefabName": null,
     "IndicatorPrefabName": null
   },
   "NewSkill9": {
@@ -137,6 +146,7 @@
     "MaxRange": 0.0,
     "Speed": 0.0,
     "ProjectilePrefabName": null,
+    "SummonPrefabName": null,
     "IndicatorPrefabName": null
   },
   "NewSkill10": {
@@ -151,6 +161,7 @@
     "MaxRange": 0.0,
     "Speed": 0.0,
     "ProjectilePrefabName": null,
+    "SummonPrefabName": null,
     "IndicatorPrefabName": null
   },
   "NewSkill11": {
@@ -165,6 +176,7 @@
     "MaxRange": 0.0,
     "Speed": 0.0,
     "ProjectilePrefabName": null,
+    "SummonPrefabName": null,
     "IndicatorPrefabName": null
   },
   "NewSkill12": {
@@ -179,6 +191,7 @@
     "MaxRange": 0.0,
     "Speed": 0.0,
     "ProjectilePrefabName": null,
+    "SummonPrefabName": null,
     "IndicatorPrefabName": null
   },
   "NewSkill13": {
@@ -193,6 +206,7 @@
     "MaxRange": 0.0,
     "Speed": 0.0,
     "ProjectilePrefabName": null,
+    "SummonPrefabName": null,
     "IndicatorPrefabName": null
   },
   "NewSkill14": {
@@ -207,6 +221,7 @@
     "MaxRange": 0.0,
     "Speed": 0.0,
     "ProjectilePrefabName": null,
+    "SummonPrefabName": null,
     "IndicatorPrefabName": null
   },
   "NewSkill15": {
@@ -221,6 +236,7 @@
     "MaxRange": 0.0,
     "Speed": 0.0,
     "ProjectilePrefabName": null,
+    "SummonPrefabName": null,
     "IndicatorPrefabName": null
   },
   "NewSkill16": {
@@ -235,13 +251,14 @@
     "MaxRange": 0.0,
     "Speed": 0.0,
     "ProjectilePrefabName": null,
+    "SummonPrefabName": null,
     "IndicatorPrefabName": null
   },
   "NewSkill17": {
     "SkillName": "SpawnerSkill",
     "Damage": 0.0,
     "BuffAmount": 0.0,
-    "DebuffAmount": 0.0,
+    "DebuffAmount": 2.0,
     "Cost": 0.0,
     "Cooltime": 0.0,
     "Duration": 0.0,
@@ -249,6 +266,7 @@
     "MaxRange": 0.0,
     "Speed": 0.0,
     "ProjectilePrefabName": null,
+    "SummonPrefabName": null,
     "IndicatorPrefabName": null
   },
   "NewSkill18": {
@@ -263,6 +281,7 @@
     "MaxRange": 0.0,
     "Speed": 0.0,
     "ProjectilePrefabName": null,
+    "SummonPrefabName": null,
     "IndicatorPrefabName": null
   }
 }

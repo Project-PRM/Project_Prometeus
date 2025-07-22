@@ -31,16 +31,16 @@ public class SpawnerSkill : ITargetableSkill
         // 방향을 바라보도록 회전 (3D 기준으로 z축 전방)
         Quaternion rotation = Quaternion.LookRotation(dir);
 
-        GameObject prefab = Resources.Load<GameObject>("Projectiles/" + Data.ProjectilePrefabName);
+        GameObject prefab = Resources.Load<GameObject>("Summons/" + Data.SummonPrefabName);
 
         if (prefab == null)
         {
-            Debug.LogError($"프리팹 {Data.ProjectilePrefabName} 을(를) Resources/Projectiles 에서 찾을 수 없습니다.");
+            Debug.LogError($"프리팹 {Data.SummonPrefabName} 을(를) Resources/Summons 에서 찾을 수 없습니다.");
             return;
         }
 
-        GameObject projectile = GameObject.Instantiate(prefab, origin, rotation);
-        projectile.GetComponent<IProjectile>().SetData(Data, character, dir);
+        GameObject summon = GameObject.Instantiate(prefab, origin, rotation);
+        summon.GetComponent<ISummonObject>().SetData(Data, character);
 
         _timer = 0f;
     }

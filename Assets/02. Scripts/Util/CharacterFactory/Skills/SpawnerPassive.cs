@@ -1,13 +1,12 @@
 using UnityEngine;
 
-public class SpawnerPassive : ISkillNoTarget
+public class SpawnerPassive : IPermanentSkill
 {
-    private float _timer = 0f;
     public SkillData Data { get; set; }
 
     public void Update()
     {
-        _timer += Time.deltaTime;
+
     }
 
     public GameObject GetIndicatorPrefab()
@@ -17,21 +16,8 @@ public class SpawnerPassive : ISkillNoTarget
 
     public void Activate(CharacterBase character)
     {
-        if (_timer < Data.Cooltime)
-        {
-            Debug.Log($"{character.Name} Passive is on cooldown.");
-            return;
-        }
-
         Debug.Log($"{character.Name} activated SpawnerPassive.");
 
-        CharacterController controller = character.Behaviour.GetComponent<CharacterController>();
-        if (controller == null)
-        {
-            Debug.LogWarning("CharacterController not found on character.");
-            return;
-        }
-
-        _timer = 0f;
+        // 소환한 물체 근처 시야 - 오브젝트 자체에서 가능
     }
 }
