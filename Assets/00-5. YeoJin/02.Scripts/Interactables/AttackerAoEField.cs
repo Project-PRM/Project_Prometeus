@@ -21,10 +21,6 @@ public class AttackerAoEField : MonoBehaviour
         _tickDamage = tickDamage;
 
         _damageSelf = _owner.Behaviour.GetComponent<IDamageable>();
-    }
-
-    private void Start()
-    {
         StartCoroutine(DamageTickRoutine());
     }
 
@@ -39,7 +35,7 @@ public class AttackerAoEField : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        var target = other.GetComponent<CharacterBehaviour>();
+        var target = other.GetComponent<IDamageable>();
         if (target != null)
         {
             _targetsInRange.Remove(target);
@@ -48,6 +44,7 @@ public class AttackerAoEField : MonoBehaviour
 
     private IEnumerator DamageTickRoutine()
     {
+        var wait = new WaitForSeconds(_tickTime);
         for (int i = 0; i < _totalTick; i++)
         {
             foreach (var target in _targetsInRange)
@@ -58,7 +55,7 @@ public class AttackerAoEField : MonoBehaviour
                 }
             }
 
-            yield return new WaitForSeconds(_tickTime);
+            yield return wait;
             Debug.Log($"tickdamage");
         }
 

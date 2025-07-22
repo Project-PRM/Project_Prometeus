@@ -29,10 +29,10 @@ public class CharacterInGameView : MonoBehaviour, IPunObservable
 
         TurnOnRevealer();
 
-        /*if (_nickname != null)
+        if (_nickname != null)
         {
             _nickname.SetName(_characterBehaviour.PhotonView.Owner.NickName);
-        }*/
+        }
 
         _healthBar.SetValue(1); // 초기값 세팅
     }
