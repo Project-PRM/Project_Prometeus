@@ -49,14 +49,16 @@ public class AttackerAoEField : MonoBehaviour
         {
             foreach (var target in _targetsInRange)
             {
-                if (target != null && target != _damageSelf)
+                target.TakeDamage(_tickDamage);
+
+                /*if (target != null && target != _damageSelf)
                 {
                     target.TakeDamage(_tickDamage);
-                }
+                }*/
             }
 
             yield return wait;
-            Debug.Log($"tickdamage");
+            Debug.Log($"Tick - {_tickDamage}");
         }
 
         Destroy(gameObject);
