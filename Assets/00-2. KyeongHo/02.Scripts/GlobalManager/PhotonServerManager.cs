@@ -102,38 +102,133 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
         PhotonNetwork.JoinRoom(roomId);
     }
 
-    // 팀 배정 메서드
+    // 팀 배정 메서드 - 파티원끼리 같은 팀 배정
     public void AssignTeams()
     {
         if (!PhotonNetwork.IsMasterClient) return;
         
         PhotonPlayer[] players = PhotonNetwork.PlayerList;
+        List<PhotonPlayer> assignedPlayers = new List<PhotonPlayer>();
+        int currentTeamIndex = 0;
         
-        // 플레이어 목록을 섞기 (랜덤 팀 배정)
-        for (int i = 0; i < players.Length; i++)
+        // 파티별로 그룹화
+        Dictionary<string, List<PhotonPlayer>> partyGroups = new Dictionary<string, List<PhotonPlayer>>();
+        List<PhotonPlayer> soloPlayers = new List<PhotonPlayer>();
+        
+        // 플레이어를 파티별로 분류
+        foreach (PhotonPlayer player in players)
         {
-            PhotonPlayer temp = players[i];
-            int randomIndex = UnityEngine.Random.Range(i, players.Length);
-            players[i] = players[randomIndex];
-            players[randomIndex] = temp;
+            // 파티 정보가 있는지 확인 (CustomProperties나 다른 방법으로 파티 정보 저장 필요)
+            string partyInfo = GetPlayerPartyInfo(player);
+            
+            if (!string.IsNullOrEmpty(partyInfo))
+            {
+                if (!partyGroups.ContainsKey(partyInfo))
+                    partyGroups[partyInfo] = new List<PhotonPlayer>();
+                partyGroups[partyInfo].Add(player);
+            }
+            else
+            {
+                soloPlayers.Add(player);
+            }
         }
         
-        // 3명씩 팀 배정
-        for (int i = 0; i < players.Length; i++)
+        // 파티별로 팀 배정
+        foreach (var partyGroup in partyGroups)
         {
-            int teamIndex = i / PLAYERS_PER_TEAM;
-            if (teamIndex < teamNames.Length)
+            List<PhotonPlayer> partyMembers = partyGroup.Value;
+            
+            // 파티원이 3명 이하인 경우 같은 팀에 배정
+            if (partyMembers.Count <= PLAYERS_PER_TEAM && currentTeamIndex < teamNames.Length)
             {
-                Hashtable props = new Hashtable();
-                props[TEAM_PROPERTY_KEY] = teamNames[teamIndex];
-                players[i].SetCustomProperties(props);
+                foreach (PhotonPlayer player in partyMembers)
+                {
+                    AssignPlayerToTeam(player, currentTeamIndex);
+                    assignedPlayers.Add(player);
+                }
                 
-                TeamIndex[players[i].ActorNumber] = teamIndex;
-                Debug.Log($"플레이어 {players[i].NickName}를 팀 {teamNames[teamIndex]}에 배정");
+                Debug.Log($"파티 '{partyGroup.Key}' ({partyMembers.Count}명)를 팀 {teamNames[currentTeamIndex]}에 배정");
+                currentTeamIndex++;
+            }
+            else
+            {
+                // 파티원이 3명보다 많은 경우 나누어서 배정
+                for (int i = 0; i < partyMembers.Count; i++)
+                {
+                    int teamIndex = currentTeamIndex + (i / PLAYERS_PER_TEAM);
+                    if (teamIndex < teamNames.Length)
+                    {
+                        AssignPlayerToTeam(partyMembers[i], teamIndex);
+                        assignedPlayers.Add(partyMembers[i]);
+                    }
+                }
+                currentTeamIndex += Mathf.CeilToInt((float)partyMembers.Count / PLAYERS_PER_TEAM);
+            }
+        }
+        
+        // 남은 솔로 플레이어들을 랜덤하게 섞어서 배정
+        for (int i = 0; i < soloPlayers.Count; i++)
+        {
+            PhotonPlayer temp = soloPlayers[i];
+            int randomIndex = UnityEngine.Random.Range(i, soloPlayers.Count);
+            soloPlayers[i] = soloPlayers[randomIndex];
+            soloPlayers[randomIndex] = temp;
+        }
+        
+        // 남은 자리에 솔로 플레이어들 배정
+        foreach (PhotonPlayer player in soloPlayers)
+        {
+            // 현재 팀에 자리가 있는지 확인
+            int playersInCurrentTeam = GetPlayersCountInTeam(currentTeamIndex);
+            
+            if (playersInCurrentTeam < PLAYERS_PER_TEAM && currentTeamIndex < teamNames.Length)
+            {
+                AssignPlayerToTeam(player, currentTeamIndex);
+            }
+            else
+            {
+                currentTeamIndex++;
+                if (currentTeamIndex < teamNames.Length)
+                {
+                    AssignPlayerToTeam(player, currentTeamIndex);
+                }
             }
         }
         
         Invoke(nameof(StartGame), 3f);
+    }
+    // 플레이어를 특정 팀에 배정하는 헬퍼 메서드
+    private void AssignPlayerToTeam(PhotonPlayer player, int teamIndex)
+    {
+        Hashtable props = new Hashtable();
+        props[TEAM_PROPERTY_KEY] = teamNames[teamIndex];
+        player.SetCustomProperties(props);
+        
+        TeamIndex[player.ActorNumber] = teamIndex;
+        Debug.Log($"플레이어 {player.NickName}를 팀 {teamNames[teamIndex]}에 배정");
+    }
+    // 특정 팀의 플레이어 수를 계산하는 헬퍼 메서드
+    private int GetPlayersCountInTeam(int teamIndex)
+    {
+        if (teamIndex >= teamNames.Length) return 0;
+    
+        int count = 0;
+        foreach (var kvp in TeamIndex)
+        {
+            if (kvp.Value == teamIndex) count++;
+        }
+        return count;
+    }
+    // 플레이어의 파티 정보를 가져오는 메서드 (구현 필요)
+    private string GetPlayerPartyInfo(PhotonPlayer player)
+    {
+        // 방법 1: CustomProperties에 파티 정보 저장된 경우
+        if (player.CustomProperties.TryGetValue("partyName", out object partyName))
+        {
+            return partyName.ToString();
+        }
+    
+        return null; // 파티 정보 없음 (솔로 플레이어)
     }
 
     private void StartGame()
@@ -142,6 +237,18 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
         {
             PrintAllPlayerTeams();
             PhotonNetwork.LoadLevel(2);
+        }
+    }
+    // 방 입장 시 자신의 파티 정보를 CustomProperties에 저장
+    private void SetPartyInfoOnJoinRoom()
+    {
+        string partyName = LobbyChatManager.Instance.GetCurrentPartyName();
+        if (!string.IsNullOrEmpty(partyName))
+        {
+            Hashtable partyProps = new Hashtable();
+            partyProps["partyName"] = partyName;
+            PhotonNetwork.LocalPlayer.SetCustomProperties(partyProps);
+            Debug.Log($"파티 정보 설정: {partyName}");
         }
     }
 
@@ -215,8 +322,12 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     public override void OnJoinedRoom()
     {
         Debug.Log($"방 입장 완료! 현재 플레이어 수: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}");
+    
+        // 파티 정보를 CustomProperties에 저장
+        SetPartyInfoOnJoinRoom();
+    
         EventManager.Broadcast(new GameStartEvent(GetPlayerTeam(PhotonNetwork.LocalPlayer)));
-        
+    
         // 파티 리더라면 파티원들에게 초대 메시지 전송
         if (LobbyChatManager.Instance.IsPartyLeader())
         {

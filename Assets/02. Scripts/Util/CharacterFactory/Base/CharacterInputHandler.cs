@@ -15,8 +15,16 @@ public class CharacterInputHandler : MonoBehaviour
         if (_characterBehaviour == null || _playerInput == null)
         {
             Debug.LogError("Missing required components on CharacterInputHandler.");
+            return;
+        }
+
+        if (!_characterBehaviour.PhotonView.IsMine)
+        {
+            _playerInput.enabled = false; // 🔒 입력 비활성화
+            enabled = false;              // 이 스크립트도 비활성화
         }
     }
+
 
     private void OnEnable()
     {

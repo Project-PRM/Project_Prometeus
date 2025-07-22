@@ -20,7 +20,7 @@ public class UI_Lobby : MonoBehaviour
     {
         if (evt != null)
         {
-            TeamNameText.text = $"TeamName : {PhotonNetwork.NickName} / {PhotonNetwork.LocalPlayer.UserId}";  
+            TeamNameText.text = $"TeamName : {evt.TeamName}";  
         }
         
         if (PhotonNetwork.CurrentRoom != null)
