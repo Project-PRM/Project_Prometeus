@@ -15,7 +15,7 @@ MonoBehaviour:
   AppSettings:
     AppIdRealtime: f9b781db-dba9-4564-b859-7c149e6440fa
     AppIdFusion: 
-    AppIdChat: 
+    AppIdChat: 858f1d3c-32ab-43df-97ea-6c0ce15e002d
     AppIdVoice: 
     AppVersion: 
     UseNameServer: 1
@@ -44,6 +44,7 @@ MonoBehaviour:
   - SelectCharacter
   - PhaseTimer
   - LoadGameRoom
+  - TestRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
