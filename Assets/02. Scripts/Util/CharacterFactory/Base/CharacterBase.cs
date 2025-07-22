@@ -138,12 +138,14 @@ public class CharacterBase
     {
         float finalDamage = DamageCalculator.CalculateDamage(damage, FinalStats.BaseArmor);
         CurrentHealth -= finalDamage;
+        Debug.Log($"{CurrentHealth} is currenthealth | {finalDamage} is finalDamage");
         if (CurrentHealth < 0)
         {
             CurrentHealth = 0;
             RaiseEvent(ECharacterEvent.OnDeath);
             return;
         }
+        Debug.Log("TAKE DAMAGE HAS BEEN CALLED");
         RaiseEvent(ECharacterEvent.OnDamaged);
     }
 

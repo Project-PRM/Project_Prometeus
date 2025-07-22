@@ -37,7 +37,7 @@ public static class FirestoreSkillDataUploader
         var firestore = FirebaseFirestore.DefaultInstance;
 
         // Resources에서 JSON 로드
-        TextAsset jsonText = Resources.Load<TextAsset>("skill_data");
+        TextAsset jsonText = Resources.Load<TextAsset>("Datas/skill_data");
         if (jsonText == null)
         {
             Debug.LogError("skill_data.json 파일을 Resources 폴더에 넣어주세요.");

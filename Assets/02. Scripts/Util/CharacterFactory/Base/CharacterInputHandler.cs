@@ -20,10 +20,10 @@ public class CharacterInputHandler : MonoBehaviour
 
     private void OnEnable()
     {
-        /*if (!_characterBehaviour.PhotonView.IsMine)
+        if (!_characterBehaviour.PhotonView.IsMine)
         {
             return;
-        }*/
+        }
         _playerInput.actions["Passive"].performed += OnPassiveUse;
         _playerInput.actions["Skill"].performed += OnSkillUse;
         _playerInput.actions["Ultimate"].performed += OnUltimateUse;
@@ -32,10 +32,10 @@ public class CharacterInputHandler : MonoBehaviour
 
     private void OnDisable()
     {
-        /*if (!_characterBehaviour.PhotonView.IsMine)
+        if (!_characterBehaviour.PhotonView.IsMine)
         {
             return;
-        }*/
+        }
         _playerInput.actions["Passive"].performed -= OnPassiveUse;
         _playerInput.actions["Skill"].performed -= OnSkillUse;
         _playerInput.actions["Ultimate"].performed -= OnUltimateUse;

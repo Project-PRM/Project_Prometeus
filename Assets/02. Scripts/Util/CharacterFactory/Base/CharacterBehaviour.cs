@@ -15,6 +15,7 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
     public CharacterBase GetCharacterBase() => _character;
     private CharacterAimingController _aimingController;
     private CharacterMove _characterMove;
+    private CharacterInGameView _gameView;
 
     private bool _isInitialized = false;
 
@@ -34,6 +35,7 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
         Inventory = GetComponent<CharacterInventory>();
 
         _characterMove = GetComponent<CharacterMove>();
+        _gameView = GetComponent<CharacterInGameView>();
         _aimingController = new CharacterAimingController(this);
     }
 
@@ -56,15 +58,16 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
             CharacterManager.Instance.CharacterStats
         );
         DamageTrigger.Owner = this;
+        _character.OnEventOccurred += _gameView.OnTakenDamage;
         _isInitialized = true;
     }
 
     public void OnAttack(InputAction.CallbackContext callback)
     {
-        /*if(!PhotonView.IsMine)
+        if (!PhotonView.IsMine)
         {
             return;
-        }*/
+        }
         if (_aimingController.IsAiming)
             return;
         TryActivateSkillOrEnterAiming(ESkillType.BasicAttack);
@@ -72,29 +75,36 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
 
     public void OnSkillUse(InputAction.CallbackContext callback)
     {
-        //if (!PhotonView.IsMine) return;
+        if (!PhotonView.IsMine) return;
         TryActivateSkillOrEnterAiming(ESkillType.Skill);
     }
 
     public void OnUltimateUse(InputAction.CallbackContext callback)
     {
-        //if (!PhotonView.IsMine) return;
+        if (!PhotonView.IsMine) return;
         TryActivateSkillOrEnterAiming(ESkillType.Ultimate);
     }
 
     public void OnPassiveUse(InputAction.CallbackContext callback)
     {
-        //if (!PhotonView.IsMine) return;
+        if (!PhotonView.IsMine) return;
         TryActivateSkillOrEnterAiming(ESkillType.Passive);
+    }
+
+    // for debug
+    public void OnTakeDamage(InputAction.CallbackContext callback)
+    {
+        if (!PhotonView.IsMine) return;
+        _character.TakeDamage(10);
     }
 
     private void Update()
     {
         if (!_isInitialized) return;
-        /*if(!PhotonView.IsMine)
+        if (!PhotonView.IsMine)
         {
             return;
-        }*/
+        }
 
         _character.Update();
         _aimingController.Update();

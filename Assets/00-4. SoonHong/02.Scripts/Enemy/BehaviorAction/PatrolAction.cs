@@ -14,6 +14,7 @@ public partial class PatrolAction : Action
     [SerializeReference] public BlackboardVariable<GameObject> Self;
 
     private NavMeshAgent _agent;
+    private Animator _animator;
     private Vector3 _patrolPostion;
     private float _currentPatrolTime = 0f;
     private float _maxPatrolTime = 5f;
@@ -31,8 +32,16 @@ public partial class PatrolAction : Action
         _agent = Self.Value.GetComponent<NavMeshAgent>();
         _agent.SetDestination(_patrolPostion);
         _currentPatrolTime = Time.time;
+        _animator = Self.Value.GetComponent<Animator>();
+        _animator.SetBool("IsWalking", true);
+
 
         return Status.Running;
+    }
+
+    protected override void OnEnd()
+    {
+        _animator.SetBool("IsWalking", false);
     }
 
     protected override Status OnUpdate()
@@ -53,7 +62,7 @@ public partial class PatrolAction : Action
         angle = DegreeToRadian(angle);
 
         postion.x = Mathf.Cos(angle) * radius;
-        postion.y = Mathf.Cos(angle) * radius;
+        postion.z = Mathf.Cos(angle) * radius;
 
         return postion;
     }
