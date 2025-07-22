@@ -1,4 +1,5 @@
 using UnityEngine;
+using FOW;
 
 public class SpawnerSkillSummon : MonoBehaviour, ISummonObject, IDamageable
 {
@@ -14,6 +15,9 @@ public class SpawnerSkillSummon : MonoBehaviour, ISummonObject, IDamageable
     private float _maxRange = 0f;
     private float _radius = 0f;
     private float _duration = 0f;
+    private float _debuffAmount = 0f;
+
+    private string _myTeam;
 
     private bool _isInitialized = false;
 
@@ -29,12 +33,6 @@ public class SpawnerSkillSummon : MonoBehaviour, ISummonObject, IDamageable
             return;
         }
 
-        // 타이머 기반이 아님
-        /*if(_timer >= _duration)
-        {
-            *//*PhotonNetwork.*//*Destroy(gameObject); Destroy(this);
-        }*/
-
         _timer += Time.deltaTime;
 
         Vector3 pos = transform.position;
@@ -43,7 +41,7 @@ public class SpawnerSkillSummon : MonoBehaviour, ISummonObject, IDamageable
 
     private void SpawnSlowField()
     {
-        GameObject prefab = Resources.Load<GameObject>("AttackerSlowField");
+        GameObject prefab = Resources.Load<GameObject>("SlowField");
         /*PhotonNetwork.*/
         GameObject field = Instantiate(
         prefab,
@@ -53,7 +51,7 @@ public class SpawnerSkillSummon : MonoBehaviour, ISummonObject, IDamageable
         );
 
         SlowField slowField = field.GetComponent<SlowField>();
-        slowField.StartSlowField(_owner);
+        slowField.StartSlowField(_owner, _debuffAmount);
     }
 
     public void TakeDamage(float damage)
@@ -79,10 +77,31 @@ public class SpawnerSkillSummon : MonoBehaviour, ISummonObject, IDamageable
         _damage = data.Damage;
         _maxRange = data.MaxRange;
         _radius = data.Radius;
+        _debuffAmount = data.DebuffAmount;
         _duration = data.Duration;
+        _myTeam = character.Team;
 
         _curHealth = _maxHealth;
 
+        TurnOnRevealer();
         _isInitialized = true;
+    }
+
+    private void TurnOnRevealer()
+    {
+        var revealer = GetComponent<FogOfWarRevealer3D>();
+        if (revealer == null || _owner == null) return;
+
+        // 팀에 전체? 소환 플레이어 혼자?
+        var ownerTeam = PhotonServerManager.Instance.GetPlayerTeam(_owner.Behaviour.PhotonView.Owner);
+
+        if (_myTeam == ownerTeam)
+        {
+            revealer.enabled = true;
+        }
+        else
+        {
+            revealer.enabled = false;
+        }
     }
 }

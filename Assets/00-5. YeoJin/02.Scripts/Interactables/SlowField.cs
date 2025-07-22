@@ -12,9 +12,10 @@ public class SlowField : MonoBehaviour
 
     private HashSet<CharacterBase> _targetsInRange = new HashSet<CharacterBase>();
 
-    public void StartSlowField(CharacterBase character)
+    public void StartSlowField(CharacterBase character, float debuffAmount)
     {
         _owner = character;
+        _slowAmount = debuffAmount;
     }
 
     private void Start()

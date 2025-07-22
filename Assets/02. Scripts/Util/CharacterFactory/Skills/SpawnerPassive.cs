@@ -18,11 +18,6 @@ public class SpawnerPassive : IPermanentSkill
     {
         Debug.Log($"{character.Name} activated SpawnerPassive.");
 
-        CharacterController controller = character.Behaviour.GetComponent<CharacterController>();
-        if (controller == null)
-        {
-            Debug.LogWarning("CharacterController not found on character.");
-            return;
-        }
+        // 소환한 물체 근처 시야 - 오브젝트 자체에서 가능
     }
 }
