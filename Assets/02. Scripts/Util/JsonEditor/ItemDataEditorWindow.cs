@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 public class ItemDataJsonEditorWindow : EditorWindow
 {
     private Dictionary<string, ItemData> _items = new();
-    private string _jsonPath = "Assets/Resources/item_data.json";
+    private string _jsonPath = "Assets/Resources/Datas/item_data.json";
     private Vector2 _scrollPos;
 
     [MenuItem("Tools/Item/ItemData JSON Editor")]
