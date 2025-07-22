@@ -39,5 +39,8 @@ public static class SkillRegistrar
         SkillFactory.Register(ESkillName.TankerSkill.ToString(), () => new TankerSkill());
         SkillFactory.Register(ESkillName.TankerPassive.ToString(), () => new TankerPassive());
         SkillFactory.Register(ESkillName.TankerUltimate.ToString(), () => new TankerUltimate());
+        SkillFactory.Register(ESkillName.SpawnerSkill.ToString(), () => new SpawnerSkill());
+        SkillFactory.Register(ESkillName.SpawnerPassive.ToString(), () => new SpawnerPassive());
+        SkillFactory.Register(ESkillName.SpawnerUltimate.ToString(), () => new SpawnerUltimate());
     }
 }

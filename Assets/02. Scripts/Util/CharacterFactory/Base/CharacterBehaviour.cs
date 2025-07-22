@@ -15,6 +15,7 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
     public CharacterBase GetCharacterBase() => _character;
     private CharacterAimingController _aimingController;
     private CharacterMove _characterMove;
+    private CharacterInGameView _gameView;
 
     private bool _isInitialized = false;
 
@@ -23,6 +24,7 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
     public CharacterController Controller { get; private set; }
     public PhotonView PhotonView { get; private set; }
     public DamageTrigger DamageTrigger { get; private set; }
+    public CharacterInventory Inventory { get; private set; }
 
     private void Awake()
     {
@@ -30,8 +32,10 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
         Controller = GetComponent<CharacterController>();
         PhotonView = GetComponent<PhotonView>();
         DamageTrigger = GetComponentInChildren<DamageTrigger>();
+        Inventory = GetComponent<CharacterInventory>();
 
         _characterMove = GetComponent<CharacterMove>();
+        _gameView = GetComponent<CharacterInGameView>();
         _aimingController = new CharacterAimingController(this);
     }
 
@@ -54,6 +58,7 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
             CharacterManager.Instance.CharacterStats
         );
         DamageTrigger.Owner = this;
+        _character.OnEventOccurred += _gameView.OnTakenDamage;
         _isInitialized = true;
     }
 
@@ -84,6 +89,13 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
     {
         //if (!PhotonView.IsMine) return;
         TryActivateSkillOrEnterAiming(ESkillType.Passive);
+    }
+
+    // for debug
+    public void OnTakeDamage(InputAction.CallbackContext callback)
+    {
+        //if (!PhotonView.IsMine) return;
+        _character.TakeDamage(10);
     }
 
     private void Update()
@@ -118,8 +130,6 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
         }
     }
 
-    
-
     public void TakeDamage(float Damage)
     {
         _character.TakeDamage(Damage);
@@ -138,5 +148,11 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
     public void RemoveStatModifier(StatModifier mod)
     {
         _character.RemoveStatModifier(mod);
+    }
+
+    public void PickUpItem(IPickupable item)
+    {
+        Inventory.AddItem(item.GetItemData());
+        item.OnPickup();
     }
 }
