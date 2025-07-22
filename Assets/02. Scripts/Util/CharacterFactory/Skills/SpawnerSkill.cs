@@ -31,7 +31,7 @@ public class SpawnerSkill : ITargetableSkill
         // 방향을 바라보도록 회전 (3D 기준으로 z축 전방)
         Quaternion rotation = Quaternion.LookRotation(dir);
 
-        GameObject prefab = Resources.Load<GameObject>("Projectiles/" + Data.ProjectilePrefabName);
+        GameObject prefab = Resources.Load<GameObject>("Summons/" + Data.SummonPrefabName);
 
         if (prefab == null)
         {
