@@ -36,7 +36,7 @@ public static class FirestoreItemDataUploader
         var firestore = FirebaseFirestore.DefaultInstance;
 
         // Resources에서 JSON 로드
-        TextAsset jsonText = Resources.Load<TextAsset>("item_data");
+        TextAsset jsonText = Resources.Load<TextAsset>("Datas/item_data");
         if (jsonText == null)
         {
             Debug.LogError("item_data.json 파일을 Resources 폴더에 넣어주세요.");

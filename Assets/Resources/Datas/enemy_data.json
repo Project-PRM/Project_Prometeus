@@ -1,0 +1,18 @@
+{
+  "DummyEnemy0": {
+    "Name": "DummyEnemy0",
+    "MaxHealth": 100.0,
+    "Armor": 0.0,
+    "Speed": 1.0,
+    "Damage": 10.0,
+    "AttackCoolTime": 1.0,
+    "AttackRange": 1.0,
+    "VisionRange": 5.0,
+    "DetectionRange": 7.0,
+    "ManaReward": 10.0,
+    "DropItemRewards": {
+      "TestItem": 0.62,
+      "TestArmor": 0.2
+    }
+  }
+}
