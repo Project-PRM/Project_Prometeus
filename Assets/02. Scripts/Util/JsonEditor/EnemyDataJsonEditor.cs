@@ -84,6 +84,11 @@ public class EnemyDataJsonEditorWindow : EditorWindow
             EditorGUILayout.Space(5);
             EditorGUILayout.LabelField("Drop Item Rewards", EditorStyles.boldLabel);
 
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField("Item Name", GUILayout.Width(200));
+            EditorGUILayout.LabelField("드롭 확률", GUILayout.Width(150));
+            EditorGUILayout.EndHorizontal();
+
             if (enemy.DropItemRewards == null)
                 enemy.DropItemRewards = new Dictionary<string, float>();
 

@@ -16,4 +16,25 @@ public class EnemyData
     [FirestoreProperty] public float DetectionRange { get; set; }
     [FirestoreProperty] public float ManaReward { get; set; }
     [FirestoreProperty] public Dictionary<string, float> DropItemRewards { get; set; }
+
+    public EnemyData() { }
+
+    public EnemyData(EnemyData other)
+    {
+        Name = other.Name;
+        MaxHealth = other.MaxHealth;
+        Armor = other.Armor;
+        Speed = other.Speed;
+        Damage = other.Damage;
+        AttackCoolTime = other.AttackCoolTime;
+        AttackRange = other.AttackRange;
+        VisionRange = other.VisionRange;
+        DetectionRange = other.DetectionRange;
+        ManaReward = other.ManaReward;
+
+        // 깊은 복사: Dictionary도 새 인스턴스로 생성
+        DropItemRewards = other.DropItemRewards != null
+            ? new Dictionary<string, float>(other.DropItemRewards)
+            : new Dictionary<string, float>();
+    }
 }
