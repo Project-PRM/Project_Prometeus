@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using Photon.Pun;
 /// <summary>
 /// 투사체 발사, 장판 생성, 지속 데미지
 /// </summary>
@@ -43,7 +43,7 @@ public class AttackerUltimate : ITargetableSkill
         }
 
         Debug.Log($"{origin} is where ultimate cube was born");
-        GameObject projectile = GameObject.Instantiate(prefab, origin, rotation);
+        GameObject projectile = /*GameObject.*/PhotonNetwork.Instantiate($"Projectiles/{Data.ProjectilePrefabName}", origin, rotation);
         projectile.GetComponent<IProjectile>().SetData(Data, character, dir);
 
         _timer = 0f;
