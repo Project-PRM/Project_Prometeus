@@ -24,6 +24,7 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
     public CharacterController Controller { get; private set; }
     public PhotonView PhotonView { get; private set; }
     public DamageTrigger DamageTrigger { get; private set; }
+    public CharacterInventory Inventory { get; private set; }
 
     private void Awake()
     {
@@ -31,6 +32,7 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
         Controller = GetComponent<CharacterController>();
         PhotonView = GetComponent<PhotonView>();
         DamageTrigger = GetComponentInChildren<DamageTrigger>();
+        Inventory = GetComponent<CharacterInventory>();
 
         _characterMove = GetComponent<CharacterMove>();
         _gameView = GetComponent<CharacterInGameView>();
@@ -128,8 +130,6 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
         }
     }
 
-    
-
     public void TakeDamage(float Damage)
     {
         _character.TakeDamage(Damage);
@@ -148,5 +148,11 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
     public void RemoveStatModifier(StatModifier mod)
     {
         _character.RemoveStatModifier(mod);
+    }
+
+    public void PickUpItem(IPickupable item)
+    {
+        Inventory.AddItem(item.GetItemData());
+        item.OnPickup();
     }
 }
