@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 public class SkillJsonEditorWindow : EditorWindow
 {
     private Dictionary<string, SkillData> _skills = new();
-    private string _jsonPath = "Assets/Resources/skill_data.json"; // 고정 경로
+    private string _jsonPath = "Assets/Resources/Datas/skill_data.json"; // 고정 경로
     private Vector2 _scrollPos;
 
     [MenuItem("Tools/Skill/Skill JSON Editor")]
