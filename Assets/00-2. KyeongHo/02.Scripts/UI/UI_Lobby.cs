@@ -53,7 +53,18 @@ public class UI_Lobby : MonoBehaviour
    {
       TeamNameText.gameObject.SetActive(true);
       RoomPlayerCountText.gameObject.SetActive(true);
-      PhotonServerManager.Instance.JoinRandomRoom();
+      // PhotonServerManager.Instance.JoinRandomRoom();
+      
+      Debug.Log($"[PartyTest] JoinRandomRoom 호출 시작");
+      Debug.Log($"[PartyTest] 내 UserID: {PhotonNetwork.AuthValues?.UserId}");
+      
+      PhotonNetwork.JoinRandomRoom(
+         expectedCustomRoomProperties : null,
+         expectedMaxPlayers : 0,
+         matchingType : MatchmakingMode.RandomMatching,
+         typedLobby : null,
+         sqlLobbyFilter : null,
+         expectedUsers : null);
       Debug.Log("매칭 시작...........");
    }
    public void OnClickMatchingStartButtonNew()

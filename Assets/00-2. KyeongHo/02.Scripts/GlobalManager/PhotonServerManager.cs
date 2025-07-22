@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Photon.Chat;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
 using UnityEngine.Serialization;
+using AuthenticationValues = Photon.Realtime.AuthenticationValues;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class PhotonServerManager : PunSingleton<PhotonServerManager>
@@ -20,7 +22,12 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     public string MyTeamName => _myTeamName;
 
     public Dictionary<int, int> TeamIndex = new();
-    
+
+    protected override void Awake()
+    {
+        base.Awake();
+        LobbyChatManager.Instance.OnPartyJoinRoom += PartyJoinRoom;
+    }
     
     public void StartMatchingFromParty()
     {
@@ -35,6 +42,13 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
             yield return null;
 
         PhotonNetwork.JoinRandomRoom(null, (byte)(15 - partySize + 1)); // 최소 partySize 이상 빈 슬롯 필요
+    }
+
+    private void PartyJoinRoom(string roomId)
+    {
+        Debug.Log($"PartyJoinRoom({roomId})호출ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ");
+        PhotonNetwork.JoinRoom(roomId);
+        
     }
     
     private void Init()
@@ -160,20 +174,162 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     {
         Debug.Log("로비(채널) 입장 완료!");
         Debug.Log($"InLobby : {PhotonNetwork.InLobby}");
+        // 채팅 매니저 강제 초기화 및 연결
+    }
 
-        PartyManager.Instance.CreateMyPartyRoom();
+    public void OnChat1ButtonClick()
+    {
+        StartCoroutine(InitializeChatAndJoinParty("Chat1"));
+    }
+    public void OnChat2ButtonClick()
+    {
+        StartCoroutine(InitializeChatAndJoinParty("Chat2"));
+    }
+    private IEnumerator InitializeChatAndJoinParty(string partyName)
+    {
+        Debug.Log("채팅 연결 초기화 시작...");
+        
+        // 1. 채팅 매니저가 존재하는지 확인
+        if (LobbyChatManager.Instance == null)
+        {
+            Debug.LogError("LobbyChatManager.Instance가 null입니다!");
+            yield break;
+        }
+
+        // 2. 강제로 채팅 연결 시도
+        LobbyChatManager.Instance.ForceConnectToChat();
+        
+        // 3. 채팅 클라이언트 연결 대기 (더 긴 타임아웃과 더 자세한 로그)
+        float timeout = 20f; // 20초로 늘림
+        float checkInterval = 0.5f; // 체크 간격을 0.5초로 늘림
+        
+        while (timeout > 0)
+        {
+            // 현재 채팅 상태 로그
+            var chatClient = LobbyChatManager.Instance.GetChatClient();
+            if (chatClient != null)
+            {
+                Debug.Log($"채팅 상태: {chatClient.State}");
+                
+                if (chatClient.State == ChatState.ConnectedToFrontEnd)
+                {
+                    Debug.Log("✅ 채팅 서버 연결 완료! 파티 참여 시도...");
+                    LobbyChatManager.Instance.JoinParty(partyName);
+                    yield break;
+                }
+                else if (chatClient.State == ChatState.Disconnected)
+                {
+                    Debug.LogWarning("채팅 연결이 끊어졌습니다. 재연결 시도...");
+                    LobbyChatManager.Instance.ForceConnectToChat();
+                }
+            }
+            else
+            {
+                Debug.LogWarning("ChatClient가 null입니다.");
+            }
+            
+            yield return new WaitForSeconds(checkInterval);
+            timeout -= checkInterval;
+        }
+        
+        Debug.LogError($"채팅 서버 연결 타임아웃! (20초) - 현재 상태: {LobbyChatManager.Instance.GetChatClient()?.State}");
+        
+        // 타임아웃 후에도 재시도
+        Debug.Log("5초 후 재시도합니다...");
+        yield return new WaitForSeconds(5f);
+        StartCoroutine(InitializeChatAndJoinParty(partyName));
     }
     public override void OnJoinedRoom()
     {
         Debug.Log($"방 입장 완료! 현재 플레이어 수: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}");
         EventManager.Broadcast(new GameStartEvent(GetPlayerTeam(PhotonNetwork.LocalPlayer)));
+        
+        Debug.Log($"=== 방 참가 완료 ===");
+        Debug.Log($"방 이름: {PhotonNetwork.CurrentRoom.Name}");
+        Debug.Log($"현재 플레이어 수: {PhotonNetwork.CurrentRoom.PlayerCount}");
+        
+        // 방에 있는 모든 플레이어 로그
+        foreach (var player in PhotonNetwork.CurrentRoom.Players.Values)
+        {
+            Debug.Log($"플레이어: {player.NickName}, UserID: {player.UserId}");
+        }
+        
+        // 방법 1: 직접 계산
+        int availableSlots = PhotonNetwork.CurrentRoom.MaxPlayers - PhotonNetwork.CurrentRoom.PlayerCount;
+        Debug.Log($"현재 들어올 수 있는 플레이어 수: {availableSlots}명");
+
+// 방법 2: 더 상세한 정보
+        Debug.Log($"최대 플레이어: {PhotonNetwork.CurrentRoom.MaxPlayers}");
+        Debug.Log($"현재 플레이어: {PhotonNetwork.CurrentRoom.PlayerCount}"); 
+        Debug.Log($"빈 슬롯: {PhotonNetwork.CurrentRoom.MaxPlayers - PhotonNetwork.CurrentRoom.PlayerCount}");
+        // 내가 원하는 UID들이 있는지 체크
+        CheckTargetUsers();
     }
+    private void CheckTargetUsers()
+    {
+        string[] targetUIDs = {"DoImcscNSyNQ2tgfZ9nuhGQOwqn1", "giiieCwvE3Zk53fGCCLTH7BbT4B2"};
+        
+        Debug.Log("=== 타겟 UID 체크 ===");
+        foreach (string uid in targetUIDs)
+        {
+            bool found = false;
+            foreach (var player in PhotonNetwork.CurrentRoom.Players.Values)
+            {
+                if (player.UserId == uid)
+                {
+                    Debug.Log($"✅ 찾음: {uid} - {player.NickName}");
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                Debug.Log($"❌ 없음: {uid}");
+            }
+        }
+        
+        // 둘 다 있으면 RPC 테스트
+        if (AreAllTargetUsersPresent())
+        {
+            Debug.Log("🎉 타겟 유저들이 모두 있음! RPC 테스트 호출");
+            photonView.RPC("TestRPC", RpcTarget.All, "모든 타겟 유저 접속 완료!");
+        }
+    }
+
+    private bool AreAllTargetUsersPresent()
+    {
+        string[] targetUIDs = {"DoImcscNSyNQ2tgfZ9nuhGQOwqn1", "giiieCwvE3Zk53fGCCLTH7BbT4B2"};
+        
+        foreach (string uid in targetUIDs)
+        {
+            bool found = false;
+            foreach (var player in PhotonNetwork.CurrentRoom.Players.Values)
+            {
+                if (player.UserId == uid)
+                {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) return false;
+        }
+        return true;
+    }
+
+    [PunRPC]
+    void TestRPC(string message)
+    {
+        Debug.Log($"🔥 RPC 받음: {message} (받은 플레이어: {PhotonNetwork.LocalPlayer.UserId})");
+    }
+    
     public override void OnPlayerEnteredRoom(PhotonPlayer newPlayer)
     {
   
         Debug.Log($"새로운 플레이어 입장: {newPlayer.NickName}");
         Debug.Log($"현재 플레이어 수: {PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}");
         EventManager.Broadcast(new GameStartEvent(GetPlayerTeam(PhotonNetwork.LocalPlayer)));
+        
+        string[] allowedUsers = {"DoImcscNSyNQ2tgfZ9nuhGQOwqn1", "giiieCwvE3Zk53fGCCLTH7BbT4B2"};
     }
 
     public override void OnPlayerLeftRoom(PhotonPlayer otherPlayer)
@@ -185,6 +341,7 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         Debug.Log("랜덤 방 입장 실패, 새로운 방 생성");
+        Debug.LogError($"JoinRandomRoom 실패: {message} (코드: {returnCode})");
         RoomOptions roomOptions = new RoomOptions
         {
             MaxPlayers = MaxPlayers,
