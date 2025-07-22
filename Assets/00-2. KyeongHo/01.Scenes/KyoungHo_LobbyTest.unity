@@ -1198,16 +1198,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1838789482}
-        m_TargetAssemblyTypeName: PhotonServerManager, Assembly-CSharp
-        m_MethodName: OnChat1ButtonClick
-        m_Mode: 1
+      - m_Target: {fileID: 1903362364167049595}
+        m_TargetAssemblyTypeName: UI_Lobby, Assembly-CSharp
+        m_MethodName: OnClickChatButton
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Chat1
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &590609331
@@ -1915,7 +1915,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.0006544812}
+  m_AnchoredPosition: {x: 0, y: 0.0003685736}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1524939441
@@ -2200,16 +2200,16 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1838789482}
-        m_TargetAssemblyTypeName: PhotonServerManager, Assembly-CSharp
-        m_MethodName: OnChat2ButtonClick
-        m_Mode: 1
+      - m_Target: {fileID: 1903362364167049595}
+        m_TargetAssemblyTypeName: UI_Lobby, Assembly-CSharp
+        m_MethodName: OnClickChatButton
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: 
+          m_StringArgument: Chat2
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1761035051
@@ -2631,7 +2631,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 2038160912}
   m_Direction: 2
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9999408
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3044,7 +3044,6 @@ MonoBehaviour:
   messageInputField: {fileID: 63881000}
   statusText: {fileID: 2059200326}
   chatText: {fileID: 1193299830}
-  sendMessageButton: {fileID: 316775424}
 --- !u!224 &2080185256
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3276,6 +3275,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1359688958949884764, guid: 2e5a7811f18affc458ea9adf39239fae, type: 3}
   m_PrefabInstance: {fileID: 1903362364167049593}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1903362364167049595 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3153931713911214438, guid: 2e5a7811f18affc458ea9adf39239fae, type: 3}
+  m_PrefabInstance: {fileID: 1903362364167049593}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b0a42e96bbf0f445bc386086d1d8e34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

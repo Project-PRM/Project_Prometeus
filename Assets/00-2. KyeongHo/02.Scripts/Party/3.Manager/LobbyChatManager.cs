@@ -1,311 +1,226 @@
 using System;
 using UnityEngine;
-using UnityEngine.UI;
-using Photon.Pun;
 using Photon.Chat;
 using ExitGames.Client.Photon;
+using Photon.Pun;
 using TMPro;
 
 public class LobbyChatManager : Singleton<LobbyChatManager>, IChatClientListener
 {
     public event Action<string> OnPartyJoinRoom;
     private ChatClient chatClient;
-    private string currentPartyChannelName;
-    private string pendingPartyName;
+    private string currentPartyName;
+    private bool isPartyLeader = false;
+    private bool isJoiningParty = false; // 파티 참여 중인지 확인용
 
     [Header("UI Elements")]
     public TMP_InputField messageInputField;
     public TextMeshProUGUI statusText;
     public TextMeshProUGUI chatText;
-    public Button sendMessageButton;
-
-    void Start()
-    {
-        if (sendMessageButton != null)
-            sendMessageButton.onClick.AddListener(SendMessage);
-    }
 
     void Update()
     {
-        if (chatClient != null)
-        {
-            chatClient.Service();
-        }
-        
-        // Enter키로 메시지 보내기
-        if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter))
-        {
-            SendMessage();
-        }
+        chatClient?.Service();
     }
 
-    // 외부에서 강제로 채팅 연결을 시작할 수 있는 메서드
-    public void ForceConnectToChat()
+    // 채팅 연결 상태 확인
+    public bool IsConnected()
     {
-        Debug.Log("강제 채팅 연결 시도...");
-        ConnectToChat();
+        return chatClient != null && chatClient.State == ChatState.ConnectedToFrontEnd;
     }
 
-    // ChatClient 상태를 외부에서 확인할 수 있는 메서드
-    public ChatClient GetChatClient()
-    {
-        return chatClient;
-    }
-
-    private void ConnectToChat()
-    {
-        // 기존 연결이 있다면 정리
-        if (chatClient != null)
-        {
-            if (chatClient.State == ChatState.ConnectedToFrontEnd)
-            {
-                Debug.Log("이미 채팅 서버에 연결되어 있습니다.");
-                return;
-            }
-            
-            chatClient.Disconnect();
-            chatClient = null;
-        }
-
-        // PhotonNetwork 연결 상태 확인
-        if (!PhotonNetwork.IsConnectedAndReady)
-        {
-            UpdateStatus("❌ Photon Network가 연결되지 않았습니다!");
-            Debug.LogError("PhotonNetwork가 연결되지 않은 상태에서 채팅 연결을 시도했습니다.");
-            return;
-        }
-
-        // 닉네임 확인
-        string nickname = PhotonNetwork.NickName;
-        if (string.IsNullOrEmpty(nickname))
-        {
-            UpdateStatus("❌ 닉네임이 설정되지 않았습니다!");
-            Debug.LogError("PhotonNetwork.NickName이 비어있습니다.");
-            return;
-        }
-
-        // AppIdChat 확인
-        string appIdChat = PhotonNetwork.PhotonServerSettings.AppSettings.AppIdChat;
-        if (string.IsNullOrEmpty(appIdChat))
-        {
-            UpdateStatus("❌ AppIdChat이 설정되지 않았습니다!");
-            Debug.LogError("AppIdChat이 PhotonServerSettings에 설정되지 않았습니다.");
-            Debug.Log("Window > Photon Unity Networking > PUN Setup에서 AppIdChat을 설정해주세요.");
-            return;
-        }
-
-        // 새로운 채팅 클라이언트 생성 및 연결
-        chatClient = new ChatClient(this);
-        AuthenticationValues authValues = new AuthenticationValues(nickname);
-        
-        Debug.Log($"채팅 연결 시도 - AppIdChat: {appIdChat.Substring(0, 8)}..., Nickname: {nickname}");
-        
-        bool connectResult = chatClient.Connect(appIdChat, PhotonNetwork.AppVersion, authValues);
-        
-        if (connectResult)
-        {
-            UpdateStatus("채팅 서버 연결 중...");
-            Debug.Log("채팅 연결 요청이 성공적으로 전송되었습니다.");
-        }
-        else
-        {
-            UpdateStatus("❌ 채팅 연결 요청 실패!");
-            Debug.LogError("chatClient.Connect() 호출이 실패했습니다.");
-        }
-    }
-
+    // 파티 참여
     public void JoinParty(string partyName)
     {
-        if (string.IsNullOrEmpty(partyName))
+        if (!IsConnected())
         {
-            UpdateStatus("파티 이름이 필요합니다.");
+            Debug.LogError("채팅 서버가 연결되지 않았습니다.");
             return;
         }
 
-        Debug.Log($"JoinParty 호출됨 - 파티명: {partyName}");
-
-        // 채팅 클라이언트 상태 확인
-        if (chatClient == null)
-        {
-            Debug.LogWarning("ChatClient가 null입니다. 대기열에 추가합니다.");
-            pendingPartyName = partyName;
-            UpdateStatus("채팅 클라이언트가 준비되지 않았습니다. 연결을 기다리는 중...");
-            ForceConnectToChat();
-            return;
-        }
-
-        Debug.Log($"현재 채팅 상태: {chatClient.State}");
-
-        if (chatClient.State != ChatState.ConnectedToFrontEnd)
-        {
-            pendingPartyName = partyName;
-            UpdateStatus($"채팅 서버 연결 대기 중... (상태: {chatClient.State})");
-            return;
-        }
-
-        // 파티 참여 시도
-        this.currentPartyChannelName = partyName;
-        bool subscribeResult = this.chatClient.Subscribe(new string[] { this.currentPartyChannelName });
+        currentPartyName = partyName;
+        isJoiningParty = true;
+        isPartyLeader = false; // 일단 리더가 아니라고 설정
         
-        if (subscribeResult)
+        chatClient.Subscribe(new string[] { partyName });
+        UpdateStatus($"파티 '{partyName}' 참여 중...");
+        
+        Debug.Log($"[JoinParty] 파티 참여 시작: {partyName}");
+    }
+
+    // 파티 리더 여부 확인
+    public bool IsPartyLeader() => isPartyLeader;
+    public string GetCurrentPartyName() => currentPartyName;
+
+    // 파티 초대 메시지 전송 (방 입장 시 자동 호출)
+    public void SendPartyInvite(string roomId)
+    {
+        if (!IsPartyLeader() || string.IsNullOrEmpty(currentPartyName)) return;
+        
+        string inviteMessage = $"!invite {roomId}";
+        chatClient.PublishMessage(currentPartyName, inviteMessage);
+        AddChatMessage("System", $"매치 찾음! 파티원들을 초대합니다.");
+        Debug.Log($"[PartyInvite] 초대 메시지 전송: {inviteMessage}");
+    }
+
+    // 일반 파티 메시지 전송
+    public void SendPartyMessage(string message)
+    {
+        if (string.IsNullOrEmpty(currentPartyName)) return;
+        chatClient.PublishMessage(currentPartyName, message);
+    }
+
+    // 강제 채팅 연결
+    public void ForceConnectToChat()
+    {
+        if (IsConnected()) return;
+
+        chatClient?.Disconnect();
+        chatClient = new ChatClient(this);
+
+        string appIdChat = PhotonNetwork.PhotonServerSettings.AppSettings.AppIdChat;
+        string nickname = PhotonNetwork.NickName;
+        
+        var authValues = new AuthenticationValues(nickname);
+        bool result = chatClient.Connect(appIdChat, PhotonNetwork.AppVersion, authValues);
+        
+        if (result)
         {
-            UpdateStatus($"파티 '{this.currentPartyChannelName}' 참여 중...");
-            Debug.Log($"파티 구독 요청 성공: {this.currentPartyChannelName}");
+            UpdateStatus("채팅 서버 연결 중...");
         }
         else
         {
-            UpdateStatus($"❌ 파티 참여 요청 실패!");
-            Debug.LogError($"파티 구독 실패: {this.currentPartyChannelName}");
+            Debug.LogError("채팅 연결 실패");
         }
     }
 
-    public void SendMessage()
-    {
-        if (chatClient == null || string.IsNullOrEmpty(currentPartyChannelName))
-        {
-            UpdateStatus("파티 채팅에 연결되지 않았습니다.");
-            return;
-        }
-
-        string message = messageInputField.text;
-        if (string.IsNullOrEmpty(message)) return;
-
-        chatClient.PublishMessage(currentPartyChannelName, message);
-        AddChatMessage("Me", message);
-        messageInputField.text = "";
-    }
-
+    // 파티 떠나기
     public void LeaveParty()
     {
-        if (chatClient != null && !string.IsNullOrEmpty(currentPartyChannelName))
+        if (string.IsNullOrEmpty(currentPartyName)) return;
+
+        if (isPartyLeader)
         {
-            chatClient.PublishMessage(currentPartyChannelName, $"{PhotonNetwork.NickName} has left the party.");
-            chatClient.Unsubscribe(new string[] { currentPartyChannelName });
-            currentPartyChannelName = "";
-            UpdateStatus("파티를 떠났습니다.");
-            ClearChat();
+            SendPartyMessage($"👑 파티 리더가 파티를 떠납니다.");
         }
+
+        chatClient.Unsubscribe(new string[] { currentPartyName });
+        currentPartyName = "";
+        isPartyLeader = false;
+        isJoiningParty = false;
+        UpdateStatus("파티를 떠났습니다.");
     }
 
-    #region Photon Chat Callbacks
+    #region Chat Callbacks
 
     public void OnConnected()
     {
         UpdateStatus("✅ 채팅 서버 연결 완료!");
-        Debug.Log("채팅 클라이언트 연결 성공!");
-        
-        // 대기 중인 파티가 있으면 자동 참여
-        if (!string.IsNullOrEmpty(pendingPartyName))
-        {
-            Debug.Log($"대기 중인 파티 참여: {pendingPartyName}");
-            string partyToJoin = pendingPartyName;
-            pendingPartyName = "";
-            JoinParty(partyToJoin);
-        }
+        Debug.Log("채팅 연결 완료");
     }
 
     public void OnSubscribed(string[] channels, bool[] results)
     {
         for (int i = 0; i < channels.Length; i++)
         {
-            Debug.Log($"채널 구독 결과 - {channels[i]}: {results[i]}");
-            
-            if (results[i] && channels[i] == this.currentPartyChannelName)
+            if (results[i] && channels[i] == currentPartyName)
             {
-                UpdateStatus($"✅ 파티 '{this.currentPartyChannelName}' 참여 완료!");
-                string joinMessage = $"{PhotonNetwork.NickName} joined the party!";
-                this.chatClient.PublishMessage(this.currentPartyChannelName, joinMessage);
-                AddChatMessage("System", $"파티 참여: {this.currentPartyChannelName}");
-            }
-            else if (!results[i])
-            {
-                UpdateStatus($"❌ 파티 '{channels[i]}' 참여 실패!");
-                Debug.LogError($"채널 구독 실패: {channels[i]}");
+                UpdateStatus($"✅ 파티 '{currentPartyName}' 참여 완료!");
+                
+                // 파티 참여 완료 후 리더 여부 결정
+                // 만약 다른 사용자가 없다면 자동으로 리더가 됨
+                if (isJoiningParty)
+                {
+                    isPartyLeader = true; // 일단 리더로 설정
+                    isJoiningParty = false;
+                    Debug.Log($"[PartyLeader] {PhotonNetwork.NickName}이(가) 파티 리더 후보가 되었습니다.");
+                }
+                
+                SendPartyMessage($"{PhotonNetwork.NickName} joined the party!");
+                AddChatMessage("System", $"파티 참여: {currentPartyName}");
             }
         }
     }
 
     public void OnGetMessages(string channelName, string[] senders, object[] messages)
     {
-        if (channelName == this.currentPartyChannelName)
+        if (channelName != currentPartyName) return;
+
+        for (int i = 0; i < senders.Length; i++)
         {
-            for (int i = 0; i < senders.Length; i++)
+            string message = messages[i].ToString();
+            string sender = senders[i];
+
+            // 자신이 보낸 메시지가 아닌 경우만 표시
+            if (sender != PhotonNetwork.NickName)
             {
-                string message = messages[i].ToString();
-                if (senders[i] != PhotonNetwork.NickName) // 자신의 메시지가 아닐 때만 추가
+                AddChatMessage(sender, message);
+
+                // 초대 메시지 처리
+                if (message.StartsWith("!invite "))
                 {
-                    AddChatMessage(senders[i], message);
+                    string roomId = message.Substring(8).Trim();
+                    Debug.Log($"[PartyInvite] {sender}로부터 방 초대: {roomId}");
+                    OnPartyJoinRoom?.Invoke(roomId);
+                    AddChatMessage("System", $"🎮 {sender}님이 매치를 찾았습니다! 참여중...");
+                }
+                // 다른 사용자의 join 메시지를 받으면 자신은 리더가 아님
+                else if (message.Contains("joined the party!") && isPartyLeader)
+                {
+                    // 이미 다른 사용자가 있다면 리더 권한 포기
+                    isPartyLeader = false;
+                    Debug.Log($"[PartyLeader] 다른 사용자가 먼저 있었습니다. 리더 권한 포기.");
                 }
             }
-            //명령어 파싱 -> PhotonServerManager에서 Action 구독
-            for (int i = 0; i < messages.Length; i++)
-            {
-                string message = messages[i].ToString();
+        }
+    }
+
+    public void OnUserSubscribed(string channel, string user)
+    {
+        AddChatMessage("System", $"👋 {user}님이 파티에 참여했습니다");
         
-                // 명령어 파싱
-                if (message.StartsWith("!invite"))
-                {
-                    if (message.Length > 7)
-                    {
-                        string roomId = message.Substring(7);
-                        OnPartyJoinRoom?.Invoke(roomId);
-                    }
-                }
-            }
+        Debug.Log($"[OnUserSubscribed] {user}님 참여, 현재 리더: {(isPartyLeader ? PhotonNetwork.NickName : "없음")}");
+    }
+
+    public void OnUserUnsubscribed(string channel, string user)
+    {
+        AddChatMessage("System", $"👋 {user}님이 파티를 떠났습니다");
+        
+        // 리더가 떠났다면 다음 사용자가 리더가 됨 (간단한 구현)
+        if (!isPartyLeader && !string.IsNullOrEmpty(currentPartyName))
+        {
+            isPartyLeader = true;
+            Debug.Log($"[PartyLeader] {PhotonNetwork.NickName}이(가) 새로운 파티 리더가 되었습니다.");
+            SendPartyMessage($"👑 {PhotonNetwork.NickName}님이 새로운 파티 리더입니다.");
         }
     }
 
     public void OnDisconnected()
     {
         UpdateStatus("❌ 채팅 서버 연결 끊김!");
-        Debug.LogWarning("채팅 서버 연결이 끊어졌습니다. 재연결을 시도합니다.");
-        Invoke(nameof(ConnectToChat), 2f);
+        Debug.LogWarning("채팅 연결 끊김 - 재연결 시도");
+        Invoke(nameof(ForceConnectToChat), 2f);
     }
 
     public void OnChatStateChange(ChatState state)
     {
         Debug.Log($"채팅 상태 변경: {state}");
-        
-        if (state == ChatState.Disconnected)
-        {
-            Debug.LogWarning("채팅 상태가 Disconnected로 변경되었습니다.");
-            Invoke(nameof(ConnectToChat), 2f);
-        }
     }
 
-    public void OnUnsubscribed(string[] channels) 
-    {
-        Debug.Log($"채널 구독 해제: {string.Join(", ", channels)}");
-    }
-    
+    // 사용하지 않는 콜백들
+    public void OnUnsubscribed(string[] channels) { }
     public void OnPrivateMessage(string sender, object message, string channelName) { }
     public void OnStatusUpdate(string user, int status, bool gotMessage, object message) { }
-    public void OnUserSubscribed(string channel, string user) 
-    {
-        AddChatMessage("System", $"👋 {user}님이 파티에 참여했습니다");
-        Debug.Log($"{user}가 채널 {channel}에 참여했습니다.");
-    }
-    public void OnUserUnsubscribed(string channel, string user) 
-    {
-        AddChatMessage("System", $"👋 {user}님이 파티를 떠났습니다");
-        Debug.Log($"{user}가 채널 {channel}을 떠났습니다.");
-    }
-    public void DebugReturn(DebugLevel level, string message) 
-    {
-        Debug.Log($"[Photon Chat Debug - {level}] {message}");
-    }
+    public void DebugReturn(DebugLevel level, string message) { }
 
     #endregion
 
-    #region Helper Methods
+    #region UI Helper Methods
 
     private void UpdateStatus(string message)
     {
         Debug.Log($"[채팅 상태] {message}");
-        if (statusText != null)
-        {
-            statusText.text = message;
-        }
+        if (statusText != null) statusText.text = message;
     }
 
     private void AddChatMessage(string sender, string message)
@@ -314,15 +229,6 @@ public class LobbyChatManager : Singleton<LobbyChatManager>, IChatClientListener
         {
             string timestamp = DateTime.Now.ToString("HH:mm");
             chatText.text += $"[{timestamp}] {sender}: {message}\n";
-            Canvas.ForceUpdateCanvases();
-        }
-    }
-
-    private void ClearChat()
-    {
-        if (chatText != null)
-        {
-            chatText.text = "";
         }
     }
 
