@@ -20,7 +20,7 @@ public class SpawnerUltimate : ITargetableSkill
     {
         if (_timer < Data.Cooltime)
         {
-            Debug.Log($"{character.Name} Ultimate is on cooldown.");
+            Debug.Log($"{character.Name} Skill is on cooldown.");
             return;
         }
 
@@ -28,6 +28,7 @@ public class SpawnerUltimate : ITargetableSkill
         target.y = 1.5f; // Y축 고정하여 2D 발사 느낌을 주기 위함
         Vector3 dir = (target - origin).normalized;
 
+        // 방향을 바라보도록 회전 (3D 기준으로 z축 전방)
         Quaternion rotation = Quaternion.LookRotation(dir);
 
         GameObject prefab = Resources.Load<GameObject>("Projectiles/" + Data.ProjectilePrefabName);
@@ -38,7 +39,6 @@ public class SpawnerUltimate : ITargetableSkill
             return;
         }
 
-        Debug.Log($"{origin} is where ultimate cube was born");
         GameObject projectile = GameObject.Instantiate(prefab, origin, rotation);
         projectile.GetComponent<IProjectile>().SetData(Data, character, dir);
 

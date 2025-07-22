@@ -80,12 +80,13 @@ public class UltimateProjectile : MonoBehaviour, IProjectile
 
     private void SpawnAoEField()
     {
-        GameObject field = Resources.Load<GameObject>("AttackerAoEField");
-        /*PhotonNetwork.*/GameObject.Instantiate(field, transform.position, Quaternion.identity);
+        //GameObject field = Resources.Load<GameObject>("AttackerAoEField");
+        //AttackerAoEField aoeField = field.GetComponent<AttackerAoEField>();
+        GameObject field = PhotonNetwork.Instantiate("AttackerAoEField", transform.position, Quaternion.identity);
         AttackerAoEField aoeField = field.GetComponent<AttackerAoEField>();
 
         aoeField.StartAoEField(_owner, _duration, _damage);
-        /*PhotonNetwork.*/Destroy(gameObject);
+        PhotonNetwork.Destroy(gameObject);
     }
 
     public void SetData(SkillData data, CharacterBase character, Vector3? direction, CharacterBase target = null)

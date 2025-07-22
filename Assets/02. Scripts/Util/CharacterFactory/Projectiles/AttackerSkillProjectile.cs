@@ -69,7 +69,7 @@ public class AttackerSkillProjectile : MonoBehaviour, IProjectile
             }
         }
 
-        /*PhotonNetwork.*/Destroy(gameObject);
+        PhotonNetwork.Destroy(gameObject);
     }
 
     private void OnDrawGizmos()
