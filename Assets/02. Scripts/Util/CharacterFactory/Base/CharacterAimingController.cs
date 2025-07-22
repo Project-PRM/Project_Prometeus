@@ -26,6 +26,11 @@ public class CharacterAimingController
 
     public void Update()
     {
+        if (!_owner.PhotonView.IsMine)
+        {
+            return;
+        }
+
         if (!IsAiming)
         {
             if (Input.GetMouseButtonDown(0)) // 좌클릭
@@ -39,11 +44,8 @@ public class CharacterAimingController
                 }
             }
             return;
-        }        /*if (!_owner.PhotonView.IsMine)
-        {
-            return;
-        }*/
-
+        }        
+        
         UpdateAimingUI();
 
         if (Input.GetMouseButtonDown(0)) // 좌클릭
