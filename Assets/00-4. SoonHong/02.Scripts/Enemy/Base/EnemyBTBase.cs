@@ -5,6 +5,9 @@ using UnityEngine.AI;
 
 public class EnemyBTBase : MonoBehaviour
 {
+    [Header("# Components")]
+    private EnemyBase _enemyBase;
+
     [Header("영역 기준 오브젝트")]
     public EnemyAreaZone AreaObject;
 
@@ -12,7 +15,7 @@ public class EnemyBTBase : MonoBehaviour
     public List<GameObject> PatrolPoints;
 
     [Header("Enemy 스텟")]
-    public EnemyBTStat EnemyStat;
+    private EnemyData EnemyStat => _enemyBase.EnemyData;
 
     private GameObject _target;
     private NavMeshAgent _navMeshAgent;
@@ -20,11 +23,11 @@ public class EnemyBTBase : MonoBehaviour
 
     private void Awake()
     {
+        _enemyBase = GetComponent<EnemyBase>();
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _behaviorAgent = GetComponent<BehaviorGraphAgent>();
-
-        Init();
     }
+
     public void Init()
     {
         if (PatrolPoints != null && PatrolPoints.Count > 0)
@@ -32,8 +35,8 @@ public class EnemyBTBase : MonoBehaviour
             _behaviorAgent.SetVariableValue("PatrolPoints", PatrolPoints);
         }
         _behaviorAgent.SetVariableValue("AreaObject", AreaObject.gameObject);
-        _behaviorAgent.SetVariableValue("MoveSpeed", EnemyStat.MoveSpeed);
-        _behaviorAgent.SetVariableValue("AttackDistance", EnemyStat.AttackDistance);
+        _behaviorAgent.SetVariableValue("MoveSpeed", EnemyStat.Speed);
+        _behaviorAgent.SetVariableValue("AttackDistance", EnemyStat.AttackRange);
         _behaviorAgent.SetVariableValue("AreaRadius", AreaObject.AreaRadius);
         _behaviorAgent.SetVariableValue("IsMasterClient", Photon.Pun.PhotonNetwork.IsMasterClient);
     }
@@ -46,7 +49,7 @@ public class EnemyBTBase : MonoBehaviour
     public void TargetSetup(GameObject target)
     {
         _target = target;
-        _behaviorAgent.SetVariableValue("Target", target);
+        _behaviorAgent.SetVariableValue("Target", target);  
         _behaviorAgent.SetVariableValue("IsTargetDetected", true);
     }
 
