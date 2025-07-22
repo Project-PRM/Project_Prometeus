@@ -21,7 +21,7 @@ public class CharacterInventory : MonoBehaviour
 
     private void Update()
     {
-        if (_character.PhotonView.IsMine)
+        if (!_character.PhotonView.IsMine)
         {
             return;
         }

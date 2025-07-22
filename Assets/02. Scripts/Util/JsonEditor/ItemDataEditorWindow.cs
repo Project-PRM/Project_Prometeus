@@ -1,9 +1,9 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
-
 public class ItemDataJsonEditorWindow : EditorWindow
 {
     private Dictionary<string, ItemData> _items = new();
@@ -163,3 +163,4 @@ public class ItemDataJsonEditorWindow : EditorWindow
         AssetDatabase.Refresh();
     }
 }
+#endif
