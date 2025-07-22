@@ -35,7 +35,7 @@ public class SpawnerSkill : ITargetableSkill
 
         if (prefab == null)
         {
-            Debug.LogError($"프리팹 {Data.ProjectilePrefabName} 을(를) Resources/Summons 에서 찾을 수 없습니다.");
+            Debug.LogError($"프리팹 {Data.SummonPrefabName} 을(를) Resources/Summons 에서 찾을 수 없습니다.");
             return;
         }
 

@@ -20,7 +20,7 @@ public class SlowField : MonoBehaviour
     private void Start()
     {
         _slowEffect = new StatModifier();
-        _slowEffect.Add(EStatType.MoveSpeed, -2);
+        _slowEffect.Add(EStatType.MoveSpeed, _slowAmount);
     }
 
     private void OnTriggerEnter(Collider other)
