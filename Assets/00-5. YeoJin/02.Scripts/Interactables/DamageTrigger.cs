@@ -31,7 +31,7 @@ public class DamageTrigger : MonoBehaviour
         Debug.Log($"collided with {other.gameObject.name}");
         IDamageable target = other.gameObject.GetComponent<IDamageable>();
 
-        if(other.TryGetComponent<CharacterBehaviour>(out var behaviour))
+        /*if(other.TryGetComponent<CharacterBehaviour>(out var behaviour))
         {
             CharacterBase otherchar = behaviour.GetCharacterBase();
             if (otherchar.Team == _curTeam)
@@ -39,7 +39,7 @@ public class DamageTrigger : MonoBehaviour
                 Debug.Log(" is the same team");
                 return; // 같은 팀이면 무시
             }
-        }
+        }*/
 
         if (target != null && target != (IDamageable)Owner && !_damagedThisActivation.Contains(target))
         {

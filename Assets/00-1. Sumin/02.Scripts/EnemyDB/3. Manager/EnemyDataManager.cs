@@ -14,15 +14,6 @@ public class EnemyDataManager : Singleton<EnemyDataManager>
         await _enemyDataRepository.InitializeAsync();
     }
 
-    public async Task<EnemyData> GetEnemyDataAsync(string enemyName)
-    {
-        if (_enemyDataRepository.Initialized == false)
-        {
-            await _enemyDataRepository.InitializeAsync();
-        }
-        return await _enemyDataRepository.GetEnemyDataAsync(enemyName);
-    }
-
     public bool TryGetEnemyData(string enemyName, out EnemyData enemyData)
     {
         if (_enemyDataRepository.Enemies.TryGetValue(enemyName, out var original))
