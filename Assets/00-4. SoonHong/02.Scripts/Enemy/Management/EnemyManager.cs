@@ -10,7 +10,7 @@ public class EnemyManager : PunSingleton<EnemyManager>
 
     private readonly List<EnemyBase> _allEnemies = new List<EnemyBase>();
 
-    private void Awake()
+    protected override void Awake()
     {
         // 수동 지정된 적들 등록
         foreach (var enemy in _presetEnemies)

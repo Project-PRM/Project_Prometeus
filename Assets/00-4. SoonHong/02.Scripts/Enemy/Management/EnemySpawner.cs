@@ -45,7 +45,7 @@ public class EnemySpawner : MonoBehaviourPun
             EnemyManager.Instance.Register(enemy);
         }
 
-        EnemyBTBase bt = enemyGO.GetComponent<EnemyBTBase>();
-        bt?.Init();
+        /*EnemyBTBase bt = enemyGO.GetComponent<EnemyBTBase>();
+        bt?.Init();*/
     }
 }
