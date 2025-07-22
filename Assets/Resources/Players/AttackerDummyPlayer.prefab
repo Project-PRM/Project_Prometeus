@@ -369,7 +369,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 11
   m_Type: 2
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.88140154, g: 0.572941, b: 0.32666495, a: 1}
   m_Intensity: 10
   m_Range: 10
   m_SpotAngle: 179
@@ -1841,6 +1841,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
+  - {fileID: 7720867957581531830}
   - {fileID: 3288031797573168734}
   - {fileID: 946712415500831582}
   sceneViewId: 0
