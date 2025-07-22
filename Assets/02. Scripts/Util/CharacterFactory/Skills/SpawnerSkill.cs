@@ -35,12 +35,12 @@ public class SpawnerSkill : ITargetableSkill
 
         if (prefab == null)
         {
-            Debug.LogError($"프리팹 {Data.ProjectilePrefabName} 을(를) Resources/Projectiles 에서 찾을 수 없습니다.");
+            Debug.LogError($"프리팹 {Data.ProjectilePrefabName} 을(를) Resources/Summons 에서 찾을 수 없습니다.");
             return;
         }
 
-        GameObject projectile = GameObject.Instantiate(prefab, origin, rotation);
-        projectile.GetComponent<IProjectile>().SetData(Data, character, dir);
+        GameObject summon = GameObject.Instantiate(prefab, origin, rotation);
+        summon.GetComponent<ISummonObject>().SetData(Data, character);
 
         _timer = 0f;
     }
