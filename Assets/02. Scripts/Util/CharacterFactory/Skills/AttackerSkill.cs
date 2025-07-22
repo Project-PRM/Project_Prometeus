@@ -1,4 +1,5 @@
 using UnityEngine;
+using Photon.Pun;
 
 /// <summary>
 /// 투사체 발사형 스킬
@@ -42,7 +43,7 @@ public class AttackerSkill : ITargetableSkill
             return;
         }
 
-        GameObject projectile = GameObject.Instantiate(prefab, origin, rotation);
+        GameObject projectile = /*GameObject.*/PhotonNetwork.Instantiate($"Projectiles/{Data.ProjectilePrefabName}", origin, rotation);
         projectile.GetComponent<IProjectile>().SetData(Data, character, dir);
 
         _timer = 0f;
