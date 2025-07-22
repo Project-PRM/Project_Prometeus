@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Photon.Chat;
 using ExitGames.Client.Photon;
@@ -12,7 +14,8 @@ public class LobbyChatManager : Singleton<LobbyChatManager>, IChatClientListener
     private string currentPartyName;
     private bool isPartyLeader = false;
     private bool isJoiningParty = false; // 파티 참여 중인지 확인용
-
+    private int currentPartyMemberCount = 0; // 파티 인원수 추적
+    private HashSet<string> partyMembers = new HashSet<string>(); // 파티원 목록
     [Header("UI Elements")]
     public TMP_InputField messageInputField;
     public TextMeshProUGUI statusText;
@@ -27,6 +30,18 @@ public class LobbyChatManager : Singleton<LobbyChatManager>, IChatClientListener
     public bool IsConnected()
     {
         return chatClient != null && chatClient.State == ChatState.ConnectedToFrontEnd;
+    }
+
+    // 파티 인원수 반환
+    public int GetPartyMemberCount()
+    {
+        return currentPartyMemberCount;
+    }
+
+    // 파티원 목록 반환
+    public string[] GetPartyMembers()
+    {
+        return partyMembers.ToArray();
     }
 
     // 파티 참여
@@ -104,31 +119,39 @@ public class LobbyChatManager : Singleton<LobbyChatManager>, IChatClientListener
             SendPartyMessage($"👑 파티 리더가 파티를 떠납니다.");
         }
 
+        // 파티원 목록에서 자신 제거
+        partyMembers.Remove(PhotonNetwork.NickName);
+        currentPartyMemberCount = 0; // 자신이 떠나면 0으로 리셋
+        partyMembers.Clear(); // 목록 초기화
+
         chatClient.Unsubscribe(new string[] { currentPartyName });
         currentPartyName = "";
         isPartyLeader = false;
         isJoiningParty = false;
         UpdateStatus("파티를 떠났습니다.");
     }
-
-    #region Chat Callbacks
-
     public void OnConnected()
     {
         UpdateStatus("✅ 채팅 서버 연결 완료!");
         Debug.Log("채팅 연결 완료");
     }
 
+    public void OnPrivateMessage(string sender, object message, string channelName)
+    {
+        throw new NotImplementedException();
+    }
     public void OnSubscribed(string[] channels, bool[] results)
     {
         for (int i = 0; i < channels.Length; i++)
         {
             if (results[i] && channels[i] == currentPartyName)
             {
-                UpdateStatus($"✅ 파티 '{currentPartyName}' 참여 완료!");
+                // 자신을 파티원에 추가
+                partyMembers.Add(PhotonNetwork.NickName);
+                currentPartyMemberCount = partyMembers.Count;
                 
-                // 파티 참여 완료 후 리더 여부 결정
-                // 만약 다른 사용자가 없다면 자동으로 리더가 됨
+                UpdateStatus($"✅ 파티 '{currentPartyName}' 참여 완료! ({currentPartyMemberCount}명)");
+                
                 if (isJoiningParty)
                 {
                     isPartyLeader = true; // 일단 리더로 설정
@@ -137,9 +160,17 @@ public class LobbyChatManager : Singleton<LobbyChatManager>, IChatClientListener
                 }
                 
                 SendPartyMessage($"{PhotonNetwork.NickName} joined the party!");
-                AddChatMessage("System", $"파티 참여: {currentPartyName}");
+                AddChatMessage("System", $"파티 참여: {currentPartyName} ({currentPartyMemberCount}명)");
             }
         }
+    }
+    public void OnUnsubscribed(string[] channels)
+    {
+        throw new NotImplementedException();
+    }
+    public void OnStatusUpdate(string user, int status, bool gotMessage, object message)
+    {
+        throw new NotImplementedException();
     }
 
     public void OnGetMessages(string channelName, string[] senders, object[] messages)
@@ -177,24 +208,42 @@ public class LobbyChatManager : Singleton<LobbyChatManager>, IChatClientListener
 
     public void OnUserSubscribed(string channel, string user)
     {
-        AddChatMessage("System", $"👋 {user}님이 파티에 참여했습니다");
-        
-        Debug.Log($"[OnUserSubscribed] {user}님 참여, 현재 리더: {(isPartyLeader ? PhotonNetwork.NickName : "없음")}");
+        if (channel == currentPartyName)
+        {
+            partyMembers.Add(user);
+            currentPartyMemberCount = partyMembers.Count;
+            
+            AddChatMessage("System", $"👋 {user}님이 파티에 참여했습니다 ({currentPartyMemberCount}명)");
+            Debug.Log($"[PartyCount] 현재 파티 인원: {currentPartyMemberCount}명");
+            
+            // UI 업데이트 이벤트 발생 (필요시)
+            //EventManager.Broadcast(new PartyMemberCountChangedEvent(currentPartyMemberCount));
+        }
     }
 
     public void OnUserUnsubscribed(string channel, string user)
     {
-        AddChatMessage("System", $"👋 {user}님이 파티를 떠났습니다");
-        
-        // 리더가 떠났다면 다음 사용자가 리더가 됨 (간단한 구현)
-        if (!isPartyLeader && !string.IsNullOrEmpty(currentPartyName))
+        if (channel == currentPartyName)
         {
-            isPartyLeader = true;
-            Debug.Log($"[PartyLeader] {PhotonNetwork.NickName}이(가) 새로운 파티 리더가 되었습니다.");
-            SendPartyMessage($"👑 {PhotonNetwork.NickName}님이 새로운 파티 리더입니다.");
+            partyMembers.Remove(user);
+            currentPartyMemberCount = partyMembers.Count;
+
+            AddChatMessage("System", $"👋 {user}님이 파티를 떠났습니다 ({currentPartyMemberCount}명)");
+            Debug.Log($"[PartyCount] 현재 파티 인원: {currentPartyMemberCount}명");
+
+            // 리더가 떠났다면 다음 사용자가 리더가 됨
+            if (!isPartyLeader && currentPartyMemberCount > 0)
+            {
+                isPartyLeader = true;
+                Debug.Log($"[PartyLeader] {PhotonNetwork.NickName}이(가) 새로운 파티 리더가 되었습니다.");
+                SendPartyMessage($"👑 {PhotonNetwork.NickName}님이 새로운 파티 리더입니다.");
+            }
         }
     }
 
+    public void DebugReturn(DebugLevel level, string message)
+    {
+    }
     public void OnDisconnected()
     {
         UpdateStatus("❌ 채팅 서버 연결 끊김!");
@@ -207,15 +256,8 @@ public class LobbyChatManager : Singleton<LobbyChatManager>, IChatClientListener
         Debug.Log($"채팅 상태 변경: {state}");
     }
 
-    // 사용하지 않는 콜백들
-    public void OnUnsubscribed(string[] channels) { }
-    public void OnPrivateMessage(string sender, object message, string channelName) { }
-    public void OnStatusUpdate(string user, int status, bool gotMessage, object message) { }
-    public void DebugReturn(DebugLevel level, string message) { }
 
-    #endregion
 
-    #region UI Helper Methods
 
     private void UpdateStatus(string message)
     {
@@ -231,6 +273,4 @@ public class LobbyChatManager : Singleton<LobbyChatManager>, IChatClientListener
             chatText.text += $"[{timestamp}] {sender}: {message}\n";
         }
     }
-
-    #endregion
 }

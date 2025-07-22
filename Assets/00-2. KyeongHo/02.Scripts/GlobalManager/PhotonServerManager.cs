@@ -57,13 +57,41 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
             return;
         }
 
-        Debug.Log("[PartyMatchmaking] 파티 리더가 매칭을 시작합니다.");
-        PhotonNetwork.JoinRandomRoom();
-    }
+        // 현재 파티 인원수 확인
+        int partySize = GetCurrentPartySize();
+        Debug.Log($"[PartyMatchmaking] 파티 인원: {partySize}명으로 매칭을 시작합니다.");
 
+        // 파티 인원수에 따른 방 찾기
+        JoinRoomForParty(partySize);
+    }
+    // 현재 파티 인원수를 확인하는 메서드 (LobbyChatManager에서 구현 필요)
+    private int GetCurrentPartySize()
+    {
+        // 파티 채팅에 참여한 인원수를 반환
+        // 이 메서드는 LobbyChatManager에서 구현해야 함
+        return LobbyChatManager.Instance.GetPartyMemberCount();
+    }
+    // 파티 인원수에 맞는 방에 참여
+    private void JoinRoomForParty(int partySize)
+    {
+        // 간단한 방식: 커스텀 프로퍼티 없이 최대 플레이어 수만 지정
+        byte expectedMaxPlayers = (byte)Mathf.Max(MaxPlayers, partySize);
+    
+        bool result = PhotonNetwork.JoinRandomRoom(null, expectedMaxPlayers);
+
+        if (!result)
+        {
+            Debug.LogError("파티 매칭 요청 실패");
+        }
+        else
+        {
+            Debug.Log($"파티 인원 {partySize}명으로 랜덤 룸 참여 시도 (간단 버전)");
+        }
+    }
     // 솔로 매칭
     public void JoinRandomRoom()
     {
+        Debug.Log("[SoloMatchmaking] 개인 매칭 시작");
         PhotonNetwork.JoinRandomRoom();
     }
 
@@ -212,13 +240,33 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        Debug.Log("랜덤 방 입장 실패, 새로운 방 생성");
+        Debug.Log($"랜덤 방 입장 실패: {message}, 새로운 방 생성");
+    
+        // 파티 매칭 중이었다면 파티 인원수를 고려한 방 생성
+        int partySize = 0;
+        if (LobbyChatManager.Instance.IsPartyLeader())
+        {
+            partySize = GetCurrentPartySize();
+            Debug.Log($"파티 인원 {partySize}명을 위한 방 생성");
+        }
+    
         RoomOptions roomOptions = new RoomOptions
         {
             MaxPlayers = MaxPlayers,
             IsVisible = true,
             IsOpen = true
         };
+    
+        // 파티 정보를 방 프로퍼티에 저장 (선택사항)
+        if (partySize > 0)
+        {
+            roomOptions.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable
+            {
+                {"partySize", partySize}
+            };
+            roomOptions.CustomRoomPropertiesForLobby = new string[] { "partySize" };
+        }
+    
         PhotonNetwork.CreateRoom(null, roomOptions);
     }
 
