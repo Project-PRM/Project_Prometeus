@@ -16,6 +16,7 @@ public class UltimateProjectile : MonoBehaviour, IProjectile
     private Vector3 _direction;
     private float _traveledDistance = 0f;
     private bool _isInitialized = false;
+    private bool _hasExploded = false;
 
     // Bezier
     private Vector3 _startPosition;
@@ -49,6 +50,7 @@ public class UltimateProjectile : MonoBehaviour, IProjectile
         {
             _bezierT = 1f;
             SpawnAoEField();
+            _hasExploded = true;
             return;
         }
 
@@ -76,10 +78,12 @@ public class UltimateProjectile : MonoBehaviour, IProjectile
         // 팀원 처리
 
         SpawnAoEField();
+        _hasExploded = true;
     }
 
     private void SpawnAoEField()
     {
+        if (_hasExploded) return;
         //GameObject field = Resources.Load<GameObject>("AttackerAoEField");
         //AttackerAoEField aoeField = field.GetComponent<AttackerAoEField>();
         GameObject field = PhotonNetwork.Instantiate("AttackerAoEField", transform.position, Quaternion.identity);
