@@ -15,6 +15,7 @@ public class CharacterMove : MonoBehaviour
     private Camera _mainCamera;
 
     private CharacterBehaviour _characterBehaviour;
+    private CharacterBase _character;
 
     private void Awake()
     {
@@ -79,6 +80,8 @@ public class CharacterMove : MonoBehaviour
     {
         if (!_characterBehaviour.PhotonView.IsMine) return;
 
+        if (_character == null) _character = _characterBehaviour.GetCharacterBase();
+
         Vector3 move = new Vector3(_movement.x, 0, _movement.y);
 
         // 중력
@@ -93,7 +96,7 @@ public class CharacterMove : MonoBehaviour
 
         move.y = _yVelocity;
 
-        float speed = _isSprinting ? 10f : 5f;
+        float speed = _isSprinting ? _character.BaseStats.MoveSpeed * 2: _character.BaseStats.MoveSpeed;
         _characterBehaviour.Controller.Move(move * speed * Time.deltaTime);
     }
 }

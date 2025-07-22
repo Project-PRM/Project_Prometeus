@@ -100,7 +100,7 @@
   "NewSkill7": {
     "SkillName": "BuffPassive",
     "Damage": 0.0,
-    "BuffAmount": 10.0,
+    "BuffAmount": 5.0,
     "DebuffAmount": 0.0,
     "Cost": 0.0,
     "Cooltime": 0.0,
@@ -114,7 +114,7 @@
   "NewSkill8": {
     "SkillName": "BuffSkill",
     "Damage": 0.0,
-    "BuffAmount": 10.0,
+    "BuffAmount": 30.0,
     "DebuffAmount": 0.0,
     "Cost": 0.0,
     "Cooltime": 0.0,
@@ -128,7 +128,7 @@
   "NewSkill9": {
     "SkillName": "BuffUltimate",
     "Damage": 0.0,
-    "BuffAmount": 10.0,
+    "BuffAmount": 20.0,
     "DebuffAmount": 0.0,
     "Cost": 0.0,
     "Cooltime": 0.0,
