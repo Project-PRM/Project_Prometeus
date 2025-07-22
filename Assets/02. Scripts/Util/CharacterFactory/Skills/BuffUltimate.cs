@@ -32,7 +32,10 @@ public class BuffUltimate : ISkillNoTarget
             {
                 // TODO : 팀원만 타겟팅 (같은 팀 여부 판단 로직 필요)
                 CharacterBase targetCharacter = behaviour.GetCharacterBase();
-                if(targetCharacter.Behaviour.TryGetComponent<IStatusAffectable>(out var statusAffectable))
+
+                if (targetCharacter.Team != character.Team) continue;
+
+                if (targetCharacter.Behaviour.TryGetComponent<IStatusAffectable>(out var statusAffectable))
                 {
                     statusAffectable.ApplyEffect(new ArmorBuffEffect(Data.BuffAmount, Data.Duration));
                 }

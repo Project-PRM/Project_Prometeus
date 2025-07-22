@@ -27,7 +27,13 @@ public class BuffSkill : IUnitTargetSkill
             return;
         }
         // TODO : 같은/다른 팀 여부 판단 구현할것
-        if(target.Behaviour.TryGetComponent<IDamageable>(out var damageable))
+        if (user.Team != target.Team)
+        {
+            Debug.Log($"{user.Name} tried to use BuffSkill on enemy {target.Name} — blocked.");
+            return;
+        }
+
+        if (target.Behaviour.TryGetComponent<IDamageable>(out var damageable))
         {
             damageable.Heal(Data.BuffAmount);
         }

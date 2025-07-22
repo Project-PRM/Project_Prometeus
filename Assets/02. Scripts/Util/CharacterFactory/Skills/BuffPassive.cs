@@ -19,7 +19,8 @@ public class BuffPassive : IPermanentSkill
     public void Activate(CharacterBase character)
     {
         var buffMod = new StatModifier();
-        buffMod.Add(EStatType.BaseArmor, Data.BuffAmount);
+        buffMod.Add(EStatType.MoveSpeed, Data.BuffAmount);
+        buffMod.Add(EStatType.MaxHealth, Data.BuffAmount);
         character.AddStatModifier(buffMod);
     }
 }

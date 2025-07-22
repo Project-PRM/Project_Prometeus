@@ -1621,6 +1621,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e68c1515be3d5304a8f50369df94b39b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Fill: {fileID: 420707255475721354}
 --- !u!1 &3922502256788671170
 GameObject:
   m_ObjectHideFlags: 0
@@ -1932,6 +1933,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 00a67aa3-a054-4dae-b52d-a2716a40f96d
     m_ActionName: 'Player/Passive[/Keyboard/leftShift]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 81d58be2-2339-427c-b7b5-6448c236b944
+    m_ActionName: 'Player/TakeDamage[/Keyboard/5]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -1975,6 +1980,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nickname: {fileID: 8117357185280395661}
+  _healthBar: {fileID: 4378372870005150367}
 --- !u!95 &3284400772661504412
 Animator:
   serializedVersion: 7
@@ -2055,9 +2061,20 @@ MonoBehaviour:
   - Type: 1
     SynchronizeType: 0
     Name: Move
+  - Type: 9
+    SynchronizeType: 0
+    Name: BasicAttack
+  - Type: 9
+    SynchronizeType: 0
+    Name: Attack2
+  - Type: 4
+    SynchronizeType: 0
+    Name: IsFirstAttack
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0
+  - SynchronizeType: 0
+    LayerIndex: 1
 --- !u!114 &6380600178584220153
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2830,6 +2847,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0db054bec985a4438a5dc97b375e016, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Owner: {fileID: 0}
   AttackRange: {fileID: 3606796518837174902}
 --- !u!1 &7776966931221405178
 GameObject:

@@ -1700,6 +1700,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: 00a67aa3-a054-4dae-b52d-a2716a40f96d
     m_ActionName: 'Player/Passive[/Keyboard/leftShift]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 81d58be2-2339-427c-b7b5-6448c236b944
+    m_ActionName: 'Player/TakeDamage[/Keyboard/5]'
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: Keyboard&Mouse
   m_DefaultActionMap: Player
@@ -1730,6 +1734,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nickname: {fileID: 8117357185280395661}
+  _healthBar: {fileID: 4939555057988416672}
 --- !u!114 &3177763884507239518
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2148,6 +2153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e68c1515be3d5304a8f50369df94b39b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Fill: {fileID: 3579362542490289893}
 --- !u!1 &5006226785151003473
 GameObject:
   m_ObjectHideFlags: 0
