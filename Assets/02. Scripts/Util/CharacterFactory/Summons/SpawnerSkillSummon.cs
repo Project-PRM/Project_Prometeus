@@ -1,3 +1,5 @@
+using Photon.Pun;
+using Photon.Pun.Demo.SlotRacer.Utils;
 using UnityEngine;
 using FOW;
 
@@ -41,8 +43,8 @@ public class SpawnerSkillSummon : MonoBehaviour, ISummonObject, IDamageable
 
     private void SpawnSlowField()
     {
-        GameObject prefab = Resources.Load<GameObject>("SlowField");
-        /*PhotonNetwork.*/
+        /*GameObject prefab = Resources.Load<GameObject>("SlowField");
+        *//*PhotonNetwork.*//*
         GameObject field = Instantiate(
         prefab,
         transform.position,
@@ -50,6 +52,12 @@ public class SpawnerSkillSummon : MonoBehaviour, ISummonObject, IDamageable
         transform
         );
 
+        SlowField slowField = field.GetComponent<SlowField>();
+        slowField.StartSlowField(_owner, _debuffAmount);*/
+
+        Vector3 spawnPosition = transform.position;
+
+        GameObject field = PhotonNetwork.Instantiate("SlowField", spawnPosition, Quaternion.identity);
         SlowField slowField = field.GetComponent<SlowField>();
         slowField.StartSlowField(_owner, _debuffAmount);
     }
@@ -60,7 +68,7 @@ public class SpawnerSkillSummon : MonoBehaviour, ISummonObject, IDamageable
         _curHealth -= DamageCalculator.CalculateDamage(damage, 0);
         if(_curHealth <= 0)
         {
-            Destroy(this);
+            PhotonNetwork.Destroy(gameObject);
         }
     }
 
