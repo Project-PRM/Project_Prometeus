@@ -222,5 +222,47 @@
     "Speed": 0.0,
     "ProjectilePrefabName": null,
     "IndicatorPrefabName": null
+  },
+  "NewSkill16": {
+    "SkillName": "SpawnerPassive",
+    "Damage": 0.0,
+    "BuffAmount": 0.0,
+    "DebuffAmount": 0.0,
+    "Cost": 0.0,
+    "Cooltime": 0.0,
+    "Duration": 0.0,
+    "Radius": 0.0,
+    "MaxRange": 0.0,
+    "Speed": 0.0,
+    "ProjectilePrefabName": null,
+    "IndicatorPrefabName": null
+  },
+  "NewSkill17": {
+    "SkillName": "SpawnerSkill",
+    "Damage": 0.0,
+    "BuffAmount": 0.0,
+    "DebuffAmount": 0.0,
+    "Cost": 0.0,
+    "Cooltime": 0.0,
+    "Duration": 0.0,
+    "Radius": 0.0,
+    "MaxRange": 0.0,
+    "Speed": 0.0,
+    "ProjectilePrefabName": null,
+    "IndicatorPrefabName": null
+  },
+  "NewSkill18": {
+    "SkillName": "SpawnerUltimate",
+    "Damage": 0.0,
+    "BuffAmount": 0.0,
+    "DebuffAmount": 0.0,
+    "Cost": 0.0,
+    "Cooltime": 0.0,
+    "Duration": 0.0,
+    "Radius": 0.0,
+    "MaxRange": 0.0,
+    "Speed": 0.0,
+    "ProjectilePrefabName": null,
+    "IndicatorPrefabName": null
   }
 }
