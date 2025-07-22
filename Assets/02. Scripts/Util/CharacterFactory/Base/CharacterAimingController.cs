@@ -108,13 +108,8 @@ public class CharacterAimingController
         {
             if (hit.TryGetComponent<IPickupable>(out var pickupable))
             {
-                /*var inventory = _owner.GetCharacterBase().Inventory;
-                if (pickupable.Pickup(inventory))
-                {
-                    // 아이템 주웠으면 오브젝트 파괴하거나 비활성화
-                    GameObject.Destroy(hit.gameObject);
-                    return true;
-                }*/
+                _owner.PickUpItem(pickupable);
+                break; // 중복으로 줍지 않도록 체크
             }
         }
         return false;
