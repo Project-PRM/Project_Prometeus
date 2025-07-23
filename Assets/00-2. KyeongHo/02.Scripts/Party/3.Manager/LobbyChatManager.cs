@@ -17,7 +17,6 @@ public class LobbyChatManager : Singleton<LobbyChatManager>, IChatClientListener
     private int currentPartyMemberCount = 0; // 파티 인원수 추적
     private HashSet<string> partyMembers = new HashSet<string>(); // 파티원 목록
     [Header("UI Elements")]
-    public TMP_InputField messageInputField;
     public TextMeshProUGUI statusText;
     public TextMeshProUGUI chatText;
 
