@@ -69,23 +69,22 @@ public class AttackerSkillProjectile : MonoBehaviour, IProjectile
         {
             if (hit.TryGetComponent<IDamageable>(out var target))
             {
-                if (target is MonoBehaviour mb && mb.TryGetComponent<PhotonView>(out var pv))
+                if (target is MonoBehaviour mb && mb.TryGetComponent<PhotonView>(out var targetView))
                 {
                     // 자신 제외
-                    if (_owner != null && pv.ViewID == _owner.Behaviour.PhotonView.ViewID)
+                    if (_owner != null && targetView.ViewID == _owner.Behaviour.PhotonView.ViewID)
                         continue;
 
                     // 팀원 제외 (선택적으로)
                     // if (_owner.Team == target.Team) continue;
 
-                    pv.RPC("RPC_TakeDamage", pv.Owner, _damage);
+                    targetView.RPC("RPC_TakeDamage", RpcTarget.AllBuffered, _damage);
                 }
             }
         }
 
         PhotonNetwork.Destroy(gameObject);
     }
-
 
     private void OnDrawGizmos()
     {
