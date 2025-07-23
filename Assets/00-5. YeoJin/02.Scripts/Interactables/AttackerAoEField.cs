@@ -26,21 +26,17 @@ public class AttackerAoEField : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        var target = other.GetComponent<IDamageable>();
-        if (target != null)
+        if(other.TryGetComponent<IDamageable>(out var damageable) && damageable != _damageSelf)
         {
-            _targetsInRange.Add(target);
-            Debug.Log($"triggered with {other.gameObject}");
+            _targetsInRange.Add(damageable);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        var target = other.GetComponent<IDamageable>();
-        if (target != null)
+        if (other.TryGetComponent<IDamageable>(out var damageable) && damageable != _damageSelf)
         {
-            _targetsInRange.Remove(target);
-            Debug.Log($"trigger exitted with {other.gameObject}");
+            _targetsInRange.Remove(damageable);
         }
     }
 
@@ -54,11 +50,11 @@ public class AttackerAoEField : MonoBehaviour
                 if (target != null && target != _damageSelf)
                 {
                     target.TakeDamage(_tickDamage);
+                    Debug.Log($"{target} : Tick - {_tickDamage}");
                 }
             }
 
             yield return wait;
-            Debug.Log($"Tick - {_tickDamage}");
         }
 
         Destroy(gameObject);
