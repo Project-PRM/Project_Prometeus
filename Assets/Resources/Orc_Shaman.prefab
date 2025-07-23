@@ -1413,12 +1413,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5130510309311962889}
   - component: {fileID: 7766390886988656253}
-  - component: {fileID: 5438223573610467703}
-  - component: {fileID: 3404149878996107803}
   - component: {fileID: 7182160202152551181}
   - component: {fileID: 8178267139745025740}
   - component: {fileID: 2065881924408409209}
-  - component: {fileID: 2729261955277391319}
   - component: {fileID: 8702485791870446445}
   m_Layer: 0
   m_Name: Orc_Shaman
@@ -1466,43 +1463,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &5438223573610467703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4645349790365375323}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23be5a59099eb5f4b939fd1b79c2df15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnemyType: 1
-  CurrentHealth: 0
---- !u!114 &3404149878996107803
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4645349790365375323}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ca305ddf48745724397b27ccc1954304, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AreaObject: {fileID: 0}
-  PatrolPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!136 &7182160202152551181
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1571,34 +1531,6 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &2729261955277391319
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4645349790365375323}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0038c16c34866b4f9e25c9c0dc0f7e6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Graph: {fileID: -812415418208716175, guid: 7274b504b0b905443be3047227538c91, type: 2}
-  m_BlackboardVariableOverridesList:
-  - rid: 562962552607211627
-  m_IsInitialised: 0
-  m_IsStarted: 0
-  references:
-    version: 2
-    RefIds:
-    - rid: 562962552607211627
-      type: {class: 'BlackboardVariable`1[[UnityEngine.GameObject, UnityEngine.CoreModule]]', ns: Unity.Behavior, asm: Unity.Behavior}
-      data:
-        GUID:
-          m_Value0: 1
-          m_Value1: 0
-        Name: Self
-        m_Value: {fileID: 4645349790365375323}
 --- !u!114 &8702485791870446445
 MonoBehaviour:
   m_ObjectHideFlags: 0
