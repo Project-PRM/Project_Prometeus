@@ -44,7 +44,7 @@ public class GroundItemBox : MonoBehaviour, IDamageable
         }
     }
 
-    public void TakeDamage(float Damage)
+    public void RPC_TakeDamage(float Damage)
     {
         _health -= DamageCalculator.CalculateDamage(Damage, 0);
         if (_health <= 0f)

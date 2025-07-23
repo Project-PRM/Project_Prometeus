@@ -43,7 +43,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         bt?.UpdateMasterClientFlag();
     }
 
-    public void TakeDamage(float Damage)
+    public void RPC_TakeDamage(float Damage)
     {
         CurrentHealth -= DamageCalculator.CalculateDamage(Damage, EnemyData.Armor);
         Debug.Log($"[{gameObject.name}] 피해 받음: {Damage}, 현재 체력: {CurrentHealth}");
