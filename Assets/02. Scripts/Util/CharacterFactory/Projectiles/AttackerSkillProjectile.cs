@@ -63,18 +63,29 @@ public class AttackerSkillProjectile : MonoBehaviour, IProjectile
     private void Explode()
     {
         Debug.Log("cube exploded");
-        // 여기 같은팀 처리 추가
+
         Collider[] hits = Physics.OverlapSphere(transform.position, _radius);
         foreach (var hit in hits)
         {
             if (hit.TryGetComponent<IDamageable>(out var target))
             {
-                target.TakeDamage(_damage);
+                if (target is MonoBehaviour mb && mb.TryGetComponent<PhotonView>(out var pv))
+                {
+                    // 자신 제외
+                    if (_owner != null && pv.ViewID == _owner.Behaviour.PhotonView.ViewID)
+                        continue;
+
+                    // 팀원 제외 (선택적으로)
+                    // if (_owner.Team == target.Team) continue;
+
+                    pv.RPC("TakeDamage", pv.Owner, _damage);
+                }
             }
         }
 
         PhotonNetwork.Destroy(gameObject);
     }
+
 
     private void OnDrawGizmos()
     {

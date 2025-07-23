@@ -36,7 +36,9 @@ public class BasicAttack : ISkillNoTarget
 
         // 애니메이션
         //user.Behaviour.Animator.SetTrigger("BasicAttack");
-        user.Behaviour.PhotonView.RPC(nameof(SetAnimation), RpcTarget.All, user);
+        int viewID = user.Behaviour.PhotonView.ViewID;
+        user.Behaviour.PhotonView.RPC(nameof(SetAnimation), RpcTarget.All, viewID);
+
 
         bool current = user.Behaviour.Animator.GetBool("IsFirstAttack");
         bool next = !current;
@@ -50,9 +52,13 @@ public class BasicAttack : ISkillNoTarget
     }
 
     [PunRPC]
-    private void SetAnimation(CharacterBase user)
+    private void SetAnimation(int viewID)
     {
-        user.Behaviour.Animator.SetTrigger("BasicAttack");
+        PhotonView view = PhotonView.Find(viewID);
+        if (view != null && view.TryGetComponent(out CharacterBehaviour behaviour))
+        {
+            behaviour.Animator.SetTrigger("BasicAttack");
+        }
     }
 
     private IEnumerator EnableTriggerTemporarily(DamageTrigger trigger, float duration)
