@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PhotonView))]
 [RequireComponent(typeof(CharacterInputHandler))]
 [RequireComponent(typeof(Animator))]
-public class CharacterBehaviour : MonoBehaviour, IDamageable
+public class CharacterBehaviour : MonoBehaviourPunCallbacks, IDamageable
 {
     [SerializeField] private ECharacterName _characterName;
 
@@ -155,5 +155,11 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
     {
         Inventory.AddItem(item.GetItemData());
         item.OnPickup();
+    }
+
+    [PunRPC]
+    public void RPC_SetAnimation(string triggerName)
+    {
+        Animator.SetTrigger(triggerName);
     }
 }
