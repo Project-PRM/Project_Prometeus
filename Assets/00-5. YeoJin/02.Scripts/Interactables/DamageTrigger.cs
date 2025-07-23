@@ -49,7 +49,7 @@ public class DamageTrigger : MonoBehaviour
             if (target is MonoBehaviour mb && mb.TryGetComponent<PhotonView>(out var targetView))
             {
                 // 피해자 클라이언트에게 데미지 적용 요청
-                targetView.RPC("RPC_TakeDamage", targetView.Owner, _base.BaseStats.BaseDamage);
+                targetView.RPC("RPC_TakeDamage", RpcTarget.AllBuffered, _base.BaseStats.BaseDamage);
                 Debug.Log($"{target} : {_base.BaseStats.BaseDamage}");
                 _damagedThisActivation.Add(target);
             }
