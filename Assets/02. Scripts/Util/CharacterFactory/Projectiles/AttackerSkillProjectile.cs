@@ -41,6 +41,10 @@ public class AttackerSkillProjectile : MonoBehaviour, IProjectile
 
     private void OnTriggerEnter(Collider collision)
     {
+        if (!_isInitialized)
+        {
+            return;
+        }
         // 땅 처리
         if (collision.gameObject.CompareTag("Ground"))
         {
