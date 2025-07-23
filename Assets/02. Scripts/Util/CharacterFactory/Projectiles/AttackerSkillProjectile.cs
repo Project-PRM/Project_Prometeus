@@ -78,7 +78,7 @@ public class AttackerSkillProjectile : MonoBehaviour, IProjectile
                     // 팀원 제외 (선택적으로)
                     // if (_owner.Team == target.Team) continue;
 
-                    pv.RPC("TakeDamage", pv.Owner, _damage);
+                    pv.RPC("RPC_TakeDamage", pv.Owner, _damage);
                 }
             }
         }

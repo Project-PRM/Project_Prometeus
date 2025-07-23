@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -44,8 +45,14 @@ public class DamageTrigger : MonoBehaviour
         if (target != null && target != (IDamageable)Owner && !_damagedThisActivation.Contains(target))
         {
             Debug.Log($"Hit {target}, damage {_base.BaseStats.BaseDamage}");
-            target.TakeDamage(_base.BaseStats.BaseDamage);
-            _damagedThisActivation.Add(target);
+
+            if (target is MonoBehaviour mb && mb.TryGetComponent<PhotonView>(out var targetView))
+            {
+                // 피해자 클라이언트에게 데미지 적용 요청
+                targetView.RPC("RPC_TakeDamage", targetView.Owner, _base.BaseStats.BaseDamage);
+                Debug.Log($"{target} : {_base.BaseStats.BaseDamage}");
+                _damagedThisActivation.Add(target);
+            }
         }
     }
 }

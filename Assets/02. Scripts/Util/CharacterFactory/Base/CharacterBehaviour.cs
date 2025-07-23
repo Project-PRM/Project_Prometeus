@@ -131,7 +131,7 @@ public class CharacterBehaviour : MonoBehaviourPunCallbacks, IDamageable
     }
 
     [PunRPC]
-    public void TakeDamage(float Damage)
+    public void RPC_TakeDamage(float Damage)
     {
         _character.TakeDamage(Damage);
     }
