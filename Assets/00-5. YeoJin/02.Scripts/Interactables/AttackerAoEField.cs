@@ -30,6 +30,7 @@ public class AttackerAoEField : MonoBehaviour
         if (target != null)
         {
             _targetsInRange.Add(target);
+            Debug.Log($"triggered with {other.gameObject}");
         }
     }
 
@@ -39,6 +40,7 @@ public class AttackerAoEField : MonoBehaviour
         if (target != null)
         {
             _targetsInRange.Remove(target);
+            Debug.Log($"trigger exitted with {other.gameObject}");
         }
     }
 
@@ -49,12 +51,10 @@ public class AttackerAoEField : MonoBehaviour
         {
             foreach (var target in _targetsInRange)
             {
-                target.TakeDamage(_tickDamage);
-
-                /*if (target != null && target != _damageSelf)
+                if (target != null && target != _damageSelf)
                 {
                     target.TakeDamage(_tickDamage);
-                }*/
+                }
             }
 
             yield return wait;
