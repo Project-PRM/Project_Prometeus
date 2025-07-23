@@ -48,9 +48,10 @@ public class AttackerAoEField : MonoBehaviour
         {
             foreach (var target in _targetsInRange)
             {
-                if (target != null && target != _damageSelf)
+                if (target is MonoBehaviour mb && mb.TryGetComponent<PhotonView>(out var targetView))
                 {
-                    target.TakeDamage(_tickDamage);
+                    // 피해자 클라이언트에게 데미지 적용 요청
+                    targetView.RPC("TakeDamage", targetView.Owner, _tickDamage);
                     Debug.Log($"{target} : Tick - {_tickDamage}");
                 }
             }
@@ -59,5 +60,5 @@ public class AttackerAoEField : MonoBehaviour
         }
 
         PhotonNetwork.Destroy(gameObject);
-    }   
+    }
 }

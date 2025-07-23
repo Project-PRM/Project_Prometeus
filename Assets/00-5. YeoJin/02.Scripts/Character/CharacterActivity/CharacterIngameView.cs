@@ -53,7 +53,6 @@ public class CharacterInGameView : MonoBehaviour, IPunObservable
             {
                 // RPC로 모든 클라이언트에 체력바 업데이트 전송
                 //_characterBehaviour.PhotonView.RPC("UpdateHealthBarRPC", RpcTarget.All, healthRatio);
-                
             }
         }
     }
