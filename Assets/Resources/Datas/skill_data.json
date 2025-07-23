@@ -266,7 +266,7 @@
     "MaxRange": 0.0,
     "Speed": 0.0,
     "ProjectilePrefabName": null,
-    "SummonPrefabName": null,
+    "SummonPrefabName": "SpawnerSkillCube",
     "IndicatorPrefabName": null
   },
   "NewSkill18": {
