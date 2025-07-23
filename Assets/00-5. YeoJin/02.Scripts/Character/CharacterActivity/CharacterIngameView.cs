@@ -46,16 +46,18 @@ public class CharacterInGameView : MonoBehaviour, IPunObservable
         {
             float healthRatio = _character.CurrentHealth / _character.BaseStats.MaxHealth;
 
+
+            UpdateHealthBarRPC(healthRatio);
             // 내 캐릭터인 경우에만 RPC 호출
             if (_characterBehaviour.PhotonView.IsMine)
             {
                 // RPC로 모든 클라이언트에 체력바 업데이트 전송
-                _characterBehaviour.PhotonView.RPC("UpdateHealthBarRPC", RpcTarget.All, healthRatio);
+                //_characterBehaviour.PhotonView.RPC("UpdateHealthBarRPC", RpcTarget.All, healthRatio);
+                
             }
         }
     }
 
-    [PunRPC]
     void UpdateHealthBarRPC(float healthRatio)
     {
         _networkHealthRatio = healthRatio;
