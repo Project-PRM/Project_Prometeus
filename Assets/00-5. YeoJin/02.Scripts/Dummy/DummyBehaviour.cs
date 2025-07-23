@@ -47,7 +47,7 @@ public class DummyBehaviour : MonoBehaviour, IDamageable
         _nickname = nickname;
     }
 
-    public void TakeDamage(float Damage)
+    public void RPC_TakeDamage(float Damage)
     {
         _character.TakeDamage(Damage);
     }

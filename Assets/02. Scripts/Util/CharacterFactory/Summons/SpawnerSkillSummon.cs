@@ -62,7 +62,7 @@ public class SpawnerSkillSummon : MonoBehaviour, ISummonObject, IDamageable
         slowField.StartSlowField(_owner, _debuffAmount);
     }
 
-    public void TakeDamage(float damage)
+    public void RPC_TakeDamage(float damage)
     {
         // 현재 방어 수치 애매
         _curHealth -= DamageCalculator.CalculateDamage(damage, 0);
