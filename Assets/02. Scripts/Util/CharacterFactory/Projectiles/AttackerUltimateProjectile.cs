@@ -64,6 +64,10 @@ public class UltimateProjectile : MonoBehaviour, IProjectile
 
     private void OnTriggerEnter(Collider collision)
     {
+        if (!_isInitialized)
+        {
+            return;
+        }
         Debug.Log($"collided with {collision.gameObject}");
         // 땅 처리
         //if (collision.gameObject.CompareTag("Ground"))

@@ -130,6 +130,7 @@ public class CharacterBehaviour : MonoBehaviour, IDamageable
         }
     }
 
+    [PunRPC]
     public void TakeDamage(float Damage)
     {
         _character.TakeDamage(Damage);

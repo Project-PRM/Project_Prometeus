@@ -1,8 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
-using Unity.AppUI.UI;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
+using Photon.Pun;
+using Photon.Realtime;
 
 [Skill("BasicAttack")]
 public class BasicAttack : ISkillNoTarget
@@ -36,7 +35,8 @@ public class BasicAttack : ISkillNoTarget
         // 실제 게임 로직에 맞게 공격력, 범위 등을 적용하는 코드를 추가해야 합니다.
 
         // 애니메이션
-        user.Behaviour.Animator.SetTrigger("BasicAttack");
+        //user.Behaviour.Animator.SetTrigger("BasicAttack");
+        user.Behaviour.PhotonView.RPC(nameof(SetAnimation), RpcTarget.All, user);
 
         bool current = user.Behaviour.Animator.GetBool("IsFirstAttack");
         bool next = !current;
@@ -47,6 +47,12 @@ public class BasicAttack : ISkillNoTarget
         user.Behaviour.Animator.SetBool("IsFirstAttack", next);
 
         Debug.Log($"{user.Name}이(가) 기본 공격을 사용했습니다!");
+    }
+
+    [PunRPC]
+    private void SetAnimation(CharacterBase user)
+    {
+        user.Behaviour.Animator.SetTrigger("BasicAttack");
     }
 
     private IEnumerator EnableTriggerTemporarily(DamageTrigger trigger, float duration)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class AttackerAoEField : MonoBehaviour
 {
@@ -57,6 +58,6 @@ public class AttackerAoEField : MonoBehaviour
             yield return wait;
         }
 
-        Destroy(gameObject);
+        PhotonNetwork.Destroy(gameObject);
     }   
 }
