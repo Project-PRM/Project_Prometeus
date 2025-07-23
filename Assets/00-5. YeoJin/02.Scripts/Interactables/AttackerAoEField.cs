@@ -51,7 +51,7 @@ public class AttackerAoEField : MonoBehaviour
                 if (target is MonoBehaviour mb && mb.TryGetComponent<PhotonView>(out var targetView))
                 {
                     // 피해자 클라이언트에게 데미지 적용 요청
-                    targetView.RPC("RPC_TakeDamage", targetView.Owner, _tickDamage);
+                    targetView.RPC("RPC_TakeDamage", RpcTarget.AllBuffered, _tickDamage);
                     Debug.Log($"{target} : Tick - {_tickDamage}");
                 }
             }
