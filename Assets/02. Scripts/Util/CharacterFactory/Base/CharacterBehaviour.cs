@@ -161,5 +161,7 @@ public class CharacterBehaviour : MonoBehaviourPunCallbacks, IDamageable
     public void RPC_SetAnimation(string triggerName)
     {
         Animator.SetTrigger(triggerName);
+
+        Debug.Log($"{PhotonView.ViewID} : animation - {triggerName}");
     }
 }
