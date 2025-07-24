@@ -42,5 +42,8 @@ public static class SkillRegistrar
         SkillFactory.Register(ESkillName.SpawnerPassive.ToString(), () => new SpawnerPassive());
         SkillFactory.Register(ESkillName.SpawnerSkill.ToString(), () => new SpawnerSkill());
         SkillFactory.Register(ESkillName.SpawnerUltimate.ToString(), () => new SpawnerUltimate());
+        SkillFactory.Register(ESkillName.FulfunsPassive.ToString(), () => new FulfunsPassive());
+        SkillFactory.Register(ESkillName.FulfunsSkill.ToString(), () => new FulfunsSkill());
+        SkillFactory.Register(ESkillName.FulfunsUltimate.ToString(), () => new FulfunsUltimate());
     }
 }

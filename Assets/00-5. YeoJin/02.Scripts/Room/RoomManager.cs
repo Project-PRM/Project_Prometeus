@@ -150,7 +150,7 @@ public class RoomManager : PunSingleton<RoomManager>
         Vector3 finalPos = basePos + _spawnOffset[myIndex];
 
         // PlayerType CustomProperty를 받아오기
-        ECharacterName character = ECharacterName.SpawnerDummy;
+        ECharacterName character = ECharacterName.Fulfuns;
         if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue("character", out object charObj))
         {
             character = (ECharacterName)(int)charObj;

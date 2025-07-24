@@ -9,6 +9,7 @@ public class EnemyData
     [FirestoreProperty] public float MaxHealth { get; set; }
     [FirestoreProperty] public float Armor { get; set; }
     [FirestoreProperty] public float Speed { get; set; }
+    [FirestoreProperty] public float SprintSpeed { get; set; }
     [FirestoreProperty] public float Damage { get; set; }
     [FirestoreProperty] public float AttackCoolTime { get; set; }
     [FirestoreProperty] public float AttackRange { get; set; }
@@ -25,6 +26,7 @@ public class EnemyData
         MaxHealth = other.MaxHealth;
         Armor = other.Armor;
         Speed = other.Speed;
+        SprintSpeed = other.SprintSpeed;
         Damage = other.Damage;
         AttackCoolTime = other.AttackCoolTime;
         AttackRange = other.AttackRange;

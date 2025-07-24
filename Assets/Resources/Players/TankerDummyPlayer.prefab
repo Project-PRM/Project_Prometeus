@@ -326,6 +326,39 @@ Transform:
   - {fileID: 2927399245734878186}
   m_Father: {fileID: 5863010536838805761}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &880917257323078465
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 756902139213271399}
+  m_Layer: 0
+  m_Name: UI_Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &756902139213271399
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 880917257323078465}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7415701229560825883}
+  - {fileID: 962821347624222696}
+  m_Father: {fileID: 3549827564469134205}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &909525911587785981
 GameObject:
   m_ObjectHideFlags: 0
@@ -806,7 +839,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 3549827564469134205}
+  m_Father: {fileID: 756902139213271399}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1474,7 +1507,7 @@ GameObject:
   - component: {fileID: 8631239530700257908}
   - component: {fileID: 242060853411088520}
   - component: {fileID: 1540028759645079676}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TankerDummyPlayer
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -1497,8 +1530,7 @@ Transform:
   - {fileID: 7660611424274992832}
   - {fileID: 423767796749573084}
   - {fileID: 8003454264716165573}
-  - {fileID: 7415701229560825883}
-  - {fileID: 962821347624222696}
+  - {fileID: 756902139213271399}
   - {fileID: 1624657557806395461}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2126,6 +2158,7 @@ GameObject:
   m_Component:
   - component: {fileID: 962821347624222696}
   - component: {fileID: 4939555057988416672}
+  - component: {fileID: 137421847201853849}
   m_Layer: 0
   m_Name: HealthBar
   m_TagString: Untagged
@@ -2147,7 +2180,7 @@ RectTransform:
   m_Children:
   - {fileID: 3579362542490289893}
   - {fileID: 9129109786774446613}
-  m_Father: {fileID: 3549827564469134205}
+  m_Father: {fileID: 756902139213271399}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2167,6 +2200,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Fill: {fileID: 3579362542490289893}
+--- !u!114 &137421847201853849
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4932264141451679424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06c78af948052824d93c22c84c08dd65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SamplePoints: []
+  PermanentlyReveal: 0
+  MaxDistBetweenSamplePoints: 0
+  NumObservers: 0
+  Observers: []
+  CachedTransform: {fileID: 0}
 --- !u!1 &5006226785151003473
 GameObject:
   m_ObjectHideFlags: 0

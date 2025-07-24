@@ -6,15 +6,11 @@ using UnityEngine;
 public class UltimateProjectile : MonoBehaviour, IProjectile
 {
     private CharacterBase _owner;
+    private SkillData _data;
 
-    private float _speed = 0f;
-    private float _damage = 0f;
     private float _maxRange = 0f;
-    private float _radius = 0f;
-    private float _duration = 3f;
 
     private Vector3 _direction;
-    private float _traveledDistance = 0f;
     private bool _isInitialized = false;
     private bool _hasExploded = false;
 
@@ -38,7 +34,7 @@ public class UltimateProjectile : MonoBehaviour, IProjectile
 
         _elapsedTime += Time.deltaTime;
         // 전체 이동 시간 계산
-        float totalTime = _maxRange / (_speed * bezierSpeedMultiplier);
+        float totalTime = _maxRange / (_data.Speed * bezierSpeedMultiplier);
 
         // 경과 시간 → 0~1 구간의 t
         float normalizedTime = Mathf.Clamp01(_elapsedTime / totalTime);
@@ -56,8 +52,6 @@ public class UltimateProjectile : MonoBehaviour, IProjectile
 
         Vector3 newPosition = Bezier.GetPoint(_startPosition, _controlPoint1, _controlPoint2, _endPosition, _bezierT);
         transform.position = newPosition;
-
-        _traveledDistance = Vector3.Distance(_startPosition, transform.position);
 
         DrawBezierDebugLine();
     }
@@ -93,23 +87,16 @@ public class UltimateProjectile : MonoBehaviour, IProjectile
         GameObject field = PhotonNetwork.Instantiate("AttackerAoEField", transform.position, Quaternion.identity);
         AttackerAoEField aoeField = field.GetComponent<AttackerAoEField>();
 
-        aoeField.StartAoEField(_owner, _duration, _damage);
+        aoeField.StartAoEField(_owner, _data.Duration, _data.Damage);
         PhotonNetwork.Destroy(gameObject);
     }
 
     public void SetData(SkillData data, CharacterBase character, Vector3? direction, CharacterBase target = null)
     {
         _owner = character;
-        _speed = data.Speed;
-        _damage = data.Damage;
+        _data = data;
         _maxRange = data.MaxRange;
-        _radius = data.Radius;
-        _duration = data.Duration; // 장판 유지 시간
         _direction = direction ?? Vector3.forward;
-        _traveledDistance = 0f;
-
-        _direction = direction ?? Vector3.forward;
-        _traveledDistance = 0f;
 
         // 베지어 곡선 초기화
         _startPosition = transform.position;

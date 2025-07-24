@@ -76,6 +76,7 @@ public class EnemyDataJsonEditorWindow : EditorWindow
             enemy.MaxHealth = EditorGUILayout.FloatField("Max Health", enemy.MaxHealth);
             enemy.Armor = EditorGUILayout.FloatField("Armor", enemy.Armor);
             enemy.Speed = EditorGUILayout.FloatField("Speed", enemy.Speed);
+            enemy.SprintSpeed = EditorGUILayout.FloatField("Sprint Speed", enemy.SprintSpeed);
             enemy.Damage = EditorGUILayout.FloatField("Damage", enemy.Damage);
             enemy.AttackCoolTime = EditorGUILayout.FloatField("Attack Cool Time", enemy.AttackCoolTime);
             enemy.AttackRange = EditorGUILayout.FloatField("Attack Range", enemy.AttackRange);
@@ -178,6 +179,7 @@ public class EnemyDataJsonEditorWindow : EditorWindow
                 MaxHealth = 100,
                 Armor = 0,
                 Speed = 1,
+                SprintSpeed = 2,
                 Damage = 10,
                 AttackCoolTime = 1,
                 AttackRange = 1,

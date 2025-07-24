@@ -6,6 +6,8 @@ TagManager:
   tags:
   - FollowCamera
   - Ground
+  - Enemy
+  - FulfunsField
   layers:
   - Default
   - TransparentFX
@@ -15,8 +17,8 @@ TagManager:
   - UI
   - Obstacle
   - UI Character
-  - 
-  - 
+  - Character
+  - Enemy
   - 
   - 
   - 

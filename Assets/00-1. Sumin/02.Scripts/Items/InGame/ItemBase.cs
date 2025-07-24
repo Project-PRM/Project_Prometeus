@@ -38,6 +38,7 @@ public abstract class ItemBase : MonoBehaviour, IPickupable
 
     public virtual void SpreadFrom(Vector3 origin)
     {
+        origin += Vector3.up;
         // 위치 약간 랜덤화
         Vector3 spawnPos = origin + Random.insideUnitSphere * 1f;
         spawnPos.y = Mathf.Abs(spawnPos.y);

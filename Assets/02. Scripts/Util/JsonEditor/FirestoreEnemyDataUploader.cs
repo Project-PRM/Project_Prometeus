@@ -82,6 +82,7 @@ public static class FirestoreEnemyDataUploader
                     MaxHealth = 100,
                     Armor = 5,
                     Speed = 2,
+                    SprintSpeed = 3,
                     Damage = 10,
                     AttackCoolTime = 1.5f,
                     AttackRange = 1,

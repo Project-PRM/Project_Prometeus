@@ -9,6 +9,11 @@ public class AttackerPassive : ISkillNoTarget
     private float _timer = 0f;
     public SkillData Data { get; set; }
     private Coroutine _dash;
+    public CharacterBase Character { get; set; }
+    public void SetOwner(CharacterBase character)
+    {
+        Character = character;
+    }
 
     public void Update()
     {
@@ -20,17 +25,17 @@ public class AttackerPassive : ISkillNoTarget
         return Resources.Load<GameObject>($"Indicators/{Data.IndicatorPrefabName}");
     }
 
-    public void Activate(CharacterBase character)
+    public void Activate()
     {
         if(_timer < Data.Cooltime)
         {
-            Debug.Log($"{character.Name} Passive is on cooldown.");
+            Debug.Log($"{Character.Name} Passive is on cooldown.");
             return;
         }
 
-        Debug.Log($"{character.Name} activated AttackerPassive.");
+        Debug.Log($"{Character.Name} activated AttackerPassive.");
 
-        CharacterController controller = character.Behaviour.GetComponent<CharacterController>();
+        CharacterController controller = Character.Behaviour.GetComponent<CharacterController>();
         if (controller == null)
         {
             Debug.LogWarning("CharacterController not found on character.");
@@ -44,7 +49,7 @@ public class AttackerPassive : ISkillNoTarget
         controller.Move(dashDirection.normalized * dashDistance);*/
 
         // 대시 설정
-        Vector3 dashDirection = character.Behaviour.transform.forward;
+        Vector3 dashDirection = Character.Behaviour.transform.forward;
 
         // 이전 대시가 있으면 중단
         if (_dash != null)
@@ -53,7 +58,7 @@ public class AttackerPassive : ISkillNoTarget
         }
 
         // 새 대시 실행
-        _dash = character.Behaviour.StartCoroutine(AttackerPassiveDash(controller, dashDirection, Data.Duration, Data.Speed));
+        _dash = Character.Behaviour.StartCoroutine(AttackerPassiveDash(controller, dashDirection, Data.Duration, Data.Speed));
 
         _timer = 0f;
     }

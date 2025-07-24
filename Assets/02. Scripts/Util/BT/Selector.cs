@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 
-public class Selector : BtNode
+public class Selector : IBtNode
 {
-    private List<BtNode> _children;
+    private List<IBtNode> _children;
 
-    public Selector(List<BtNode> children) => _children = children;
+    public Selector(List<IBtNode> children) => _children = children;
 
-    public override ENodeState Evaluate()
+    public ENodeState Evaluate()
     {
         foreach (var child in _children)
         {

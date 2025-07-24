@@ -12,6 +12,7 @@ public class AttackerAoEField : MonoBehaviour
     [SerializeField] private float _tickDamage;
     [SerializeField] private float _tickTime = 0.5f;
     [SerializeField] private int _totalTick = 10;
+    [SerializeField] private LayerMask _raycastLayerMask;
 
     private HashSet<IDamageable> _targetsInRange = new HashSet<IDamageable>();
 
@@ -31,6 +32,10 @@ public class AttackerAoEField : MonoBehaviour
         {
             _targetsInRange.Add(damageable);
         }
+        else if(damageable == _damageSelf)
+        {
+            _owner.RaiseEvent(ECharacterEvent.OnFulfunsFieldTouched);
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -44,15 +49,51 @@ public class AttackerAoEField : MonoBehaviour
     private IEnumerator DamageTickRoutine()
     {
         var wait = new WaitForSeconds(_tickTime);
+
         for (int i = 0; i < _totalTick; i++)
         {
             foreach (var target in _targetsInRange)
             {
                 if (target is MonoBehaviour mb && mb.TryGetComponent<PhotonView>(out var targetView))
                 {
-                    // 피해자 클라이언트에게 데미지 적용 요청
-                    targetView.RPC("RPC_TakeDamage", RpcTarget.AllBuffered, _tickDamage);
-                    Debug.Log($"{target} : Tick - {_tickDamage}");
+                    Vector3 direction = (mb.transform.position - transform.position).normalized;
+                    float distance = Vector3.Distance(transform.position, mb.transform.position) + 0.1f;
+
+                    RaycastHit[] hits = Physics.RaycastAll(transform.position, direction, distance, _raycastLayerMask);
+
+                    System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+                    bool hitObstacleFirst = false;
+                    bool hitTargetFirst = false;
+
+                    foreach (var hit in hits)
+                    {
+                        var hitTransform = hit.transform;
+                        int hitLayer = hitTransform.gameObject.layer;
+
+                        if (hitLayer == LayerMask.NameToLayer("Obstacle"))
+                        {
+                            // 장애물이 먼저 맞았다면 루프 종료 — 데미지 안 줌
+                            hitObstacleFirst = true;
+                            break;
+                        }
+
+                        if (hitLayer == LayerMask.NameToLayer("Character") ||
+                            hitLayer == LayerMask.NameToLayer("Enemy"))
+                        {
+                            if (hitTransform == mb.transform)
+                            {
+                                // 타겟이 먼저 맞았다면 데미지 주고 루프 종료
+                                hitTargetFirst = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (hitTargetFirst && !hitObstacleFirst)
+                    {
+                        targetView.RPC("RPC_TakeDamage", RpcTarget.AllBuffered, _tickDamage);
+                    }
                 }
             }
 

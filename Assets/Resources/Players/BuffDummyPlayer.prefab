@@ -1581,6 +1581,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3057775602529772480}
   - component: {fileID: 4378372870005150367}
+  - component: {fileID: 1631039363418958859}
   m_Layer: 0
   m_Name: HealthBar
   m_TagString: Untagged
@@ -1622,6 +1623,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Fill: {fileID: 420707255475721354}
+--- !u!114 &1631039363418958859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3887961084692524909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06c78af948052824d93c22c84c08dd65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SamplePoints: []
+  PermanentlyReveal: 0
+  MaxDistBetweenSamplePoints: 0
+  NumObservers: 0
+  Observers: []
+  CachedTransform: {fileID: 0}
 --- !u!1 &3922502256788671170
 GameObject:
   m_ObjectHideFlags: 0
@@ -1707,7 +1726,7 @@ GameObject:
   - component: {fileID: 8631239530700257908}
   - component: {fileID: 242060853411088520}
   - component: {fileID: 4518791611430432285}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BuffDummyPlayer
   m_TagString: Player
   m_Icon: {fileID: 0}

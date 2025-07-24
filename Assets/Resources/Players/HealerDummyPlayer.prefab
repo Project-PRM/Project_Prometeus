@@ -1459,6 +1459,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6895237609406304601}
   - component: {fileID: 1202137083442987977}
+  - component: {fileID: 2438022328611968887}
   m_Layer: 0
   m_Name: HealthBar
   m_TagString: Untagged
@@ -1500,6 +1501,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Fill: {fileID: 8705889754276144003}
+--- !u!114 &2438022328611968887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3653408897894052448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06c78af948052824d93c22c84c08dd65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SamplePoints: []
+  PermanentlyReveal: 0
+  MaxDistBetweenSamplePoints: 0
+  NumObservers: 0
+  Observers: []
+  CachedTransform: {fileID: 0}
 --- !u!1 &3697271040921507721
 GameObject:
   m_ObjectHideFlags: 0
@@ -1616,7 +1635,7 @@ GameObject:
   - component: {fileID: 8631239530700257908}
   - component: {fileID: 242060853411088520}
   - component: {fileID: 4144933786073553633}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HealerDummyPlayer
   m_TagString: Player
   m_Icon: {fileID: 0}

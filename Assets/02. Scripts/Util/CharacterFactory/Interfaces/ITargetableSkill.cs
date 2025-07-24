@@ -5,6 +5,6 @@ using UnityEngine;
 /// </summary>
 public interface ITargetableSkill : ISkill
 {
-    public void Activate(CharacterBase character, Vector3 target);
+    public void Activate(Vector3 target);
     public GameObject GetIndicatorPrefab();
 }

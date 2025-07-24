@@ -6,4 +6,5 @@ public enum ECharacterEvent
     OnKill,
     OnHitEnemy,
     OnDeath,
+    OnFulfunsFieldTouched,
 }
