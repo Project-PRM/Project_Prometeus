@@ -24,6 +24,9 @@ public class AttackAction : IActionNode
         if (_enemy.Target == null)
             return;
 
+        _enemy.ResetAnimatorParameters();
+        _enemy.Animator.SetBool("isAttacking", true);
+
         _enemy.NavMeshAgent.isStopped = true;
         Debug.Log($"Attack {_enemy.Target}: {_enemy.EnemyData.Damage}");
 

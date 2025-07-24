@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -12,6 +11,7 @@ public class EnemyController : MonoBehaviour, IDamageable
     public Transform Target { get; private set; }
 
     private bool _isInitialized = false;
+    private bool _isDead = false;
     private float _timer;
 
     [SerializeField] private EEnemyType _enemyType;
@@ -26,18 +26,22 @@ public class EnemyController : MonoBehaviour, IDamageable
     public NavMeshAgent NavMeshAgent { get; private set; }
     public Animator Animator { get; private set; }
     public PhotonView PhotonView { get; private set; }
+    public Rigidbody Rigidbody { get; private set; }
+    public Collider Collider { get; private set; } 
 
     private void Awake()
     {
         NavMeshAgent = GetComponent<NavMeshAgent>();
         Animator = GetComponent<Animator>();
         PhotonView = GetComponent<PhotonView>();
+        Rigidbody = GetComponent<Rigidbody>();
+        Collider = GetComponent<Collider>();
 
         // 임시
         Invoke(nameof(Initialize), 2f);
     }
 
-    private void Start()
+    protected virtual void Start()
     {
         _btRoot = new Selector(new List<IBtNode>
         {
@@ -63,13 +67,14 @@ public class EnemyController : MonoBehaviour, IDamageable
             _isInitialized = true;
             NavMeshAgent.speed = EnemyData.Speed;
             CurrentHealth = EnemyData.MaxHealth;
+            _isDead = false;
         }
     }
 
     private void Update()
     {
         _timer += Time.deltaTime;
-        if (_timer < TICK || !_isInitialized)
+        if (_timer < TICK || !_isInitialized || _isDead)
         {
             return;
         }
@@ -100,6 +105,35 @@ public class EnemyController : MonoBehaviour, IDamageable
     private void Die()
     {
         Debug.Log($"{gameObject.name} has died.");
-        /*PhotonNetwork.*/Destroy(gameObject);
+        _isDead = true;
+        NavMeshAgent.isStopped = true;
+        NavMeshAgent.enabled = false;
+        Rigidbody.isKinematic = true;
+        Collider.enabled = false;
+        ResetAnimatorParameters();
+
+        Animator.SetTrigger("Die");
+        // TODO : 죽음 애니메이션 시작하면서 아이템 뿌리고, 애니메이션 끝나면 파괴
+        /*PhotonNetwork.*/
+        Destroy(gameObject);
+    }
+
+    public void ResetAnimatorParameters()
+    {
+        foreach (AnimatorControllerParameter param in Animator.parameters)
+        {
+            switch (param.type)
+            {
+                case AnimatorControllerParameterType.Bool:
+                    Animator.SetBool(param.name, false);
+                    break;
+                case AnimatorControllerParameterType.Trigger:
+                    Animator.ResetTrigger(param.name);
+                    break;
+                case AnimatorControllerParameterType.Float:
+                    Animator.SetFloat(param.name, 0f);
+                    break;
+            }
+        }
     }
 }

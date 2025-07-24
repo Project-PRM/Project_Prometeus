@@ -15,8 +15,7 @@ public class PatrolAction : IActionNode
             ChooseNextPatrolPoint();
         }
 
-        _enemy.NavMeshAgent.isStopped = false;
-        _enemy.NavMeshAgent.SetDestination(_nextPatrolPoint.position);
+        Patrol();
 
         return ENodeState.Running;
     }
@@ -26,5 +25,14 @@ public class PatrolAction : IActionNode
         int idx = Random.Range(0, _enemy.PatrolPoints.Length);
         _nextPatrolPoint = _enemy.PatrolPoints[idx];
         Debug.Log($"새로운 패트롤 지점: {_nextPatrolPoint.name}");
+    }
+
+    private void Patrol()
+    {
+        _enemy.ResetAnimatorParameters();
+        _enemy.NavMeshAgent.isStopped = false;
+        _enemy.NavMeshAgent.speed = _enemy.EnemyData.Speed;
+        _enemy.NavMeshAgent.SetDestination(_nextPatrolPoint.position);
+        _enemy.Animator.SetBool("isWalking", true);
     }
 }
