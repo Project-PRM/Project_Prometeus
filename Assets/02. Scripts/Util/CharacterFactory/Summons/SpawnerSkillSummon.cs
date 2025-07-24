@@ -6,6 +6,7 @@ using FOW;
 public class SpawnerSkillSummon : MonoBehaviour, ISummonObject, IDamageable
 {
     private CharacterBase _owner;
+    private SkillData _data;
 
     // TODO : 스탯 modifier 영향 받게? 
     private float _maxHealth = 20f;
@@ -59,7 +60,7 @@ public class SpawnerSkillSummon : MonoBehaviour, ISummonObject, IDamageable
 
         GameObject field = PhotonNetwork.Instantiate("SlowField", spawnPosition, Quaternion.identity);
         SlowField slowField = field.GetComponent<SlowField>();
-        slowField.StartSlowField(_owner, _debuffAmount);
+        slowField.StartSlowField(_owner, _data);
     }
 
     public void RPC_TakeDamage(float damage)
@@ -80,13 +81,8 @@ public class SpawnerSkillSummon : MonoBehaviour, ISummonObject, IDamageable
 
     public void SetData(SkillData data, CharacterBase character, CharacterBase target = null)
     {
+        _data = data;
         _owner = character;
-        _speed = data.Speed;
-        _damage = data.Damage;
-        _maxRange = data.MaxRange;
-        _radius = data.Radius;
-        _debuffAmount = data.DebuffAmount;
-        _duration = data.Duration;
         _myTeam = character.Team;
 
         _curHealth = _maxHealth;

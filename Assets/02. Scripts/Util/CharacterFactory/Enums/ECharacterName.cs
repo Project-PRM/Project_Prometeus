@@ -6,4 +6,5 @@ public enum ECharacterName
     HealerDummy,
     TankerDummy,
     SpawnerDummy,
+    Fulfuns,
 }
