@@ -121,7 +121,7 @@ public class CharacterBase
         _ultimate.Update();
     }
 
-    private void RaiseEvent(ECharacterEvent characterEvent)
+    public void RaiseEvent(ECharacterEvent characterEvent)
     {
         OnEventOccurred?.Invoke(characterEvent);
     }
