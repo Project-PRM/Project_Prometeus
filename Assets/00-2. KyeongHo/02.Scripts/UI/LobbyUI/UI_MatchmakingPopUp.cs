@@ -4,36 +4,22 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UI_Lobby : MonoBehaviour
+public class UI_MatchmakingPopUp : UI_PopUp
 {
+    [Header("Matchmaking UI")]
     public TextMeshProUGUI RoomPlayerCountText;
     public TextMeshProUGUI SystemMessageText;
     public Button MatchingStartButton;
-     
-    private void Start()
+    
+    void Start()
     {
         EventManager.AddListener<GameStartEvent>(Refresh);
     }
-
     public void Refresh(GameStartEvent evt = null)
     {
         if (PhotonNetwork.CurrentRoom != null)
         {
             RoomPlayerCountText.text = $"{PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}";
-        }
-    }
-
-    // 게임 시작 버튼 (방장만 가능)
-    public void OnClickGameStartButton()
-    {
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.CurrentRoom.IsOpen = false;
-            PhotonServerManager.Instance.AssignTeams();
-        }
-        else
-        {
-            ShowSystemMessage("방장만 게임을 시작할 수 있습니다.");
         }
     }
 
@@ -73,14 +59,6 @@ public class UI_Lobby : MonoBehaviour
         }
     }
 
-    // 파티 채팅 참여 (Chat1, Chat2 버튼용)
-    public void OnClickChatButton(string partyName)
-    {
-        Debug.Log($"[PartyJoin] 파티 참여 시도: {partyName}");
-        PartyManager.Instance.JoinPartyChat(partyName);
-        ShowSystemMessage($"파티 '{partyName}' 참여 중...");
-    }
-
     // 매칭 버튼 상태 업데이트
     public void UpdateMatchingButtonState()
     {
@@ -111,6 +89,20 @@ public class UI_Lobby : MonoBehaviour
         if (SystemMessageText != null)
         {
             SystemMessageText.gameObject.SetActive(false);
+        }
+    }
+
+    public override void Show()
+    {
+        base.Show();
+        UpdateMatchingButtonState();
+    }
+    public override void Hide()
+    {
+        base.Hide();
+        if (PhotonNetwork.InRoom)
+        {
+            PhotonNetwork.LeaveRoom();    
         }
     }
 }

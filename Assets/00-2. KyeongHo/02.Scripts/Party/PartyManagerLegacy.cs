@@ -3,7 +3,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class PartyManager : PunSingleton<PartyManager>
+public class PartyManagerLegacy : PunSingleton<PartyManagerLegacy>
 {
     private const byte MaxPartySize = 3;
 
