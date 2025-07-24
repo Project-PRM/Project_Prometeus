@@ -5,11 +5,8 @@ using UnityEngine;
 public class AttackerSkillProjectile : MonoBehaviour, IProjectile
 {
     private CharacterBase _owner;
+    private SkillData _data;
 
-    private float _speed = 0f;
-    private float _damage = 0f;
-    private float _maxRange = 0f;
-    private float _radius = 0f;
     private Vector3 _direction;
 
     private float _traveledDistance = 0f;
@@ -22,7 +19,7 @@ public class AttackerSkillProjectile : MonoBehaviour, IProjectile
             return;
         }
 
-        float moveDistance = _speed * Time.deltaTime;
+        float moveDistance = _data.Speed * Time.deltaTime;
         Vector3 move = _direction.normalized * moveDistance;
 
         // 이동: Y는 무시, 현재 위치의 y는 고정 -> 직선으로 가게 하고싶을때 사용
@@ -33,7 +30,7 @@ public class AttackerSkillProjectile : MonoBehaviour, IProjectile
         transform.position = pos;
 
         _traveledDistance += moveDistance;
-        if (_traveledDistance >= _maxRange)
+        if (_traveledDistance >= _data.MaxRange)
         {
             Explode();
         }
@@ -64,7 +61,7 @@ public class AttackerSkillProjectile : MonoBehaviour, IProjectile
     {
         Debug.Log("cube exploded");
 
-        Collider[] hits = Physics.OverlapSphere(transform.position, _radius);
+        Collider[] hits = Physics.OverlapSphere(transform.position, _data.Radius);
         foreach (var hit in hits)
         {
             if (hit.TryGetComponent<IDamageable>(out var target))
@@ -78,7 +75,7 @@ public class AttackerSkillProjectile : MonoBehaviour, IProjectile
                     // 팀원 제외 (선택적으로)
                     // if (_owner.Team == target.Team) continue;
 
-                    targetView.RPC("RPC_TakeDamage", RpcTarget.AllBuffered, _damage);
+                    targetView.RPC("RPC_TakeDamage", RpcTarget.AllBuffered, _data.Damage);
                 }
             }
         }
@@ -86,19 +83,10 @@ public class AttackerSkillProjectile : MonoBehaviour, IProjectile
         PhotonNetwork.Destroy(gameObject);
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, _radius);
-    }
-
     public void SetData(SkillData data, CharacterBase character, Vector3? direction, CharacterBase target = null)
     {
         _owner = character;
-        _speed = data.Speed;
-        _damage = data.Damage;
-        _maxRange = data.MaxRange;
-        _radius = data.Radius;
+        _data = data;
         _direction = direction ?? Vector3.forward;
         _traveledDistance = 0f;
 

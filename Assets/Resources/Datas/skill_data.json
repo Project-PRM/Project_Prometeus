@@ -310,7 +310,7 @@
     "Radius": 5.0,
     "MaxRange": 15.0,
     "Speed": 10.0,
-    "ProjectilePrefabName": "AttackerUltimateCube",
+    "ProjectilePrefabName": "FulfunsSkillCube",
     "SummonPrefabName": null,
     "IndicatorPrefabName": null
   },
@@ -325,7 +325,7 @@
     "Radius": 0.0,
     "MaxRange": 0.0,
     "Speed": 0.0,
-    "ProjectilePrefabName": null,
+    "ProjectilePrefabName": "FulfunsUltimateCube",
     "SummonPrefabName": null,
     "IndicatorPrefabName": null
   }

@@ -6,6 +6,7 @@ TagManager:
   tags:
   - FollowCamera
   - Ground
+  - FulfunsField
   layers:
   - Default
   - TransparentFX
