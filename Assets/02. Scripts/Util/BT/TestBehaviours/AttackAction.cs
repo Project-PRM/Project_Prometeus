@@ -1,12 +1,20 @@
-public class AttackAction : BtNode
+using UnityEngine;
+
+public class AttackAction : IActionNode
 {
-    private AIController _ai;
+    private EnemyController _enemy;
 
-    public AttackAction(AIController ai) => _ai = ai;
+    public AttackAction(EnemyController enemy) => _enemy = enemy;
 
-    public override ENodeState Evaluate()
+    public ENodeState Evaluate()
     {
-        _ai.AttackPlayer();
+        AttackPlayer();
         return ENodeState.Success;
+    }
+
+    public void AttackPlayer()
+    {
+        Debug.Log("공격!");
+        // 애니메이션 실행 + 데미지
     }
 }

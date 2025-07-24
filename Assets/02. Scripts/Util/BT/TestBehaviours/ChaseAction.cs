@@ -1,12 +1,20 @@
-public class ChaseAction : BtNode
+using UnityEngine;
+
+public class ChaseAction : IActionNode
 {
-    private AIController _ai;
+    private EnemyController _enemy;
 
-    public ChaseAction(AIController ai) => _ai = ai;
+    public ChaseAction(EnemyController enemy) => _enemy = enemy;
 
-    public override ENodeState Evaluate()
+    public ENodeState Evaluate()
     {
-        _ai.ChasePlayer();
+        ChasePlayer();
         return ENodeState.Running;
+    }
+
+    public void ChasePlayer()
+    {
+        Debug.Log("추격 중");
+        // 플레이어 쪽으로 이동
     }
 }

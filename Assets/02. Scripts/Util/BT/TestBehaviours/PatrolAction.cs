@@ -1,12 +1,20 @@
-public class PatrolAction : BtNode
+using UnityEngine;
+
+public class PatrolAction : IActionNode
 {
-    private AIController _ai;
+    private EnemyController _enemy;
 
-    public PatrolAction(AIController ai) => _ai = ai;
+    public PatrolAction(EnemyController enemy) => _enemy = enemy;
 
-    public override ENodeState Evaluate()
+    public ENodeState Evaluate()
     {
-        _ai.Patrol();
+        Patrol();
         return ENodeState.Running;
+    }
+
+    public void Patrol()
+    {
+        Debug.Log("패트롤 중");
+        // Waypoint 이동 등
     }
 }
