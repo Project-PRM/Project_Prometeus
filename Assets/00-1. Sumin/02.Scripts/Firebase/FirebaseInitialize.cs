@@ -3,7 +3,6 @@ using Firebase.Auth;
 using Firebase.Firestore;
 using UnityEngine;
 using System.Threading.Tasks;
-using Unity.VisualScripting;
 
 public static class FirebaseInitialize
 {
@@ -15,11 +14,8 @@ public static class FirebaseInitialize
 
     private static TaskCompletionSource<bool> _initTcs = new TaskCompletionSource<bool>();
 
-
-
     static FirebaseInitialize()
     {
-        
         InitAsync();
     }
 
@@ -32,12 +28,8 @@ public static class FirebaseInitialize
 
             App = FirebaseApp.DefaultInstance;
             Auth = FirebaseAuth.DefaultInstance;
-            // ✅ Firestore 설정: Persistence 끄기
-            var db = FirebaseFirestore.DefaultInstance;
-            db.Settings.PersistenceEnabled = false;
-            DB = db;
-            // DB = FirebaseFirestore.DefaultInstance;
-            
+            DB = FirebaseFirestore.DefaultInstance;
+
             IsInitialized = true;
             _initTcs.SetResult(true);
         }

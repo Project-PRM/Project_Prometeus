@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class UI_Lobby : MonoBehaviour
 {
+    public TextMeshProUGUI TeamNameText;
     public TextMeshProUGUI RoomPlayerCountText;
     public TextMeshProUGUI SystemMessageText;
     public Button MatchingStartButton;
@@ -17,6 +18,11 @@ public class UI_Lobby : MonoBehaviour
 
     public void Refresh(GameStartEvent evt = null)
     {
+        if (evt != null)
+        {
+            TeamNameText.text = $"TeamName : {evt.TeamName}";  
+        }
+        
         if (PhotonNetwork.CurrentRoom != null)
         {
             RoomPlayerCountText.text = $"{PhotonNetwork.CurrentRoom.PlayerCount}/{PhotonNetwork.CurrentRoom.MaxPlayers}";
@@ -40,13 +46,14 @@ public class UI_Lobby : MonoBehaviour
     // 매칭 시작 버튼
     public void OnClickMatchingStartButton()
     {
+        TeamNameText.gameObject.SetActive(true);
         RoomPlayerCountText.gameObject.SetActive(true);
     
         Debug.Log("[Matching] 매칭 시작");
         
         // 현재 상태 디버그 로그
-        string partyName = PartyManager.Instance.GetCurrentPartyName();
-        bool isPartyLeader = PartyManager.Instance.IsPartyLeader();
+        string partyName = LobbyChatManager.Instance.GetCurrentPartyName();
+        bool isPartyLeader = LobbyChatManager.Instance.IsPartyLeader();
         
         Debug.Log($"[Debug] 현재 파티: {partyName}, 파티 리더: {isPartyLeader}");
     
@@ -77,7 +84,7 @@ public class UI_Lobby : MonoBehaviour
     public void OnClickChatButton(string partyName)
     {
         Debug.Log($"[PartyJoin] 파티 참여 시도: {partyName}");
-        PartyManager.Instance.JoinPartyChat(partyName);
+        PhotonServerManager.Instance.JoinPartyChat(partyName);
         ShowSystemMessage($"파티 '{partyName}' 참여 중...");
     }
 
@@ -86,8 +93,8 @@ public class UI_Lobby : MonoBehaviour
     {
         if (MatchingStartButton == null) return;
 
-        bool isInParty = !string.IsNullOrEmpty(PartyManager.Instance.GetCurrentPartyName());
-        bool isPartyLeader = PartyManager.Instance.IsPartyLeader();
+        bool isInParty = !string.IsNullOrEmpty(LobbyChatManager.Instance.GetCurrentPartyName());
+        bool isPartyLeader = LobbyChatManager.Instance.IsPartyLeader();
 
         MatchingStartButton.interactable = !isInParty || isPartyLeader;
         

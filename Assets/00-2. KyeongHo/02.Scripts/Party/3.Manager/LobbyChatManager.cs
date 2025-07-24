@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,52 +7,24 @@ using ExitGames.Client.Photon;
 using Photon.Pun;
 using TMPro;
 
-public class PartyManager : Singleton<PartyManager>, IChatClientListener
+public class LobbyChatManager : Singleton<LobbyChatManager>, IChatClientListener
 {
     public event Action<string> OnPartyJoinRoom;
-    public GameObject FriendInvitePrefab;
-    
     private ChatClient chatClient;
     private string currentPartyName;
     private bool isPartyLeader = false;
     private bool isJoiningParty = false; // 파티 참여 중인지 확인용
     private int currentPartyMemberCount = 0; // 파티 인원수 추적
     private HashSet<string> partyMembers = new HashSet<string>(); // 파티원 목록
-    private string partyLeaderName = ""; // 파티 리더 이름 저장
-    
+    [Header("UI Elements")]
+    public TextMeshProUGUI statusText;
+    public TextMeshProUGUI chatText;
+
     void Update()
     {
         chatClient?.Service();
     }
 
-    // Chat 버튼 클릭 시 - 간단화
-    public void JoinPartyChat(string partyName)
-    {
-        StartCoroutine(ConnectAndJoinParty(partyName));
-    }
-
-    private IEnumerator ConnectAndJoinParty(string partyName)
-    {
-        PartyManager.Instance.ForceConnectToChat();
-        
-        // 채팅 연결 대기
-        float timeout = 10f;
-        while (timeout > 0)
-        {
-            if (PartyManager.Instance.IsConnected())
-            {
-                PartyManager.Instance.JoinParty(partyName);
-                yield break;
-            }
-            
-            yield return new WaitForSeconds(0.5f);
-            timeout -= 0.5f;
-        }
-        
-        Debug.LogError("채팅 서버 연결 타임아웃!");
-    }
-
-    
     // 채팅 연결 상태 확인
     public bool IsConnected()
     {
@@ -102,38 +73,15 @@ public class PartyManager : Singleton<PartyManager>, IChatClientListener
         
         string inviteMessage = $"!invite {roomId}";
         chatClient.PublishMessage(currentPartyName, inviteMessage);
-        Debug.Log("매치 찾음! 파티원들을 초대합니다.");
+        AddChatMessage("System", $"매치 찾음! 파티원들을 초대합니다.");
         Debug.Log($"[PartyInvite] 초대 메시지 전송: {inviteMessage}");
     }
-    // 친구 초대 기능
-    public void SendFriendInvite( string friendUID, string myNickname)
-    {
-        // 현재 파티가 없다면 파티 생성
-        if (string.IsNullOrEmpty(currentPartyName))
-        {
-            Debug.Log("파티가 없어 새로 생성합니다.");
-        
-            currentPartyName = AccountManager.Instance.MyAccount.UserId;
-            isJoiningParty = true; // 생성자는 자동으로 리더가 됨
-            partyLeaderName = PhotonNetwork.NickName; // 미리 리더로 설정
-        
-            chatClient.Subscribe(new string[] { currentPartyName });
-            UpdateStatus($"파티 '{currentPartyName}' 생성 및 초대 중...");
-        
-            Debug.Log($"[CreateParty] 파티 생성: {currentPartyName}");
-        }
-        // 현재 파티가 있지만 리더가 아닌 경우
-        else if (!IsPartyLeader())
-        {
-            Debug.Log("파티 리더만 친구를 초대할 수 있습니다.");
-            return;
-        }
 
-        // 친구에게 개인 메시지로 초대 전송
-        string inviteMessage = $"!partyinvite {currentPartyName} {myNickname}";
-        chatClient.SendPrivateMessage(friendUID, inviteMessage);
-    
-        Debug.Log($"[FriendInvite] {friendUID}에게 파티 초대를 보냈습니다.");
+    // 일반 파티 메시지 전송
+    public void SendPartyMessage(string message)
+    {
+        if (string.IsNullOrEmpty(currentPartyName)) return;
+        chatClient.PublishMessage(currentPartyName, message);
     }
 
     // 강제 채팅 연결
@@ -164,6 +112,12 @@ public class PartyManager : Singleton<PartyManager>, IChatClientListener
     public void LeaveParty()
     {
         if (string.IsNullOrEmpty(currentPartyName)) return;
+
+        if (isPartyLeader)
+        {
+            SendPartyMessage($"👑 파티 리더가 파티를 떠납니다.");
+        }
+
         // 파티원 목록에서 자신 제거
         partyMembers.Remove(PhotonNetwork.NickName);
         currentPartyMemberCount = 0; // 자신이 떠나면 0으로 리셋
@@ -173,7 +127,6 @@ public class PartyManager : Singleton<PartyManager>, IChatClientListener
         currentPartyName = "";
         isPartyLeader = false;
         isJoiningParty = false;
-        partyLeaderName = ""; // 추가
         UpdateStatus("파티를 떠났습니다.");
     }
     public void OnConnected()
@@ -184,31 +137,7 @@ public class PartyManager : Singleton<PartyManager>, IChatClientListener
 
     public void OnPrivateMessage(string sender, object message, string channelName)
     {
-        string messageStr = message.ToString();
-    
-        // 파티 초대 메시지 처리
-        if (messageStr.StartsWith("!partyinvite "))
-        {
-            string[] parts = messageStr.Split(' ');
-            if (parts.Length >= 3)
-            {
-                string partyName = parts[1];
-                string inviterNickname = parts[2];
-            
-                // 초대 UI 생성 (받는 사람에게만)
-                if (FriendInvitePrefab != null)
-                {
-                    GameObject inviteUI = Instantiate(FriendInvitePrefab);
-                    var inviteComponent = inviteUI.GetComponent<UI_PartyInvitePopup>();
-                    if (inviteComponent != null)
-                    {
-                        inviteComponent.SetInviteInfo(partyName, sender, inviterNickname);
-                    }
-                
-                    Debug.Log($"[PartyInvite] {inviterNickname}님으로부터 파티 초대를 받았습니다.");
-                }
-            }
-        }
+        throw new NotImplementedException();
     }
     public void OnSubscribed(string[] channels, bool[] results)
     {
@@ -225,16 +154,12 @@ public class PartyManager : Singleton<PartyManager>, IChatClientListener
                 if (isJoiningParty)
                 {
                     isPartyLeader = true; // 일단 리더로 설정
-                    partyLeaderName = PhotonNetwork.NickName;
                     isJoiningParty = false;
-                    Debug.Log($"[PartyLeader] {PhotonNetwork.NickName}이(가) 파티 리더가 되었습니다.");
-                }
-                else
-                {
-                    isPartyLeader = false;
+                    Debug.Log($"[PartyLeader] {PhotonNetwork.NickName}이(가) 파티 리더 후보가 되었습니다.");
                 }
                 
-                Debug.Log($"파티 참여: {currentPartyName} ({currentPartyMemberCount}명)");
+                SendPartyMessage($"{PhotonNetwork.NickName} joined the party!");
+                AddChatMessage("System", $"파티 참여: {currentPartyName} ({currentPartyMemberCount}명)");
             }
         }
     }
@@ -259,13 +184,22 @@ public class PartyManager : Singleton<PartyManager>, IChatClientListener
             // 자신이 보낸 메시지가 아닌 경우만 표시
             if (sender != PhotonNetwork.NickName)
             {
+                AddChatMessage(sender, message);
+
                 // 초대 메시지 처리
                 if (message.StartsWith("!invite "))
                 {
                     string roomId = message.Substring(8).Trim();
                     Debug.Log($"[PartyInvite] {sender}로부터 방 초대: {roomId}");
                     OnPartyJoinRoom?.Invoke(roomId);
-                    Debug.Log($"🎮 {sender}님이 매치를 찾았습니다! 참여중...");
+                    AddChatMessage("System", $"🎮 {sender}님이 매치를 찾았습니다! 참여중...");
+                }
+                // 다른 사용자의 join 메시지를 받으면 자신은 리더가 아님
+                else if (message.Contains("joined the party!") && isPartyLeader)
+                {
+                    // 이미 다른 사용자가 있다면 리더 권한 포기
+                    isPartyLeader = false;
+                    Debug.Log($"[PartyLeader] 다른 사용자가 먼저 있었습니다. 리더 권한 포기.");
                 }
             }
         }
@@ -278,32 +212,11 @@ public class PartyManager : Singleton<PartyManager>, IChatClientListener
             partyMembers.Add(user);
             currentPartyMemberCount = partyMembers.Count;
             
-            Debug.Log($"👋 {user}님이 파티에 참여했습니다 ({currentPartyMemberCount}명)");
+            AddChatMessage("System", $"👋 {user}님이 파티에 참여했습니다 ({currentPartyMemberCount}명)");
             Debug.Log($"[PartyCount] 현재 파티 인원: {currentPartyMemberCount}명");
             
             // UI 업데이트 이벤트 발생 (필요시)
             //EventManager.Broadcast(new PartyMemberCountChangedEvent(currentPartyMemberCount));
-            
-            // 파티 리더가 떠났다면 랜덤하게 다음 사용자가 리더가 됨
-            if (user == partyLeaderName && currentPartyMemberCount > 0)
-            {
-                // 남은 파티원 중 랜덤하게 새 리더 선택
-                var remainingMembers = partyMembers.Where(m => m != PhotonNetwork.NickName).ToArray();
-                if (remainingMembers.Length > 0)
-                {
-                    partyLeaderName = remainingMembers[UnityEngine.Random.Range(0, remainingMembers.Length)];
-                }
-                else
-                {
-                    partyLeaderName = PhotonNetwork.NickName; // 자신만 남았다면
-                }
-            
-                if (partyLeaderName == PhotonNetwork.NickName)
-                {
-                    isPartyLeader = true;
-                    Debug.Log($"[PartyLeader] {PhotonNetwork.NickName}이(가) 새로운 파티 리더가 되었습니다.");
-                }
-            }
         }
     }
 
@@ -314,7 +227,7 @@ public class PartyManager : Singleton<PartyManager>, IChatClientListener
             partyMembers.Remove(user);
             currentPartyMemberCount = partyMembers.Count;
 
-            Debug.Log($"👋 {user}님이 파티를 떠났습니다 ({currentPartyMemberCount}명)");
+            AddChatMessage("System", $"👋 {user}님이 파티를 떠났습니다 ({currentPartyMemberCount}명)");
             Debug.Log($"[PartyCount] 현재 파티 인원: {currentPartyMemberCount}명");
 
             // 리더가 떠났다면 다음 사용자가 리더가 됨
@@ -322,6 +235,7 @@ public class PartyManager : Singleton<PartyManager>, IChatClientListener
             {
                 isPartyLeader = true;
                 Debug.Log($"[PartyLeader] {PhotonNetwork.NickName}이(가) 새로운 파티 리더가 되었습니다.");
+                SendPartyMessage($"👑 {PhotonNetwork.NickName}님이 새로운 파티 리더입니다.");
             }
         }
     }
@@ -340,8 +254,22 @@ public class PartyManager : Singleton<PartyManager>, IChatClientListener
     {
         Debug.Log($"채팅 상태 변경: {state}");
     }
+
+
+
+
     private void UpdateStatus(string message)
     {
         Debug.Log($"[채팅 상태] {message}");
+        if (statusText != null) statusText.text = message;
+    }
+
+    private void AddChatMessage(string sender, string message)
+    {
+        if (chatText != null)
+        {
+            string timestamp = DateTime.Now.ToString("HH:mm");
+            chatText.text += $"[{timestamp}] {sender}: {message}\n";
+        }
     }
 }
