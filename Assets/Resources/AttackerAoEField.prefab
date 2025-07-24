@@ -156,6 +156,9 @@ MonoBehaviour:
   _tickDamage: 0
   _tickTime: 0.5
   _totalTick: 10
+  _raycastLayerMask:
+    serializedVersion: 2
+    m_Bits: 832
 --- !u!114 &8460184197524987589
 MonoBehaviour:
   m_ObjectHideFlags: 0
