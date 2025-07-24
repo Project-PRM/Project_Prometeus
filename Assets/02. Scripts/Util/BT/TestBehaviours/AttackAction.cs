@@ -10,6 +10,7 @@ public class AttackAction : IActionNode
 
     public ENodeState Evaluate()
     {
+        Debug.Log("Attack 실행중");
         if(Time.time < _lastAttackTime + _enemy.EnemyData.AttackCoolTime)
         {
             return ENodeState.Running;
@@ -22,6 +23,9 @@ public class AttackAction : IActionNode
     {
         if (_enemy.Target == null)
             return;
+
+        _enemy.ResetAnimatorParameters();
+        _enemy.Animator.SetBool("isAttacking", true);
 
         _enemy.NavMeshAgent.isStopped = true;
         Debug.Log($"Attack {_enemy.Target}: {_enemy.EnemyData.Damage}");
