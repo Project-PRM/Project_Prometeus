@@ -1726,7 +1726,7 @@ GameObject:
   - component: {fileID: 8631239530700257908}
   - component: {fileID: 242060853411088520}
   - component: {fileID: 4518791611430432285}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BuffDummyPlayer
   m_TagString: Player
   m_Icon: {fileID: 0}

@@ -1545,7 +1545,7 @@ GameObject:
   - component: {fileID: 242060853411088520}
   - component: {fileID: 6339711160186851088}
   - component: {fileID: -4262281987946173215}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FulfunsPlayer
   m_TagString: Player
   m_Icon: {fileID: 0}
