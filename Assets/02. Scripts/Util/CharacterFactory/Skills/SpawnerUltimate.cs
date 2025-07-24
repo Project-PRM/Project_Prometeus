@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 public class SpawnerUltimate : ITargetableSkill
@@ -20,26 +21,30 @@ public class SpawnerUltimate : ITargetableSkill
     {
         if (_timer < Data.Cooltime)
         {
-            Debug.Log($"{character.Name} Skill is on cooldown.");
+            Debug.Log($"{character.Name} Ultimate is on cooldown.");
             return;
         }
 
-        Vector3 origin = character.Behaviour.transform.position + character.Behaviour.transform.forward * 1.5f + Vector3.up;
-        target.y = 1.5f; // Y축 고정하여 2D 발사 느낌을 주기 위함
-        Vector3 dir = (target - origin).normalized;
+        Debug.Log("SpawnerUltimate activated.");
 
-        // 방향을 바라보도록 회전 (3D 기준으로 z축 전방)
+        // 발사 위치 계산
+        Vector3 origin = character.Behaviour.transform.position + character.Behaviour.transform.forward * 1.5f + Vector3.up;
+        target.y = 1.5f;
+        Vector3 dir = (target - origin).normalized;
         Quaternion rotation = Quaternion.LookRotation(dir);
 
+        // 프리팹 로드
         GameObject prefab = Resources.Load<GameObject>("Projectiles/" + Data.ProjectilePrefabName);
-
         if (prefab == null)
         {
-            Debug.LogError($"프리팹 {Data.ProjectilePrefabName} 을(를) Resources/Projectiles 에서 찾을 수 없습니다.");
+            Debug.LogError($"Projectile prefab '{Data.ProjectilePrefabName}' not found in Resources/Projectiles.");
             return;
         }
 
-        GameObject projectile = GameObject.Instantiate(prefab, origin, rotation);
+        // 큐브 생성 (Photon)
+        GameObject projectile = PhotonNetwork.Instantiate($"Projectiles/{Data.ProjectilePrefabName}", origin, rotation);
+
+        // 데이터 세팅
         projectile.GetComponent<IProjectile>().SetData(Data, character, dir);
 
         _timer = 0f;
