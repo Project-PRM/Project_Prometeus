@@ -10,6 +10,7 @@ public class AttackAction : IActionNode
 
     public ENodeState Evaluate()
     {
+        Debug.Log("Attack 실행중");
         if(Time.time < _lastAttackTime + _enemy.EnemyData.AttackCoolTime)
         {
             return ENodeState.Running;

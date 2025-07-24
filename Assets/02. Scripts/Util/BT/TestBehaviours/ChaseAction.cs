@@ -9,6 +9,7 @@ public class ChaseAction : IActionNode
 
     public ENodeState Evaluate()
     {
+        Debug.Log("Chase 실행중");
         ChasePlayer();
         return ENodeState.Running;
     }
