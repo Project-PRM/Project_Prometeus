@@ -3,5 +3,5 @@
 /// </summary>
 public interface ISkillNoTarget : ISkill
 {
-    public void Activate(CharacterBase user);
+    public void Activate();
 }

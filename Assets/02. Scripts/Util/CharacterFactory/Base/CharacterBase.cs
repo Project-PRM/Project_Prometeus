@@ -61,6 +61,11 @@ public class CharacterBase
         BaseStats = baseStats;
         CurrentHealth = BaseStats.MaxHealth;
         BindPassiveEvents();
+
+        _basicAttack.SetOwner(this);
+        _passive.SetOwner(this);
+        _skill.SetOwner(this);
+        _ultimate.SetOwner(this);
     }
 
     public ISkill GetSkill(ESkillType type)
@@ -90,15 +95,15 @@ public class CharacterBase
 
         if (skill is IUnitTargetSkill unitTargetSkill && target != null)
         {
-            unitTargetSkill.Activate(this, target);
+            unitTargetSkill.Activate(target);
         }
         else if (skill is ITargetableSkill targetableSkill && position.HasValue)
         {
-            targetableSkill.Activate(this, position.Value);
+            targetableSkill.Activate(position.Value);
         }
         else if (skill is ISkillNoTarget skillNoTarget)
         {
-            skillNoTarget.Activate(this);
+            skillNoTarget.Activate();
         } 
         else
         {

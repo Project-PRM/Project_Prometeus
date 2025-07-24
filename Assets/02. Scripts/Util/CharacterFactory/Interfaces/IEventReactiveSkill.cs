@@ -4,6 +4,6 @@
 /// </summary>
 public interface IEventReactiveSkill : ISkill
 {
-    public void Activate(CharacterBase user);
+    public void Activate();
     public void OnEvent(ECharacterEvent evt);
 }

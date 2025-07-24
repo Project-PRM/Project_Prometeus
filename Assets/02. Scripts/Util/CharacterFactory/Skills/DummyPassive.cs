@@ -6,6 +6,11 @@ public class DummyPassive : IEventReactiveSkill
     private float _timer = 0f;
 
     public SkillData Data { get; set; }
+    public CharacterBase Character { get; set; }
+    public void SetOwner(CharacterBase character)
+    {
+        Character = character;
+    }
 
     public void Update()
     {
@@ -17,14 +22,14 @@ public class DummyPassive : IEventReactiveSkill
         return Resources.Load<GameObject>($"Indicators/{Data.IndicatorPrefabName}");
     }
 
-    public void Activate(CharacterBase character)
+    public void Activate()
     {
         if (_timer < Data.Cooltime)
         {
-            Debug.Log($"{character.Name} DummyPassive is on cooldown.");
+            Debug.Log($"{Character.Name} DummyPassive is on cooldown.");
             return;
         }
-        Debug.Log($"{character.Name} activated DummyPassive.");
+        Debug.Log($"{Character.Name} activated DummyPassive.");
 
         _timer = 0f;
     }

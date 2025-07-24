@@ -5,6 +5,11 @@ public class HealerPassive : IEventReactiveSkill
     private float _timer = 0f;
 
     public SkillData Data { get; set; }
+    public CharacterBase Character { get; set; }
+    public void SetOwner(CharacterBase character)
+    {
+        Character = character;
+    }
 
     public void Update()
     {
@@ -16,14 +21,14 @@ public class HealerPassive : IEventReactiveSkill
         return Resources.Load<GameObject>($"Indicators/{Data.IndicatorPrefabName}");
     }
 
-    public void Activate(CharacterBase character)
+    public void Activate()
     {
         if (_timer < Data.Cooltime)
         {
-            Debug.Log($"{character.Name} HealerPassive is on cooldown.");
+            Debug.Log($"{Character.Name} HealerPassive is on cooldown.");
             return;
         }
-        Debug.Log($"{character.Name} activated HealerPassive.");
+        Debug.Log($"{Character.Name} activated HealerPassive.");
 
         _timer = 0f;
     }

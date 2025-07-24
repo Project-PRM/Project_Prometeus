@@ -5,6 +5,11 @@ public class FulfunsUltimate : ITargetableSkill
 {
     private float _timer = 0f;
     public SkillData Data { get; set; }
+    public CharacterBase Character { get; set; }
+    public void SetOwner(CharacterBase character)
+    {
+        Character = character;
+    }
 
     public void Update() => _timer += Time.deltaTime;
 
@@ -13,15 +18,15 @@ public class FulfunsUltimate : ITargetableSkill
         return Resources.Load<GameObject>($"Indicators/{Data.IndicatorPrefabName}");
     }
 
-    public void Activate(CharacterBase character, Vector3 target)
+    public void Activate(Vector3 target)
     {
         if (_timer < Data.Cooltime)
         {
-            Debug.Log($"{character.Name} Ultimate is on cooldown.");
+            Debug.Log($"{Character.Name} Ultimate is on cooldown.");
             return;
         }
 
-        Vector3 origin = character.Behaviour.transform.position + character.Behaviour.transform.forward * 1.5f + Vector3.up;
+        Vector3 origin = Character.Behaviour.transform.position + Character.Behaviour.transform.forward * 1.5f + Vector3.up;
         target.y = 1.5f;
         Vector3 dir = (target - origin).normalized;
         Quaternion rotation = Quaternion.LookRotation(dir);
@@ -34,7 +39,7 @@ public class FulfunsUltimate : ITargetableSkill
         }
 
         GameObject projectile = PhotonNetwork.Instantiate($"Projectiles/{Data.ProjectilePrefabName}", origin, rotation);
-        projectile.GetComponent<IProjectile>().SetData(Data, character, dir);
+        projectile.GetComponent<IProjectile>().SetData(Data, Character, dir);
 
         _timer = 0f;
     }

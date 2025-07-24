@@ -5,6 +5,6 @@ using UnityEngine;
 /// </summary>
 public interface IUnitTargetSkill : ISkill
 {
-    public void Activate(CharacterBase user, CharacterBase target);
+    public void Activate(CharacterBase target);
     public GameObject GetIndicatorPrefab();
 }

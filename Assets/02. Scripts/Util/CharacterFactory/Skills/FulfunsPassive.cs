@@ -6,7 +6,6 @@ using System.Collections;
 public class FulfunsPassive : IEventReactiveSkill
 {
     private float _timer = 0f;
-    private CharacterBase _character;
 
     private bool _isActive = false;
     private float _activeTimeRemaining = 0f;
@@ -15,6 +14,12 @@ public class FulfunsPassive : IEventReactiveSkill
     private Coroutine _smallPuddles;
 
     public SkillData Data { get; set; }
+
+    public CharacterBase Character { get; set; }
+    public void SetOwner(CharacterBase character)
+    {
+        Character = character;
+    }
 
     public void Update()
     {
@@ -35,7 +40,7 @@ public class FulfunsPassive : IEventReactiveSkill
 
         if (_spawnCooldownTimer <= 0f)
         {
-            Vector3 spawnPos = _character.Behaviour.transform.position;
+            Vector3 spawnPos = Character.Behaviour.transform.position;
             spawnPos.y = 0.1f; // 땅에 살짝 띄워서 생성
             Debug.Log("Trying to instantiate AoE at " + spawnPos);
             SpawnSmallAoE(spawnPos);
@@ -48,14 +53,11 @@ public class FulfunsPassive : IEventReactiveSkill
         return Resources.Load<GameObject>($"Indicators/{Data.IndicatorPrefabName}");
     }
 
-    public void Activate(CharacterBase character)
+    public void Activate()
     {
-        _character = character;
-
         if(_smallPuddles == null)
         {
-            _smallPuddles = _character.Behaviour.StartCoroutine(SpawnSmallPuddles());
-
+            _smallPuddles = Character.Behaviour.StartCoroutine(SpawnSmallPuddles());
         }
         _isActive = true;
         _activeTimeRemaining = 5f;
@@ -63,10 +65,10 @@ public class FulfunsPassive : IEventReactiveSkill
 
         if (_timer < Data.Cooltime)
         {
-            Debug.Log($"{character.Name} FulfunsPassive is on cooldown.");
+            Debug.Log($"{Character.Name} FulfunsPassive is on cooldown.");
             return;
         }
-        Debug.Log($"{character.Name} activated FulfunsPassive.");
+        Debug.Log($"{Character.Name} activated FulfunsPassive.");
 
         _timer = 0f;
     }
@@ -92,7 +94,7 @@ public class FulfunsPassive : IEventReactiveSkill
 
         GameObject area = /*GameObject.*/PhotonNetwork.Instantiate($"Summons/{Data.SummonPrefabName}", pos, Quaternion.identity);
         AttackerAoEField puddles = area.GetComponent<AttackerAoEField>();
-        puddles.StartAoEField(_character, Data.Duration, Data.Damage);
+        puddles.StartAoEField(Character, Data.Duration, Data.Damage);
     }
 
     private IEnumerator SpawnSmallPuddles()
@@ -105,7 +107,7 @@ public class FulfunsPassive : IEventReactiveSkill
 
         while (elapsed < duration)
         {
-            Vector3 spawnPos = _character.Behaviour.transform.position;
+            Vector3 spawnPos = Character.Behaviour.transform.position;
             spawnPos.y = 0.1f;
 
             Debug.Log("Spawn puddle at " + spawnPos);
