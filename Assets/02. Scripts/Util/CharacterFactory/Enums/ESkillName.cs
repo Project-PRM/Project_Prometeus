@@ -20,4 +20,7 @@ public enum ESkillName
     SpawnerSkill,
     SpawnerUltimate,
     SpawnerPassive,
+    FulfunsSkill,
+    FulfunsUltimate,
+    FulfunsPassive,
 }
