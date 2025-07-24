@@ -7,6 +7,7 @@ TagManager:
   - FollowCamera
   - Ground
   - Enemy
+  - FulfunsField
   layers:
   - Default
   - TransparentFX

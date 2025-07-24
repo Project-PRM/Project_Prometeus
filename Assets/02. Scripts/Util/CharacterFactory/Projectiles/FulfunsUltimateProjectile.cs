@@ -1,9 +1,8 @@
-using Photon.Pun;
 using Photon.Pun.Demo.SlotRacer.Utils;
+using Photon.Pun;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
-public class UltimateProjectile : MonoBehaviour, IProjectile
+public class FulfunsUltimateProjectile : MonoBehaviour, IProjectile
 {
     private CharacterBase _owner;
     private SkillData _data;
@@ -45,15 +44,13 @@ public class UltimateProjectile : MonoBehaviour, IProjectile
         if (_bezierT >= 1f)
         {
             _bezierT = 1f;
-            SpawnAoEField();
+            SpawnFulfunsObject();
             _hasExploded = true;
             return;
         }
 
         Vector3 newPosition = Bezier.GetPoint(_startPosition, _controlPoint1, _controlPoint2, _endPosition, _bezierT);
         transform.position = newPosition;
-
-        DrawBezierDebugLine();
     }
 
     private void OnTriggerEnter(Collider collision)
@@ -63,31 +60,37 @@ public class UltimateProjectile : MonoBehaviour, IProjectile
             return;
         }
         Debug.Log($"collided with {collision.gameObject}");
-        // 땅 처리
-        //if (collision.gameObject.CompareTag("Ground"))
-        //{
-        //    return;
-        //}
+
         // 자기 자신 처리
         if (_owner != null && collision.gameObject == _owner.Behaviour.gameObject)
         {
             return;
         }
-        // 팀원 처리
 
-        SpawnAoEField();
+
+        if (collision.CompareTag("FulfunsField"))
+        {
+            Vector3 spawnPos = transform.position;
+            spawnPos.y = 1f; // 땅에 붙게 Y 고정
+
+            PhotonNetwork.Instantiate("FulfunsUltimateObject", spawnPos, Quaternion.identity);
+            _hasExploded = true;
+            PhotonNetwork.Destroy(gameObject);
+        }
+        else
+        {
+            // 플레이어 밀쳐내기 구현 필요
+        }
+
         _hasExploded = true;
     }
 
-    private void SpawnAoEField()
+    private void SpawnFulfunsObject()
     {
         if (_hasExploded) return;
-        //GameObject field = Resources.Load<GameObject>("AttackerAoEField");
-        //AttackerAoEField aoeField = field.GetComponent<AttackerAoEField>();
-        GameObject field = PhotonNetwork.Instantiate("AttackerAoEField", transform.position, Quaternion.identity);
-        AttackerAoEField aoeField = field.GetComponent<AttackerAoEField>();
-
-        aoeField.StartAoEField(_owner, _data.Duration, _data.Damage);
+        GameObject slime = PhotonNetwork.Instantiate("FulfunsUltimateObject", transform.position, Quaternion.identity);
+        //FulfunsSpawnObject slimeObject = slime.GetComponent<FulfunsSpawnObject>();
+        //slimeObject - 아직 아무것도 안함
         PhotonNetwork.Destroy(gameObject);
     }
 
@@ -111,21 +114,4 @@ public class UltimateProjectile : MonoBehaviour, IProjectile
 
         _isInitialized = true;
     }
-
-    private void DrawBezierDebugLine()
-    {
-        if (!_isInitialized) return;
-
-        int resolution = 20; // 샘플 수
-        Vector3 prev = _startPosition;
-
-        for (int i = 1; i <= resolution; i++)
-        {
-            float t = i / (float)resolution;
-            Vector3 point = Bezier.GetPoint(_startPosition, _controlPoint1, _controlPoint2, _endPosition, t);
-            Debug.DrawLine(prev, point, Color.cyan, 0f, false);
-            prev = point;
-        }
-    }
-
 }

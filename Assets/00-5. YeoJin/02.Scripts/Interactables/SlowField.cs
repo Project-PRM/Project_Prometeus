@@ -5,23 +5,25 @@ using UnityEngine;
 public class SlowField : MonoBehaviour
 {
     private CharacterBase _owner;
+    private SkillData _data;
 
     [SerializeField] private float _duration;
     [SerializeField] private float _slowAmount = -2f;
-    private StatModifier _slowEffect;
+    private SlowEffect _slowEffect;
 
     private HashSet<CharacterBase> _targetsInRange = new HashSet<CharacterBase>();
 
-    public void StartSlowField(CharacterBase character, float debuffAmount)
+    public void StartSlowField(CharacterBase character, SkillData data)
     {
         _owner = character;
-        _slowAmount = debuffAmount;
+        _data = data;
+        _slowAmount = _data.DebuffAmount;
     }
 
     private void Start()
     {
-        _slowEffect = new StatModifier();
-        _slowEffect.Add(EStatType.MoveSpeed, _slowAmount);
+        _slowEffect = new SlowEffect(_data.Duration, _data.DebuffAmount);
+        //_slowEffect.Add(EStatType.MoveSpeed, _slowAmount);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -30,7 +32,8 @@ public class SlowField : MonoBehaviour
         if (target != null && target != _owner)
         {
             _targetsInRange.Add(target);
-            target.AddStatModifier(_slowEffect);
+            //target.AddStatModifier(_slowEffect);
+            _slowEffect.Apply(target);
         }
     }
 
@@ -40,7 +43,7 @@ public class SlowField : MonoBehaviour
         if (target != null && target != _owner)
         {
             _targetsInRange.Remove(target);
-            target.RemoveStatModifier(_slowEffect);
+            _slowEffect.Remove(target);
         }
     }
 
@@ -48,7 +51,8 @@ public class SlowField : MonoBehaviour
     {
         foreach(var character in _targetsInRange)
         {
-            character.RemoveStatModifier(_slowEffect);
+            //character.RemoveStatModifier(_slowEffect);
+            _slowEffect.Remove(character);
         }
     }
 }
