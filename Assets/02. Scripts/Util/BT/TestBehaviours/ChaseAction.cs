@@ -3,6 +3,7 @@ using UnityEngine;
 public class ChaseAction : IActionNode
 {
     private EnemyController _enemy;
+    private Transform _cachedTarget;
 
     public ChaseAction(EnemyController enemy) => _enemy = enemy;
 
@@ -14,7 +15,11 @@ public class ChaseAction : IActionNode
 
     public void ChasePlayer()
     {
-        Debug.Log("추격 중");
-        // 플레이어 쪽으로 이동
+        if (_enemy.Target == null || _cachedTarget == _enemy.Target)
+            return;
+        _enemy.NavMeshAgent.isStopped = false;
+        Debug.Log($"Chasing player: {_enemy.Target.name}");
+        _enemy.NavMeshAgent.SetDestination(_enemy.Target.position);
+        //_enemy.Animator.SetBool("isRunning", true);
     }
 }

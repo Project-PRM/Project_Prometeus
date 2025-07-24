@@ -14,6 +14,7 @@ public class IsPlayerInAttackRange : IConditionNode
     public bool CheckIsPlayerInAttackRange()
     {
         if (_enemy.Target == null) return false;
-        return Vector3.Distance(_enemy.transform.position, _enemy.Target.position) < _enemy.EnemyData.AttackRange;
+        return Vector3.Distance(_enemy.transform.position, _enemy.Target.position)
+            < _enemy.EnemyData.AttackRange;
     }
 }
