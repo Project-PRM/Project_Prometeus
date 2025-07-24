@@ -27,12 +27,9 @@ public class CharacterInGameView : MonoBehaviour, IPunObservable
             SetupCamera();
         }
 
-        TurnOnRevealer();
-
-        if (_nickname != null)
-        {
-            _nickname.SetName(_characterBehaviour.PhotonView.Owner.NickName);
-        }
+        /*TurnOnRevealer();
+        SetNickname();*/
+        ApplyTeamBasedVisibility();
 
         _healthBar.SetValue(1); // 초기값 세팅
     }
@@ -73,6 +70,36 @@ public class CharacterInGameView : MonoBehaviour, IPunObservable
         }
     }
 
+    private void ApplyTeamBasedVisibility()
+    {
+        var revealer = GetComponent<FogOfWarRevealer3D>();
+        if (revealer == null) return;
+        if (_nickname == null) return;
+
+        if (_characterBehaviour.PhotonView.IsMine)
+        {
+            revealer.enabled = true;
+            _nickname.SetName(PhotonNetwork.NickName);
+            _nickname.gameObject.SetActive(true);
+            return;
+        }
+
+        var myTeam = PhotonServerManager.Instance.GetPlayerTeam(PhotonNetwork.LocalPlayer);
+        var team = PhotonServerManager.Instance.GetPlayerTeam(_characterBehaviour.PhotonView.Owner);
+
+        if (myTeam == team)
+        {
+            revealer.enabled = true;
+            _nickname.SetName(_characterBehaviour.PhotonView.Owner.NickName);
+            _nickname.gameObject.SetActive(true);
+        }
+        else
+        {
+            revealer.enabled = false;
+            _nickname.gameObject.SetActive(false);
+        }
+    }
+
     private void TurnOnRevealer()
     {
         var revealer = GetComponent<FogOfWarRevealer3D>();
@@ -90,6 +117,34 @@ public class CharacterInGameView : MonoBehaviour, IPunObservable
         if (myTeam == team)
         {
             revealer.enabled = true;
+        }
+        else
+        {
+            _nickname.gameObject.SetActive(false);
+        }
+    }
+
+    private void SetNickname()
+    {
+        if (_nickname == null) return;
+
+        if (_characterBehaviour.PhotonView.IsMine)
+        {
+            _nickname.SetName(PhotonNetwork.NickName);
+            return;
+        }
+
+        var myTeam = PhotonServerManager.Instance.GetPlayerTeam(PhotonNetwork.LocalPlayer);
+        var team = PhotonServerManager.Instance.GetPlayerTeam(_characterBehaviour.PhotonView.Owner);
+
+        if (myTeam == team)
+        {
+            _nickname.SetName(_characterBehaviour.PhotonView.Owner.NickName);
+            _nickname.gameObject.SetActive(true);
+        }
+        else
+        {
+            _nickname.gameObject.SetActive(false);
         }
     }
 
