@@ -112,10 +112,20 @@ public class EnemyController : MonoBehaviour, IDamageable
         Collider.enabled = false;
         ResetAnimatorParameters();
 
+        //PhotonView.RPC("RPC_AnimationTrigger", RpcTarget.AllBuffered, "Die");
         Animator.SetTrigger("Die");
         // TODO : 죽음 애니메이션 시작하면서 아이템 뿌리고, 애니메이션 끝나면 파괴
         /*PhotonNetwork.*/
         Destroy(gameObject);
+    }
+
+    [PunRPC]
+    public void RPC_AnimationTrigger(string triggerName)
+    {
+        if (Animator != null)
+        {
+            Animator.SetTrigger(triggerName);
+        }
     }
 
     public void ResetAnimatorParameters()
