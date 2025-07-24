@@ -75,17 +75,27 @@ public class CharacterInventory : MonoBehaviour
         Debug.Log($"CharacterInventory initialized with {HavingItems.Count} items in bag, {EquippedItems.Count} equipped.");
     }
 
-
     public void AddItem(ItemData item)
     {
         HavingItems.Add(item);
         SortHavingItems();
     }
 
-    public void RemoveItem(ItemData item)
+    public void DropItem(ItemData item)
     {
         HavingItems.Remove(item);
         SortHavingItems();
+    }
+
+    public void DropAndInstantiateItem(ItemData item)
+    {
+        if (!HavingItems.Contains(item)) return;
+        HavingItems.Remove(item);
+        SortHavingItems();
+        GameObject temp = Resources.Load<GameObject>($"Items/{item.Name}");
+        GameObject itemObject = Instantiate(temp, transform.position, Quaternion.identity);
+        //GameObject itemObject = PhotonNetwork.Instantiate($"Items/{item.Name}", transform.position, Quaternion.identity);
+        itemObject.GetComponent<ItemBase>().SpreadFrom(transform.position);
     }
 
     public bool TryEquipItem(ItemData item)

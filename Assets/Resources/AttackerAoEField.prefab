@@ -15,6 +15,8 @@ GameObject:
   - component: {fileID: 1018352570997287847}
   - component: {fileID: 838903678087490410}
   - component: {fileID: 8460184197524987589}
+  - component: {fileID: 3092463857887204215}
+  - component: {fileID: 6008037319245190298}
   m_Layer: 0
   m_Name: AttackerAoEField
   m_TagString: FulfunsField
@@ -176,3 +178,36 @@ MonoBehaviour:
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &3092463857887204215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2819273694450957364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06c78af948052824d93c22c84c08dd65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SamplePoints:
+  - {fileID: 4297222484646958027}
+  PermanentlyReveal: 0
+  MaxDistBetweenSamplePoints: 0
+  NumObservers: 0
+  Observers: []
+  CachedTransform: {fileID: 0}
+--- !u!114 &6008037319245190298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2819273694450957364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bd2966c16df4fa4cba52ea99b2698d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjectsToHide:
+  - {fileID: 3983395572475963971}
