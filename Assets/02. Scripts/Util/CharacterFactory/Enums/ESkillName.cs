@@ -18,6 +18,6 @@ public enum ESkillName
     TankerSkill,
     TankerUltimate,
     SpawnerSkill,
+    SpawnerUltimate,
     SpawnerPassive,
-    SpawnerUltimate
 }
