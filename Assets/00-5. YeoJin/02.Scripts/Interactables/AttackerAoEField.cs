@@ -44,15 +44,25 @@ public class AttackerAoEField : MonoBehaviour
     private IEnumerator DamageTickRoutine()
     {
         var wait = new WaitForSeconds(_tickTime);
+
         for (int i = 0; i < _totalTick; i++)
         {
             foreach (var target in _targetsInRange)
             {
                 if (target is MonoBehaviour mb && mb.TryGetComponent<PhotonView>(out var targetView))
                 {
-                    // 피해자 클라이언트에게 데미지 적용 요청
-                    targetView.RPC("RPC_TakeDamage", RpcTarget.AllBuffered, _tickDamage);
-                    Debug.Log($"{target} : Tick - {_tickDamage}");
+                    Vector3 direction = (mb.transform.position - transform.position).normalized;
+                    float distance = Vector3.Distance(transform.position, mb.transform.position);
+
+                    // Ray를 쏴서 직접 맞는 오브젝트가 target인지 확인
+                    if (Physics.Raycast(transform.position, direction, out RaycastHit hit, distance))
+                    {
+                        // target과 직접 부딪혔는지 확인 (transform 기준 비교)
+                        if (hit.transform == mb.transform)
+                        {
+                            targetView.RPC("RPC_TakeDamage", RpcTarget.AllBuffered, _tickDamage);
+                        }
+                    }
                 }
             }
 

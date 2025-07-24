@@ -108,7 +108,6 @@ public class MyInventoryPanel : Singleton<MyInventoryPanel>
         return false;
     }
 
-
     private void UpdateBagSlotCount()
     {
         var bagItem = _currentInventory.EquippedItems.FirstOrDefault(i => i.ItemType == EItemType.Bag);
@@ -135,5 +134,11 @@ public class MyInventoryPanel : Singleton<MyInventoryPanel>
         }
 
         UpdateInventorySize(finalSlot);
+    }
+
+    public void DropAndInstantiateItem(ItemData item)
+    {
+        _currentInventory.DropAndInstantiateItem(item);
+        OpenPanel(_currentInventory);
     }
 }
