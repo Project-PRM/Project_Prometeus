@@ -36,9 +36,9 @@ public class GroundItemBox : MonoBehaviour, IDamageable
 
         foreach(var item in _itemList)
         {
-            GameObject temp = Resources.Load<GameObject>(item.Name);
+            GameObject temp = Resources.Load<GameObject>($"Items/{item.Name}");
             GameObject itemObject = Instantiate(temp, transform.position, Quaternion.identity);
-            //GameObject itemObject = PhotonNetwork.Instantiate(item.Name, transform.position, Quaternion.identity);
+            //GameObject itemObject = PhotonNetwork.Instantiate($"Items/{item.Name}", transform.position, Quaternion.identity);
             _itemObjects.Add(itemObject);
             itemObject.SetActive(false);
         }
