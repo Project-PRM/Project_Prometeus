@@ -79,6 +79,7 @@ public class FulfunsPassive : IEventReactiveSkill
         {
             return;
         }
+        Activate();
         Debug.Log($"fulfuns passive start");
     }
 
