@@ -1,7 +1,7 @@
 using UnityEngine;
 using Photon.Pun;
-using Unity.AppUI.Core;
-using UnityEngine.TextCore.Text;
+using static UnityEditor.PlayerSettings;
+using System.Collections;
 
 public class FulfunsPassive : IEventReactiveSkill
 {
@@ -12,13 +12,17 @@ public class FulfunsPassive : IEventReactiveSkill
     private float _activeTimeRemaining = 0f;
     private float _spawnCooldownTimer = 0f;
 
+    private Coroutine _smallPuddles;
+
     public SkillData Data { get; set; }
 
     public void Update()
     {
         _timer += Time.deltaTime;
 
+        Debug.Log("is it active?");
         if (!_isActive) return;
+        Debug.Log("Yes it is");
 
         _activeTimeRemaining -= Time.deltaTime;
         _spawnCooldownTimer -= Time.deltaTime;
@@ -33,6 +37,7 @@ public class FulfunsPassive : IEventReactiveSkill
         {
             Vector3 spawnPos = _character.Behaviour.transform.position;
             spawnPos.y = 0.1f; // 땅에 살짝 띄워서 생성
+            Debug.Log("Trying to instantiate AoE at " + spawnPos);
             SpawnSmallAoE(spawnPos);
             _spawnCooldownTimer = 1f; // 1초마다 생성
         }
@@ -46,6 +51,15 @@ public class FulfunsPassive : IEventReactiveSkill
     public void Activate(CharacterBase character)
     {
         _character = character;
+
+        if(_smallPuddles == null)
+        {
+            _smallPuddles = _character.Behaviour.StartCoroutine(SpawnSmallPuddles());
+
+        }
+        _isActive = true;
+        _activeTimeRemaining = 5f;
+        _spawnCooldownTimer = 0f;
 
         if (_timer < Data.Cooltime)
         {
@@ -63,12 +77,7 @@ public class FulfunsPassive : IEventReactiveSkill
         {
             return;
         }
-
         Debug.Log($"fulfuns passive start");
-
-        _isActive = true;
-        _activeTimeRemaining = 5f;
-        _spawnCooldownTimer = 0f;
     }
 
     private void SpawnSmallAoE(Vector3 pos)
@@ -84,5 +93,31 @@ public class FulfunsPassive : IEventReactiveSkill
         GameObject area = /*GameObject.*/PhotonNetwork.Instantiate($"Summons/{Data.SummonPrefabName}", pos, Quaternion.identity);
         AttackerAoEField puddles = area.GetComponent<AttackerAoEField>();
         puddles.StartAoEField(_character, Data.Duration, Data.Damage);
+    }
+
+    private IEnumerator SpawnSmallPuddles()
+    {
+        float duration = 5f;
+        float tick = 1f;
+        var tickSec = new WaitForSeconds(tick);
+
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            Vector3 spawnPos = _character.Behaviour.transform.position;
+            spawnPos.y = 0.1f;
+
+            Debug.Log("Spawn puddle at " + spawnPos);
+            SpawnSmallAoE(spawnPos);
+
+            yield return tickSec;
+            elapsed += tick;
+        }
+
+        // 쿨타임용
+        yield return new WaitForSeconds(6f);
+
+        _smallPuddles = null;
     }
 }
