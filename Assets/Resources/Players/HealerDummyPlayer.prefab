@@ -1635,7 +1635,7 @@ GameObject:
   - component: {fileID: 8631239530700257908}
   - component: {fileID: 242060853411088520}
   - component: {fileID: 4144933786073553633}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HealerDummyPlayer
   m_TagString: Player
   m_Icon: {fileID: 0}

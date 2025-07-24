@@ -12,6 +12,7 @@ public class AttackerAoEField : MonoBehaviour
     [SerializeField] private float _tickDamage;
     [SerializeField] private float _tickTime = 0.5f;
     [SerializeField] private int _totalTick = 10;
+    [SerializeField] private LayerMask _raycastLayerMask;
 
     private HashSet<IDamageable> _targetsInRange = new HashSet<IDamageable>();
 
@@ -52,16 +53,42 @@ public class AttackerAoEField : MonoBehaviour
                 if (target is MonoBehaviour mb && mb.TryGetComponent<PhotonView>(out var targetView))
                 {
                     Vector3 direction = (mb.transform.position - transform.position).normalized;
-                    float distance = Vector3.Distance(transform.position, mb.transform.position);
+                    float distance = Vector3.Distance(transform.position, mb.transform.position) + 0.1f;
 
-                    // Ray를 쏴서 직접 맞는 오브젝트가 target인지 확인
-                    if (Physics.Raycast(transform.position, direction, out RaycastHit hit, distance))
+                    RaycastHit[] hits = Physics.RaycastAll(transform.position, direction, distance, _raycastLayerMask);
+
+                    System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+
+                    bool hitObstacleFirst = false;
+                    bool hitTargetFirst = false;
+
+                    foreach (var hit in hits)
                     {
-                        // target과 직접 부딪혔는지 확인 (transform 기준 비교)
-                        if (hit.transform == mb.transform)
+                        var hitTransform = hit.transform;
+                        int hitLayer = hitTransform.gameObject.layer;
+
+                        if (hitLayer == LayerMask.NameToLayer("Obstacle"))
                         {
-                            targetView.RPC("RPC_TakeDamage", RpcTarget.AllBuffered, _tickDamage);
+                            // 장애물이 먼저 맞았다면 루프 종료 — 데미지 안 줌
+                            hitObstacleFirst = true;
+                            break;
                         }
+
+                        if (hitLayer == LayerMask.NameToLayer("Character") ||
+                            hitLayer == LayerMask.NameToLayer("Enemy"))
+                        {
+                            if (hitTransform == mb.transform)
+                            {
+                                // 타겟이 먼저 맞았다면 데미지 주고 루프 종료
+                                hitTargetFirst = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (hitTargetFirst && !hitObstacleFirst)
+                    {
+                        targetView.RPC("RPC_TakeDamage", RpcTarget.AllBuffered, _tickDamage);
                     }
                 }
             }

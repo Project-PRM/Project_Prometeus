@@ -2293,7 +2293,7 @@ GameObject:
   - component: {fileID: 8159299049935430757}
   - component: {fileID: 3166987202729198461}
   - component: {fileID: 8524318827526128175}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: SpawnerDummyPlayer
   m_TagString: Player
   m_Icon: {fileID: 0}
