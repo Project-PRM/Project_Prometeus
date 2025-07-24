@@ -99,7 +99,7 @@ public class CharacterBase
         else if (skill is ISkillNoTarget skillNoTarget)
         {
             skillNoTarget.Activate(this);
-        }
+        } 
         else
         {
             Debug.LogWarning($"Skill {type} activation failed: parameters mismatch or unsupported skill type.");
@@ -121,7 +121,7 @@ public class CharacterBase
         _ultimate.Update();
     }
 
-    private void RaiseEvent(ECharacterEvent characterEvent)
+    public void RaiseEvent(ECharacterEvent characterEvent)
     {
         OnEventOccurred?.Invoke(characterEvent);
     }

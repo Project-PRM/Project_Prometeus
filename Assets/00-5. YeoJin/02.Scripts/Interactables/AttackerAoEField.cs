@@ -32,6 +32,10 @@ public class AttackerAoEField : MonoBehaviour
         {
             _targetsInRange.Add(damageable);
         }
+        else if(damageable == _damageSelf)
+        {
+            _owner.RaiseEvent(ECharacterEvent.OnFulfunsFieldTouched);
+        }
     }
 
     private void OnTriggerExit(Collider other)
