@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 
-public class Sequence : BtNode
+public class Sequence : IBtNode
 {
-    private List<BtNode> _children;
+    private List<IBtNode> _children;
 
-    public Sequence(List<BtNode> children) => _children = children;
+    public Sequence(List<IBtNode> children) => _children = children;
 
-    public override ENodeState Evaluate()
+    public ENodeState Evaluate()
     {
         foreach (var child in _children)
         {

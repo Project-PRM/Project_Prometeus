@@ -1,11 +1,20 @@
-public class IsPlayerInAttackRange : BtNode
+using UnityEngine;
+
+public class IsPlayerInAttackRange : IConditionNode
 {
-    private AIController _ai;
+    private EnemyController _enemy;
 
-    public IsPlayerInAttackRange(AIController ai) => _ai = ai;
+    public IsPlayerInAttackRange(EnemyController enemy) => _enemy = enemy;
 
-    public override ENodeState Evaluate()
+    public ENodeState Evaluate()
     {
-        return _ai.IsPlayerInAttackRange() ? ENodeState.Success : ENodeState.Failure;
+        return CheckIsPlayerInAttackRange() ? ENodeState.Success : ENodeState.Failure;
+    }
+
+    public bool CheckIsPlayerInAttackRange()
+    {
+        if (_enemy.Target == null) return false;
+        return Vector3.Distance(_enemy.transform.position, _enemy.Target.position)
+            < _enemy.EnemyData.AttackRange;
     }
 }

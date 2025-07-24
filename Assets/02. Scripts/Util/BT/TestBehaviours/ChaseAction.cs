@@ -1,12 +1,25 @@
-public class ChaseAction : BtNode
+using UnityEngine;
+
+public class ChaseAction : IActionNode
 {
-    private AIController _ai;
+    private EnemyController _enemy;
+    private Transform _cachedTarget;
 
-    public ChaseAction(AIController ai) => _ai = ai;
+    public ChaseAction(EnemyController enemy) => _enemy = enemy;
 
-    public override ENodeState Evaluate()
+    public ENodeState Evaluate()
     {
-        _ai.ChasePlayer();
+        ChasePlayer();
         return ENodeState.Running;
+    }
+
+    public void ChasePlayer()
+    {
+        if (_enemy.Target == null || _cachedTarget == _enemy.Target)
+            return;
+        _enemy.NavMeshAgent.isStopped = false;
+        Debug.Log($"Chasing player: {_enemy.Target.name}");
+        _enemy.NavMeshAgent.SetDestination(_enemy.Target.position);
+        //_enemy.Animator.SetBool("isRunning", true);
     }
 }
