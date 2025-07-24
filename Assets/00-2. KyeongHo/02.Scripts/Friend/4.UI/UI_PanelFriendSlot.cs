@@ -11,13 +11,13 @@ public class UI_PanelFriendSlot : MonoBehaviour
         FriendName.text = nickname;
         FriendConnectState.text = "online"; // TODO : Account랑 firestore에 추후 필드 추가
     }
-    void Start()
+    public async void OnClickFriendInvite()
     {
-        
-    }
 
-    void Update()
-    {
-        
+        string friendUid = await AccountManager.Instance.GetUidWithNickname(FriendName.text);
+        string myNickname = AccountManager.Instance.MyAccount.Nickname;
+    
+        // 친구 초대 전송
+        PartyManager.Instance.SendFriendInvite(friendUid, myNickname);
     }
 }
