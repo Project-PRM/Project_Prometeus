@@ -7,4 +7,6 @@ public interface ISkill
 {
     public void Update();
     public SkillData Data { get; set; }
+    public CharacterBase Character { get; set; }
+    public void SetOwner(CharacterBase character);
 }

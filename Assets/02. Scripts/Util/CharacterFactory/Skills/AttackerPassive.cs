@@ -9,6 +9,11 @@ public class AttackerPassive : ISkillNoTarget
     private float _timer = 0f;
     public SkillData Data { get; set; }
     private Coroutine _dash;
+    public CharacterBase Character { get; set; }
+    public void SetOwner(CharacterBase character)
+    {
+        Character = character;
+    }
 
     public void Update()
     {

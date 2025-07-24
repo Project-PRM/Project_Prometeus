@@ -5,6 +5,11 @@ public class TankerSkill : ISkill
     private float _timer = 0f;
 
     public SkillData Data { get; set; }
+    public CharacterBase Character { get; set; }
+    public void SetOwner(CharacterBase character)
+    {
+        Character = character;
+    }
 
     public void Update()
     {

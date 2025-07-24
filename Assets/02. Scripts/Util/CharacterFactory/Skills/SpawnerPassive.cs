@@ -3,6 +3,11 @@ using UnityEngine;
 public class SpawnerPassive : IPermanentSkill
 {
     public SkillData Data { get; set; }
+    public CharacterBase Character { get; set; }
+    public void SetOwner(CharacterBase character)
+    {
+        Character = character;
+    }
 
     public void Update()
     {
