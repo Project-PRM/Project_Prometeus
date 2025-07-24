@@ -286,17 +286,17 @@
   },
   "NewSkill19": {
     "SkillName": "FulfunsPassive",
-    "Damage": 0.0,
+    "Damage": 5.0,
     "BuffAmount": 0.0,
     "DebuffAmount": 0.0,
     "Cost": 0.0,
-    "Cooltime": 0.0,
+    "Cooltime": 10.0,
     "Duration": 0.0,
     "Radius": 0.0,
     "MaxRange": 0.0,
     "Speed": 0.0,
     "ProjectilePrefabName": null,
-    "SummonPrefabName": null,
+    "SummonPrefabName": "SmallAoEField",
     "IndicatorPrefabName": null
   },
   "NewSkill20": {
