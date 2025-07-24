@@ -21,15 +21,15 @@ public class SpawnerSkill : ITargetableSkill
         return Resources.Load<GameObject>($"Indicators/{Data.IndicatorPrefabName}");
     }
 
-    public void Activate(CharacterBase character, Vector3 target)
+    public void Activate(Vector3 target)
     {
         if (_timer < Data.Cooltime)
         {
-            Debug.Log($"{character.Name} Skill is on cooldown.");
+            Debug.Log($"{Character.Name} Skill is on cooldown.");
             return;
         }
 
-        Vector3 origin = character.Behaviour.transform.position + character.Behaviour.transform.forward * 1.5f + Vector3.up;
+        Vector3 origin = Character.Behaviour.transform.position + Character.Behaviour.transform.forward * 1.5f + Vector3.up;
         target.y = 1.5f; // Y축 고정하여 2D 발사 느낌을 주기 위함
         Vector3 dir = (target - origin).normalized;
 
@@ -45,7 +45,7 @@ public class SpawnerSkill : ITargetableSkill
         }
 
         GameObject summon = GameObject.Instantiate(prefab, origin, rotation);
-        summon.GetComponent<ISummonObject>().SetData(Data, character);
+        summon.GetComponent<ISummonObject>().SetData(Data, Character);
 
         _timer = 0f;
     }

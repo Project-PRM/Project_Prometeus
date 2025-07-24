@@ -21,14 +21,14 @@ public class TankerPassive : IEventReactiveSkill
         return Resources.Load<GameObject>($"Indicators/{Data.IndicatorPrefabName}");
     }
 
-    public void Activate(CharacterBase character)
+    public void Activate()
     {
         if (_timer < Data.Cooltime)
         {
-            Debug.Log($"{character.Name} TankerPassive is on cooldown.");
+            Debug.Log($"{Character.Name} TankerPassive is on cooldown.");
             return;
         }
-        Debug.Log($"{character.Name} activated TankerPassive.");
+        Debug.Log($"{Character.Name} activated TankerPassive.");
 
         _timer = 0f;
     }

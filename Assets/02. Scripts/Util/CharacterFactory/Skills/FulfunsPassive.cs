@@ -53,14 +53,11 @@ public class FulfunsPassive : IEventReactiveSkill
         return Resources.Load<GameObject>($"Indicators/{Data.IndicatorPrefabName}");
     }
 
-    public void Activate(CharacterBase character)
+    public void Activate()
     {
-        Character = character;
-
         if(_smallPuddles == null)
         {
             _smallPuddles = Character.Behaviour.StartCoroutine(SpawnSmallPuddles());
-
         }
         _isActive = true;
         _activeTimeRemaining = 5f;
@@ -68,10 +65,10 @@ public class FulfunsPassive : IEventReactiveSkill
 
         if (_timer < Data.Cooltime)
         {
-            Debug.Log($"{character.Name} FulfunsPassive is on cooldown.");
+            Debug.Log($"{Character.Name} FulfunsPassive is on cooldown.");
             return;
         }
-        Debug.Log($"{character.Name} activated FulfunsPassive.");
+        Debug.Log($"{Character.Name} activated FulfunsPassive.");
 
         _timer = 0f;
     }

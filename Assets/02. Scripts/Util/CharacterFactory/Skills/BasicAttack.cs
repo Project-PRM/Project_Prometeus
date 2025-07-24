@@ -25,20 +25,20 @@ public class BasicAttack : ISkillNoTarget
         return Resources.Load<GameObject>($"Indicators/{Data.IndicatorPrefabName}");
     }
 
-    public void Activate(CharacterBase user)
+    public void Activate()
     {
         if (_timer < Data.Cooltime) return;
         _timer = 0f;
 
-        user.Behaviour.PhotonView.RPC("RPC_SetAnimation", RpcTarget.All, "BasicAttack");
+        Character.Behaviour.PhotonView.RPC("RPC_SetAnimation", RpcTarget.All, "BasicAttack");
 
-        bool current = user.Behaviour.Animator.GetBool("IsFirstAttack");
+        bool current = Character.Behaviour.Animator.GetBool("IsFirstAttack");
         bool next = !current;
 
-        DamageTrigger trigger = user.Behaviour.DamageTrigger;
-        user.Behaviour.StartCoroutine(EnableTriggerTemporarily(trigger, 0.5f));
+        DamageTrigger trigger = Character.Behaviour.DamageTrigger;
+        Character.Behaviour.StartCoroutine(EnableTriggerTemporarily(trigger, 0.5f));
 
-        user.Behaviour.Animator.SetBool("IsFirstAttack", next);
+        Character.Behaviour.Animator.SetBool("IsFirstAttack", next);
     }
 
     private IEnumerator EnableTriggerTemporarily(DamageTrigger trigger, float duration)

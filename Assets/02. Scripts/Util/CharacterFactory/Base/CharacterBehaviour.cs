@@ -122,7 +122,7 @@ public class CharacterBehaviour : MonoBehaviourPunCallbacks, IDamageable
         }
         else if (skill is ISkillNoTarget noTargetSkill)
         {
-            noTargetSkill.Activate(_character); // 즉시 발동
+            noTargetSkill.Activate(); // 즉시 발동
         }
         else
         {

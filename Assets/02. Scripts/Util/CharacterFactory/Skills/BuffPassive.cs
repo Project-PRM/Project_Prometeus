@@ -21,11 +21,11 @@ public class BuffPassive : IPermanentSkill
         return Resources.Load<GameObject>($"Indicators/{Data.IndicatorPrefabName}");
     }
 
-    public void Activate(CharacterBase character)
+    public void Activate()
     {
         var buffMod = new StatModifier();
         buffMod.Add(EStatType.MoveSpeed, Data.BuffAmount);
         buffMod.Add(EStatType.MaxHealth, Data.BuffAmount);
-        character.AddStatModifier(buffMod);
+        Character.AddStatModifier(buffMod);
     }
 }
