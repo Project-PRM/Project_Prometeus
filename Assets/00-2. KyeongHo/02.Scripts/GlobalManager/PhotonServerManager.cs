@@ -23,7 +23,7 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     protected override void Awake()
     {
         base.Awake();
-        LobbyChatManager.Instance.OnPartyJoinRoom += PartyJoinRoom;
+        PartyManager.Instance.OnPartyJoinRoom += PartyJoinRoom;
     }
 
     private void Start()
@@ -51,7 +51,7 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     // 파티 매칭 시작 (파티 리더만 호출)
     public void StartPartyMatchmaking()
     {
-        if (!LobbyChatManager.Instance.IsPartyLeader())
+        if (!PartyManager.Instance.IsPartyLeader())
         {
             Debug.LogWarning("파티 리더만 매칭을 시작할 수 있습니다.");
             return;
@@ -69,7 +69,7 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     {
         // 파티 채팅에 참여한 인원수를 반환
         // 이 메서드는 LobbyChatManager에서 구현해야 함
-        return LobbyChatManager.Instance.GetPartyMemberCount();
+        return PartyManager.Instance.GetPartyMemberCount();
     }
     // 파티 인원수에 맞는 방에 참여
     private void JoinRoomForParty(int partySize)
@@ -242,7 +242,7 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     // 방 입장 시 자신의 파티 정보를 CustomProperties에 저장
     private void SetPartyInfoOnJoinRoom()
     {
-        string partyName = LobbyChatManager.Instance.GetCurrentPartyName();
+        string partyName = PartyManager.Instance.GetCurrentPartyName();
         if (!string.IsNullOrEmpty(partyName))
         {
             Hashtable partyProps = new Hashtable();
@@ -279,33 +279,7 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
         }
     }
 
-    // Chat 버튼 클릭 시 - 간단화
-    public void JoinPartyChat(string partyName)
-    {
-        StartCoroutine(ConnectAndJoinParty(partyName));
-    }
-
-    private IEnumerator ConnectAndJoinParty(string partyName)
-    {
-        LobbyChatManager.Instance.ForceConnectToChat();
-        
-        // 채팅 연결 대기
-        float timeout = 10f;
-        while (timeout > 0)
-        {
-            if (LobbyChatManager.Instance.IsConnected())
-            {
-                LobbyChatManager.Instance.JoinParty(partyName);
-                yield break;
-            }
-            
-            yield return new WaitForSeconds(0.5f);
-            timeout -= 0.5f;
-        }
-        
-        Debug.LogError("채팅 서버 연결 타임아웃!");
-    }
-
+    
     #region Photon Callbacks
 
     public override void OnConnectedToMaster()
@@ -329,10 +303,10 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
         EventManager.Broadcast(new GameStartEvent(GetPlayerTeam(PhotonNetwork.LocalPlayer)));
     
         // 파티 리더라면 파티원들에게 초대 메시지 전송
-        if (LobbyChatManager.Instance.IsPartyLeader())
+        if (PartyManager.Instance.IsPartyLeader())
         {
             string roomId = PhotonNetwork.CurrentRoom.Name;
-            LobbyChatManager.Instance.SendPartyInvite(roomId);
+            PartyManager.Instance.SendPartyInvite(roomId);
             Debug.Log($"[PartyLeader] 파티원들에게 초대 메시지 전송: {roomId}");
         }
     }
@@ -355,7 +329,7 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     
         // 파티 매칭 중이었다면 파티 인원수를 고려한 방 생성
         int partySize = 0;
-        if (LobbyChatManager.Instance.IsPartyLeader())
+        if (PartyManager.Instance.IsPartyLeader())
         {
             partySize = GetCurrentPartySize();
             Debug.Log($"파티 인원 {partySize}명을 위한 방 생성");
@@ -381,6 +355,13 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
         PhotonNetwork.CreateRoom(null, roomOptions);
     }
 
+    public override void OnLeftRoom()
+    {
+        base.OnLeftLobby();
+        Debug.Log("방 나감ㅇㅇ");
+        PhotonNetwork.ConnectUsingSettings();
+        Debug.Log("마스터서버 재연결 ㅇㅇㅇㅇ");
+    }
     public override void OnDisconnected(DisconnectCause cause)
     {
         Debug.Log($"연결 끊김: {cause}");

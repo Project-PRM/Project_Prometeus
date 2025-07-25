@@ -1,33 +1,42 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 public class UI_PartyInvitePopup : MonoBehaviour
 {
-    public Text inviterNicknameText;
+    public TextMeshProUGUI inviterNicknameText;
     public Button acceptButton;
     public Button declineButton;
 
-    private string _partyId;
+    private string _partyName;
     private string _inviterUid;
 
-    public void Initialize(string partyId, string inviterUid, string inviterNickname)
+    
+
+    public void OnAccept()
     {
-        _partyId = partyId;
+        // 파티 참여
+        PartyManager.Instance.JoinParty(_partyName);
+       
+        Debug.Log($"파티 '{_partyName}' 초대를 수락했습니다.");
+        Destroy(gameObject);
+    }
+
+    public void OnDecline()
+    {
+        Debug.Log($"파티 '{_partyName}' 초대를 거절했습니다.");
+        Destroy(gameObject);
+    }
+    public void SetInviteInfo(string partyName,string sender,string inviterNickname)
+    {
+        Initialize(partyName, sender, inviterNickname);
+    }
+    public void Initialize(string partyName, string inviterUid, string inviterNickname)
+    {
+        _partyName = partyName;
         _inviterUid = inviterUid;
-        inviterNicknameText.text = $"{inviterNickname} has invited you to their party.";
+        inviterNicknameText.text = $"{inviterNickname}님이 파티에 초대하셨습니다.";
 
         acceptButton.onClick.AddListener(OnAccept);
         declineButton.onClick.AddListener(OnDecline);
-    }
-
-    private void OnAccept()
-    {
-        // PartyManager.Instance.AcceptInvitation(_partyId, _inviterUid);
-        Destroy(gameObject);
-    }
-
-    private void OnDecline()
-    {
-        // Optional: Notify the inviter that the invitation was declined
-        Destroy(gameObject);
     }
 }
