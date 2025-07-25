@@ -40,4 +40,31 @@ public class VeckUltimate : ISkillNoTarget
 
         _timer = 0f;
     }
+
+    private void ActivateUltimate()
+    {
+        GameObject shield = FindShieldInFront();
+        if (shield == null) return;
+
+        var veckShield = shield.GetComponent<VeckSkillShield>();
+        if (veckShield == null) return;
+
+        veckShield.OnUltimateActivate();
+    }
+
+    private GameObject FindShieldInFront()
+    {
+        Vector3 origin = Character.Behaviour.transform.position + Vector3.up * 1f;
+        Vector3 direction = Character.Behaviour.transform.forward;
+
+        if (Physics.Raycast(origin, direction, out RaycastHit hit, 2f))
+        {
+            if (hit.collider.CompareTag("VeckShield"))
+            {
+                return hit.collider.gameObject;
+            }
+        }
+
+        return null;
+    }
 }

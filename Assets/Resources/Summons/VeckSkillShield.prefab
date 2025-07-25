@@ -16,8 +16,8 @@ GameObject:
   - component: {fileID: 7751824278157800251}
   - component: {fileID: -8424427873951125777}
   m_Layer: 0
-  m_Name: VeckSkillSummon
-  m_TagString: Untagged
+  m_Name: VeckSkillShield
+  m_TagString: VeckShield
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

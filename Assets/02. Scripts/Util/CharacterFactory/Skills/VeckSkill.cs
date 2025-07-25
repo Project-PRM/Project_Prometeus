@@ -48,7 +48,7 @@ public class VeckSkill : ISkillNoTarget
             return;
         }
 
-        Vector3 spawnPos = Character.Behaviour.transform.position + Character.Behaviour.transform.forward * 1f;
+        Vector3 spawnPos = Character.Behaviour.transform.position + Character.Behaviour.transform.forward * 1.2f;
         GameObject shieldObj = PhotonNetwork.Instantiate($"Summons/{Data.SummonPrefabName}", spawnPos, Quaternion.identity);
         _currentShield = shieldObj.GetComponent<VeckSkillShield>();
 
