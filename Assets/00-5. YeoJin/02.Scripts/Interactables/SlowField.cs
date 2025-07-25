@@ -17,12 +17,12 @@ public class SlowField : MonoBehaviour
     {
         _owner = character;
         _data = data;
-        _slowAmount = _data.DebuffAmount;
+        _slowAmount = _data.DebuffAmount[EStatType.MoveSpeed];
     }
 
     private void Start()
     {
-        _slowEffect = new SlowEffect(_data.Duration, _data.DebuffAmount);
+        _slowEffect = new SlowEffect(_data.Duration, _data.DebuffAmount[EStatType.MoveSpeed]);
         //_slowEffect.Add(EStatType.MoveSpeed, _slowAmount);
     }
 

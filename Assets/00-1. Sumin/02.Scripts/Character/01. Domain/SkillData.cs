@@ -1,5 +1,6 @@
 using UnityEngine;
 using Firebase.Firestore;
+using System.Collections.Generic;
 
 [System.Serializable]
 [FirestoreData]
@@ -7,8 +8,8 @@ public class SkillData
 {
     [FirestoreProperty] public string SkillName { get; set; }
     [FirestoreProperty] public float Damage { get; set; }
-    [FirestoreProperty] public float BuffAmount { get; set; }
-    [FirestoreProperty] public float DebuffAmount { get; set; }
+    [FirestoreProperty] public Dictionary<EStatType, float> BuffAmount { get; set; }
+    [FirestoreProperty] public Dictionary<EStatType, float> DebuffAmount { get; set; }
     [FirestoreProperty] public float Cost { get; set; }
     [FirestoreProperty] public float Cooltime { get; set; }
     [FirestoreProperty] public float Duration { get; set; }

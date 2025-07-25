@@ -40,7 +40,7 @@ public class BuffSkill : IUnitTargetSkill
 
         if (target.Behaviour.TryGetComponent<IDamageable>(out var damageable))
         {
-            damageable.Heal(Data.BuffAmount);
+            damageable.Heal(Data.Damage);
         }
 
         _timer = 0f;

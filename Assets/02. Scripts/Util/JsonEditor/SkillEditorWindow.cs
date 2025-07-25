@@ -1,15 +1,15 @@
 #if UNITY_EDITOR
-
 using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using System;
 
 public class SkillJsonEditorWindow : EditorWindow
 {
     private Dictionary<string, SkillData> _skills = new();
-    private string _jsonPath = "Assets/Resources/Datas/skill_data.json"; // 고정 경로
+    private string _jsonPath = "Assets/Resources/Datas/skill_data.json";
     private Vector2 _scrollPos;
 
     [MenuItem("Tools/Skill/Skill JSON Editor")]
@@ -42,7 +42,6 @@ public class SkillJsonEditorWindow : EditorWindow
         }
 
         _scrollPos = EditorGUILayout.BeginScrollView(_scrollPos);
-
         List<string> toRemove = new();
 
         foreach (var key in new List<string>(_skills.Keys))
@@ -52,8 +51,10 @@ public class SkillJsonEditorWindow : EditorWindow
             EditorGUILayout.BeginVertical("box");
             skill.SkillName = EditorGUILayout.TextField("Skill Name", skill.SkillName);
             skill.Damage = EditorGUILayout.FloatField("Damage", skill.Damage);
-            skill.BuffAmount = EditorGUILayout.FloatField("BuffAmount", skill.BuffAmount);
-            skill.DebuffAmount = EditorGUILayout.FloatField("DebuffAmount", skill.DebuffAmount);
+
+            DrawStatDictionary("Buff Amount", skill.BuffAmount);
+            DrawStatDictionary("Debuff Amount", skill.DebuffAmount);
+
             skill.Cost = EditorGUILayout.FloatField("Cost", skill.Cost);
             skill.Cooltime = EditorGUILayout.FloatField("Cooltime", skill.Cooltime);
             skill.Duration = EditorGUILayout.FloatField("Duration", skill.Duration);
@@ -68,6 +69,7 @@ public class SkillJsonEditorWindow : EditorWindow
             {
                 toRemove.Add(key);
             }
+
             EditorGUILayout.EndVertical();
         }
 
@@ -83,7 +85,12 @@ public class SkillJsonEditorWindow : EditorWindow
         if (GUILayout.Button("➕ 새 스킬 추가"))
         {
             string newKey = "NewSkill" + _skills.Count;
-            _skills[newKey] = new SkillData { SkillName = newKey };
+            _skills[newKey] = new SkillData
+            {
+                SkillName = newKey,
+                BuffAmount = new(),
+                DebuffAmount = new()
+            };
         }
 
         if (GUILayout.Button("💾 JSON 저장"))
@@ -91,6 +98,51 @@ public class SkillJsonEditorWindow : EditorWindow
             SaveJson();
         }
     }
+
+    private Dictionary<EStatType, float> DrawStatDictionary(string label, Dictionary<EStatType, float> dict)
+    {
+        EditorGUILayout.LabelField(label, EditorStyles.boldLabel);
+
+        if (dict == null)
+            dict = new();
+
+        List<EStatType> keysToRemove = new();
+        foreach (var kvp in dict)
+        {
+            EditorGUILayout.BeginHorizontal();
+            EditorGUILayout.LabelField(kvp.Key.ToString(), GUILayout.Width(100));
+            dict[kvp.Key] = EditorGUILayout.FloatField(kvp.Value);
+
+            if (GUILayout.Button("✖", GUILayout.Width(30)))
+                keysToRemove.Add(kvp.Key);
+
+            EditorGUILayout.EndHorizontal();
+        }
+
+        foreach (var key in keysToRemove)
+            dict.Remove(key);
+
+        EditorGUILayout.Space();
+
+        // 새로운 항목 추가 UI
+        EditorGUILayout.BeginHorizontal();
+        EStatType newKey = EStatType.MaxHealth;
+        float newValue = 0;
+
+        newKey = (EStatType)EditorGUILayout.EnumPopup(newKey, GUILayout.Width(100));
+        newValue = EditorGUILayout.FloatField(newValue);
+
+        if (GUILayout.Button("➕", GUILayout.Width(30)))
+        {
+            if (!dict.ContainsKey(newKey))
+                dict.Add(newKey, newValue);
+        }
+
+        EditorGUILayout.EndHorizontal();
+
+        return dict;
+    }
+
 
     private void SaveJson()
     {
