@@ -24,19 +24,13 @@ public class VeckUltimate : ISkillNoTarget
     {
         if (_timer < Data.Cooltime)
         {
-            Debug.Log($"{Character.Name} Skill is on cooldown.");
+            Debug.Log($"{Character.Name} Ultimate is on cooldown.");
             return;
         }
 
         Debug.Log($"{Character.Name} activated VeckUltimate.");
 
-        CharacterController controller = Character.Behaviour.GetComponent<CharacterController>();
-        if (controller == null)
-        {
-            Debug.LogWarning("CharacterController not found on character.");
-            return;
-        }
-
+        ActivateUltimate();
 
         _timer = 0f;
     }
@@ -49,7 +43,7 @@ public class VeckUltimate : ISkillNoTarget
         var veckShield = shield.GetComponent<VeckSkillShield>();
         if (veckShield == null) return;
 
-        veckShield.OnUltimateActivate();
+        veckShield.OnUltimateActivate(Data);
     }
 
     private GameObject FindShieldInFront()

@@ -2,11 +2,17 @@ using FOW;
 using Photon.Pun;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class VeckSkillShield : MonoBehaviour, ISummonObject, IDamageable
 {
     private CharacterBase _owner;
     private SkillData _data;
+    private Renderer _renderer;
+
+    private SkillData _ultimateData;
+
+    private Color _emissionColor = new Color(191f / 255f, 24f / 255f, 0f) * 3f;
 
     // TODO : 스탯 modifier 영향 받게? 
     private float _maxHealth = 30f;
@@ -20,6 +26,11 @@ public class VeckSkillShield : MonoBehaviour, ISummonObject, IDamageable
 
     private bool _isInitialized = false;
     private bool _isUltimateState = false;
+
+    private void Start()
+    {
+        _renderer = GetComponent<Renderer>();
+    }
 
     public void Update()
     {
@@ -50,17 +61,22 @@ public class VeckSkillShield : MonoBehaviour, ISummonObject, IDamageable
         transform.rotation = Quaternion.Euler(euler);
     }
 
-    public void OnUltimateActivate()
+    public void OnUltimateActivate(SkillData ultimateData)
     {
         // - 속성 1 : 방패 방어력 + 30 -> _curArmor에 30 더하기
         // -속성 2 : 방패 피격 시 전방 부채꼴(거리 2) 로 5 데미지
         // - 속성 3 : 2초 뒤 전방 부채꼴(거리 5 ) 로 20 데미지 및 넉백
-        // 레이어 복구
+        // 레이어 바꾸기 - 궁극기 레이어?
+        /*shield.layer = LayerMask.NameToLayer("궁극기 실드 레이어 이름");*/
         //  코루틴 시작으로 구현하기?
         if (_isUltimateState) return;
+        _ultimateData = ultimateData;
 
         _isUltimateState = true;
         _curArmor += 30f;
+
+        PhotonView photonView = GetComponent<PhotonView>();
+        photonView.RPC(nameof(RPC_SetEmission), RpcTarget.AllBuffered, true);
 
         StartCoroutine(UltimateAttackPhase());
     }
@@ -72,16 +88,17 @@ public class VeckSkillShield : MonoBehaviour, ISummonObject, IDamageable
         // 레이어 복구
         if (!_isUltimateState) return;
 
+        PhotonView photonView = GetComponent<PhotonView>();
+        photonView.RPC(nameof(RPC_SetEmission), RpcTarget.AllBuffered, false);
+
         _curArmor = _baseArmor;
         _isUltimateState = false;
     }
 
     private IEnumerator UltimateAttackPhase()
     {
-        float delayBeforeSecondHit = 2f;
-
         // 첫 피격 데미지는 RPC_TakeDamage 안에서 처리
-        yield return new WaitForSeconds(delayBeforeSecondHit);
+        yield return new WaitForSeconds(2f);
 
         // 2초 뒤 강한 부채꼴 공격
         Vector3 origin = transform.position;
@@ -93,7 +110,7 @@ public class VeckSkillShield : MonoBehaviour, ISummonObject, IDamageable
         {
             if (hit.TryGetComponent<IDamageable>(out var damageable))
             {
-                damageable.RPC_TakeDamage(20f);
+                damageable.RPC_TakeDamage(_ultimateData.Damage);
                 // 넉백도 원하면 적용
                 Vector3 force = direction.normalized * 5f;
                 if (hit.TryGetComponent<Rigidbody>(out var rb))
@@ -105,12 +122,34 @@ public class VeckSkillShield : MonoBehaviour, ISummonObject, IDamageable
         OnUltimateEnd();
     }
 
+    [PunRPC]
+    public void RPC_SetEmission(bool enable)
+    {
+        if (_renderer == null) return;
+
+        Material mat = _renderer.material;
+        mat.SetColor("_EmissionColor", enable ? _emissionColor : Color.black);
+    }
+
     public void RPC_TakeDamage(float damage)
     {
-        // 현재 방어 수치 애매
         _curHealth -= DamageCalculator.CalculateDamage(damage, _curArmor);
 
-        // 궁극기 상태일 경우 : 
+        if (_isUltimateState)
+        {
+            Vector3 origin = transform.position;
+            Vector3 direction = transform.forward;
+
+            Collider[] targets = Physics.OverlapSphere(origin + direction * 1.5f, 1.5f); // 거리 2
+
+            foreach (var hit in targets)
+            {
+                if (hit.TryGetComponent<IDamageable>(out var damageable))
+                {
+                    damageable.RPC_TakeDamage(_data.Damage); // TickDamage 또는 하드코딩
+                }
+            }
+        }
 
         if (_curHealth <= 0)
         {

@@ -52,6 +52,7 @@ MonoBehaviour:
   - RPC_SetAnimation
   - RPC_TakeDamage
   - RPC_AnimationTrigger
+  - RPC_SetEmission
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
