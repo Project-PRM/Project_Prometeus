@@ -9,8 +9,8 @@ EditorBuildSettings:
     path: Assets/00-2. KyeongHo/01.Scenes/KyoungHo_LoginTest.unity
     guid: c1d33bb78d046294d9f9816dccd20463
   - enabled: 1
-    path: Assets/00-2. KyeongHo/01.Scenes/KyoungHo_Proto_Lobby.unity
-    guid: e24801da04b1a4d4dafbcb1a1a572cab
+    path: Assets/00-2. KyeongHo/01.Scenes/KyoungHo_MainLobbyScene_Merge.unity
+    guid: 39f11f9b8ca60554ea2abecdd7871300
   - enabled: 1
     path: Assets/01. Scenes/Proto/Proto_InGame.unity
     guid: 4de283dc9c3128e4f8d6efcea9334928
