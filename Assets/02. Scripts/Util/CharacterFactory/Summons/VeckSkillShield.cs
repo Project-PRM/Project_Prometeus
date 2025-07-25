@@ -100,7 +100,7 @@ public class VeckSkillShield : MonoBehaviour, ISummonObject, IDamageable
     private IEnumerator UltimateAttackPhase()
     {
         // 첫 피격 데미지는 RPC_TakeDamage 안에서 처리
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(_ultimateData.Duration);
 
         // 2초 뒤 강한 부채꼴 공격
         Vector3 origin = transform.position;
