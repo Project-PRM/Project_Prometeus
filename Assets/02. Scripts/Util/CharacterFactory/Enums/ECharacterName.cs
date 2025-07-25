@@ -7,4 +7,5 @@ public enum ECharacterName
     TankerDummy,
     SpawnerDummy,
     Fulfuns,
+    Veck,
 }

@@ -8,6 +8,7 @@ TagManager:
   - Ground
   - Enemy
   - FulfunsField
+  - VeckShield
   layers:
   - Default
   - TransparentFX

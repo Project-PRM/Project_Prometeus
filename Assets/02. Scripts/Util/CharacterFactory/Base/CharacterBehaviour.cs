@@ -1,3 +1,4 @@
+using HighlightPlus;
 using Photon.Pun;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,7 +8,7 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(PhotonView))]
 [RequireComponent(typeof(CharacterInputHandler))]
 [RequireComponent(typeof(Animator))]
-public class CharacterBehaviour : MonoBehaviourPunCallbacks, IDamageable
+public class CharacterBehaviour : MonoBehaviourPunCallbacks, IDamageable, ISelectable
 {
     [SerializeField] private ECharacterName _characterName;
 
@@ -25,6 +26,7 @@ public class CharacterBehaviour : MonoBehaviourPunCallbacks, IDamageable
     public PhotonView PhotonView { get; private set; }
     public DamageTrigger DamageTrigger { get; private set; }
     public CharacterInventory Inventory { get; private set; }
+    public HighlightEffect HighlightEffect { get; set; }
 
     private void Awake()
     {
@@ -37,6 +39,7 @@ public class CharacterBehaviour : MonoBehaviourPunCallbacks, IDamageable
         _characterMove = GetComponent<CharacterMove>();
         _gameView = GetComponent<CharacterInGameView>();
         _aimingController = new CharacterAimingController(this);
+        HighlightEffect = GetComponent<HighlightEffect>();
     }
 
     private async void Start()
@@ -163,5 +166,10 @@ public class CharacterBehaviour : MonoBehaviourPunCallbacks, IDamageable
         Animator.SetTrigger(triggerName);
 
         Debug.Log($"{PhotonView.ViewID} : animation - {triggerName}");
+    }
+
+    public void SetHighlight(bool isOn)
+    {
+        HighlightEffect.SetHighlighted(isOn);
     }
 }
