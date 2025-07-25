@@ -24,6 +24,7 @@ public class AttackAction : IActionNode
         if (_enemy.Target == null)
             return;
 
+        _enemy.transform.LookAt(_enemy.Target.position);
         _enemy.ResetAnimatorParameters();
         _enemy.Animator.SetBool("isAttacking", true);
 
