@@ -25,10 +25,8 @@ public class FulfunsPassive : IEventReactiveSkill
     {
         _timer += Time.deltaTime;
 
-        Debug.Log("is it active?");
         if (!_isActive) return;
-        Debug.Log("Yes it is");
-
+        Debug.Log("passive active");
         _activeTimeRemaining -= Time.deltaTime;
         _spawnCooldownTimer -= Time.deltaTime;
 
@@ -36,15 +34,6 @@ public class FulfunsPassive : IEventReactiveSkill
         {
             _isActive = false;
             return;
-        }
-
-        if (_spawnCooldownTimer <= 0f)
-        {
-            Vector3 spawnPos = Character.Behaviour.transform.position;
-            spawnPos.y = 0.1f; // 땅에 살짝 띄워서 생성
-            Debug.Log("Trying to instantiate AoE at " + spawnPos);
-            SpawnSmallAoE(spawnPos);
-            _spawnCooldownTimer = 1f; // 1초마다 생성
         }
     }
 
@@ -119,6 +108,7 @@ public class FulfunsPassive : IEventReactiveSkill
         }
 
         // 쿨타임용
+
         yield return new WaitForSeconds(6f);
 
         _smallPuddles = null;
