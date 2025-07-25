@@ -10,13 +10,30 @@ public class PatrolAction : IActionNode
     public ENodeState Evaluate()
     {
         Debug.Log("Patrol 실행중");
-        if (_nextPatrolPoint == null || Vector3.Distance(_enemy.transform.position, _nextPatrolPoint.position) < 1f)
+
+        if (_enemy.Target != null || _enemy.IsPlayerDetected(_enemy.EnemyData.VisionRange))
+        {
+            Debug.Log("플레이어 감지! 패트롤 실패");
+            _enemy.NavMeshAgent.isStopped = true;
+            _enemy.Animator.SetBool("isWalking", false);
+            _nextPatrolPoint = null;
+            return ENodeState.Failure;
+        }
+
+        if (_nextPatrolPoint == null)
         {
             ChooseNextPatrolPoint();
         }
+        else if (Vector3.Distance(_enemy.transform.position, _nextPatrolPoint.position) < 1f)
+        {
+            Debug.Log($"패트롤 지점 {_nextPatrolPoint.name} 도착!");
+            _enemy.NavMeshAgent.isStopped = true;
+            _enemy.Animator.SetBool("isWalking", false);
+            _nextPatrolPoint = null;
+            return ENodeState.Success;
+        }
 
         Patrol();
-
         return ENodeState.Running;
     }
 
