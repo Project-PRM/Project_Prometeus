@@ -42,7 +42,7 @@ public class BuffUltimate : ISkillNoTarget
 
                 if (targetCharacter.Behaviour.TryGetComponent<IStatusAffectable>(out var statusAffectable))
                 {
-                    statusAffectable.ApplyEffect(new ArmorBuffEffect(Data.BuffAmount[EStatType.BaseArmor], Data.Duration));
+                    statusAffectable.ApplyEffect(new ArmorBuffEffect(Data.BuffAmount[EStatType.BaseArmor.ToString()], Data.Duration));
                 }
             }
         }
