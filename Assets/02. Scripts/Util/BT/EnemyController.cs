@@ -7,7 +7,7 @@ using HighlightPlus;
 public class EnemyController : MonoBehaviour, IDamageable, ISelectable
 {
     private const float TICK = 0.5f;
-    private IBtNode _btRoot;
+    protected IBtNode _btRoot;
 
     public Transform Target { get; private set; }
 
@@ -90,6 +90,29 @@ public class EnemyController : MonoBehaviour, IDamageable, ISelectable
         Target = target;
     }
 
+    public void SelectTarget()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, EnemyData.VisionRange);
+        List<GameObject> targets = new List<GameObject>();
+        foreach (var hit in hits)
+        {
+            if (hit.CompareTag("Player"))
+            {
+                targets.Add(hit.gameObject);
+            }
+        }
+        int idx = Random.Range(0, targets.Count);
+
+        if (targets.Count > 0)
+        {
+            SetTarget(targets[idx].transform);
+        }
+        else
+        {
+            SetTarget(null);
+        }
+    }
+
     [PunRPC]
     public void RPC_TakeDamage(float Damage)
     {
@@ -153,5 +176,11 @@ public class EnemyController : MonoBehaviour, IDamageable, ISelectable
     public void SetHighlight(bool isOn)
     {
         HighlightEffect.SetHighlighted(isOn);
+    }
+
+    public bool IsPlayerDetected(float detectDistance)
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, detectDistance, LayerMask.GetMask("Character"));
+        return hits.Length > 0;
     }
 }
