@@ -2,8 +2,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using Photon.Pun;
+using HighlightPlus;
 
-public class EnemyController : MonoBehaviour, IDamageable
+public class EnemyController : MonoBehaviour, IDamageable, ISelectable
 {
     private const float TICK = 0.5f;
     private IBtNode _btRoot;
@@ -27,7 +28,8 @@ public class EnemyController : MonoBehaviour, IDamageable
     public Animator Animator { get; private set; }
     public PhotonView PhotonView { get; private set; }
     public Rigidbody Rigidbody { get; private set; }
-    public Collider Collider { get; private set; } 
+    public Collider Collider { get; private set; }
+    public HighlightEffect HighlightEffect { get; set; }
 
     private void Awake()
     {
@@ -36,6 +38,7 @@ public class EnemyController : MonoBehaviour, IDamageable
         PhotonView = GetComponent<PhotonView>();
         Rigidbody = GetComponent<Rigidbody>();
         Collider = GetComponent<Collider>();
+        HighlightEffect = GetComponent<HighlightEffect>();
 
         // 임시
         Invoke(nameof(Initialize), 2f);
@@ -145,5 +148,10 @@ public class EnemyController : MonoBehaviour, IDamageable
                     break;
             }
         }
+    }
+
+    public void SetHighlight(bool isOn)
+    {
+        HighlightEffect.SetHighlighted(isOn);
     }
 }
