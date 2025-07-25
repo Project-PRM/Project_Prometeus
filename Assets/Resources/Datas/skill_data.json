@@ -944,7 +944,7 @@
   },
   "VeckSkill": {
     "SkillName": "VeckSkill",
-    "Damage": 0.0,
+    "Damage": 5.0,
     "BuffAmount": {
       "MaxHealth": 0.0,
       "MaxMana": 0.0,
