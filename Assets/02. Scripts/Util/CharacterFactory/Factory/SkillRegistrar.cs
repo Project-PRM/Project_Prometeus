@@ -48,5 +48,8 @@ public static class SkillRegistrar
         SkillFactory.Register(ESkillName.VeckPassive.ToString(), () => new VeckPassive());
         SkillFactory.Register(ESkillName.VeckSkill.ToString(), () => new VeckSkill());
         SkillFactory.Register(ESkillName.VeckUltimate.ToString(), () => new VeckUltimate());
+        SkillFactory.Register(ESkillName.LaranPassive.ToString(), () => new LaranPassive());
+        SkillFactory.Register(ESkillName.LaranSkill.ToString(), () => new LaranSkill());
+        SkillFactory.Register(ESkillName.LaranUltimate.ToString(), () => new LaranUltimate());
     }
 }

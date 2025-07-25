@@ -1,7 +1,7 @@
 using Photon.Pun;
 using UnityEngine;
 
-public class FulfunsSkill : ITargetableSkill
+public class LaranSkill : ITargetableSkill
 {
     private float _timer = 0f;
 
@@ -26,10 +26,11 @@ public class FulfunsSkill : ITargetableSkill
     {
         if (_timer < Data.Cooltime)
         {
-            Debug.Log($"{Character.Name} Skill is on cooldown.");
+            Debug.Log($"{Character.Name} Ultimate is on cooldown.");
             return;
         }
 
+        Debug.Log("created Fulfuns ULTIMATE cube");
         Vector3 origin = Character.Behaviour.transform.position + Character.Behaviour.transform.forward * 1.5f + Vector3.up;
         target.y = 1.5f; // Y축 고정하여 2D 발사 느낌을 주기 위함
         Vector3 dir = (target - origin).normalized;
@@ -43,7 +44,8 @@ public class FulfunsSkill : ITargetableSkill
             Debug.LogError($"프리팹 {Data.ProjectilePrefabName} 을(를) Resources/Projectiles 에서 찾을 수 없습니다.");
             return;
         }
-        
+
+        Debug.Log($"{origin} is where ultimate cube was born");
         GameObject projectile = /*GameObject.*/PhotonNetwork.Instantiate($"Projectiles/{Data.ProjectilePrefabName}", origin, rotation);
         projectile.GetComponent<IProjectile>().SetData(Data, Character, dir);
 
