@@ -1,6 +1,5 @@
 using UnityEngine;
 using Photon.Pun;
-using static UnityEditor.PlayerSettings;
 using System.Collections;
 
 public class FulfunsPassive : IEventReactiveSkill

@@ -11,7 +11,9 @@ using TMPro;
 public class PartyManager : Singleton<PartyManager>, IChatClientListener
 {
     public event Action<string> OnPartyJoinRoom;
+    public event Action<HashSet<string>> OnPartyMemberChanged;
     public GameObject FriendInvitePrefab;
+    public GameObject Parent_FriendInvite;
     
     private ChatClient chatClient;
     private string currentPartyName;
@@ -21,6 +23,11 @@ public class PartyManager : Singleton<PartyManager>, IChatClientListener
     private HashSet<string> partyMembers = new HashSet<string>(); // 파티원 목록
     private string partyLeaderName = ""; // 파티 리더 이름 저장
     
+    private void Start()
+    {
+        if (!IsConnected())
+            ForceConnectToChat(); // 자동 연결 시도
+    }
     void Update()
     {
         chatClient?.Service();
@@ -106,34 +113,50 @@ public class PartyManager : Singleton<PartyManager>, IChatClientListener
         Debug.Log($"[PartyInvite] 초대 메시지 전송: {inviteMessage}");
     }
     // 친구 초대 기능
-    public void SendFriendInvite( string friendUID, string myNickname)
+    private IEnumerator SendFriendInvite_Coroutine(string friendNickname, string myNickname)
     {
-        // 현재 파티가 없다면 파티 생성
+        if (!IsConnected())
+        {
+            Debug.Log("ChatClient가 연결되지 않아 연결을 시도합니다.");
+            ForceConnectToChat();
+
+            float timeout = 10f;
+            while (!IsConnected() && timeout > 0f)
+            {
+                yield return new WaitForSeconds(0.5f);
+                timeout -= 0.5f;
+            }
+
+            if (!IsConnected())
+            {
+                Debug.LogError("ChatClient 연결 실패로 친구 초대를 보낼 수 없습니다.");
+                yield break;
+            }
+        }
+
         if (string.IsNullOrEmpty(currentPartyName))
         {
             Debug.Log("파티가 없어 새로 생성합니다.");
-        
             currentPartyName = AccountManager.Instance.MyAccount.UserId;
-            isJoiningParty = true; // 생성자는 자동으로 리더가 됨
-            partyLeaderName = PhotonNetwork.NickName; // 미리 리더로 설정
-        
+            isJoiningParty = true;
+            partyLeaderName = PhotonNetwork.NickName;
+
             chatClient.Subscribe(new string[] { currentPartyName });
             UpdateStatus($"파티 '{currentPartyName}' 생성 및 초대 중...");
-        
-            Debug.Log($"[CreateParty] 파티 생성: {currentPartyName}");
         }
-        // 현재 파티가 있지만 리더가 아닌 경우
         else if (!IsPartyLeader())
         {
             Debug.Log("파티 리더만 친구를 초대할 수 있습니다.");
-            return;
+            yield break;
         }
 
-        // 친구에게 개인 메시지로 초대 전송
         string inviteMessage = $"!partyinvite {currentPartyName} {myNickname}";
-        chatClient.SendPrivateMessage(friendUID, inviteMessage);
-    
-        Debug.Log($"[FriendInvite] {friendUID}에게 파티 초대를 보냈습니다.");
+        chatClient.SendPrivateMessage(friendNickname, inviteMessage);
+        Debug.Log($"[FriendInvite] {friendNickname}에게 파티 초대를 보냈습니다.");
+    }
+    public void SendFriendInvite( string friendNickname, string myNickname)
+    {
+        StartCoroutine(SendFriendInvite_Coroutine(friendNickname, myNickname));
     }
 
     // 강제 채팅 연결
@@ -174,6 +197,7 @@ public class PartyManager : Singleton<PartyManager>, IChatClientListener
         isPartyLeader = false;
         isJoiningParty = false;
         partyLeaderName = ""; // 추가
+        OnPartyMemberChanged?.Invoke(partyMembers);
         UpdateStatus("파티를 떠났습니다.");
     }
     public void OnConnected()
@@ -184,21 +208,27 @@ public class PartyManager : Singleton<PartyManager>, IChatClientListener
 
     public void OnPrivateMessage(string sender, object message, string channelName)
     {
+        if (sender == PhotonNetwork.NickName) return;
         string messageStr = message.ToString();
+        Debug.Log("PrivateMessage 수신 ㅇㅇㅇㅇㅇㅇㅇㅇ");
     
         // 파티 초대 메시지 처리
         if (messageStr.StartsWith("!partyinvite "))
         {
+            Debug.Log("partyinvite맞음?ㅇㅇ");
             string[] parts = messageStr.Split(' ');
             if (parts.Length >= 3)
             {
                 string partyName = parts[1];
                 string inviterNickname = parts[2];
             
+                Debug.Log("대충 파티초대 메세지 맞는거같음 ㅇㅇ");
                 // 초대 UI 생성 (받는 사람에게만)
                 if (FriendInvitePrefab != null)
                 {
-                    GameObject inviteUI = Instantiate(FriendInvitePrefab);
+                    Debug.Log("여기가 프리팹 생성");
+                    
+                    GameObject inviteUI = Instantiate(FriendInvitePrefab, Parent_FriendInvite.transform);
                     var inviteComponent = inviteUI.GetComponent<UI_PartyInvitePopup>();
                     if (inviteComponent != null)
                     {
@@ -233,6 +263,7 @@ public class PartyManager : Singleton<PartyManager>, IChatClientListener
                 {
                     isPartyLeader = false;
                 }
+                OnPartyMemberChanged?.Invoke(partyMembers);
                 
                 Debug.Log($"파티 참여: {currentPartyName} ({currentPartyMemberCount}명)");
             }
@@ -281,6 +312,7 @@ public class PartyManager : Singleton<PartyManager>, IChatClientListener
             Debug.Log($"👋 {user}님이 파티에 참여했습니다 ({currentPartyMemberCount}명)");
             Debug.Log($"[PartyCount] 현재 파티 인원: {currentPartyMemberCount}명");
             
+            OnPartyMemberChanged?.Invoke(partyMembers);
             // UI 업데이트 이벤트 발생 (필요시)
             //EventManager.Broadcast(new PartyMemberCountChangedEvent(currentPartyMemberCount));
             
@@ -316,6 +348,8 @@ public class PartyManager : Singleton<PartyManager>, IChatClientListener
 
             Debug.Log($"👋 {user}님이 파티를 떠났습니다 ({currentPartyMemberCount}명)");
             Debug.Log($"[PartyCount] 현재 파티 인원: {currentPartyMemberCount}명");
+            
+            OnPartyMemberChanged?.Invoke(partyMembers);
 
             // 리더가 떠났다면 다음 사용자가 리더가 됨
             if (!isPartyLeader && currentPartyMemberCount > 0)

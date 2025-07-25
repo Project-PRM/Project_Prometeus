@@ -10,13 +10,10 @@ public class UI_PartyInvitePopup : MonoBehaviour
     private string _partyName;
     private string _inviterUid;
 
-    
-
     public void OnAccept()
     {
         // 파티 참여
         PartyManager.Instance.JoinParty(_partyName);
-       
         Debug.Log($"파티 '{_partyName}' 초대를 수락했습니다.");
         Destroy(gameObject);
     }
