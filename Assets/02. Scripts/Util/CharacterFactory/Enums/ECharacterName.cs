@@ -8,4 +8,5 @@ public enum ECharacterName
     SpawnerDummy,
     Fulfuns,
     Veck,
+    Laran,
 }

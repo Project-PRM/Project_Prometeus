@@ -1548,7 +1548,7 @@ GameObject:
   - component: {fileID: -2907231820692825633}
   - component: {fileID: -6179717667251962163}
   m_Layer: 8
-  m_Name: VeckPlayer
+  m_Name: LaranPlayer
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1832,7 +1832,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e53f40355875f4f4da79666d07697068, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _characterName: 7
+  _characterName: 8
 --- !u!95 &3284400772661504412
 Animator:
   serializedVersion: 7
@@ -2088,8 +2088,8 @@ MonoBehaviour:
   effectNameFilter: 
   effectNameUseRegEx: 0
   combineMeshes: 0
-  alphaCutOff: 0
-  cullBackFaces: 1
+  alphaCutOff: 0.5
+  cullBackFaces: 0
   ignoreObjectVisibility: 0
   reflectionProbes: 0
   GPUInstancing: 1
@@ -2164,7 +2164,7 @@ MonoBehaviour:
   outlineGradientInLocalSpace: 0
   outlineWidth: 0.45
   outlineBlurPasses: 2
-  outlineQuality: 3
+  outlineQuality: 2
   outlineEdgeMode: 0
   outlineEdgeThreshold: 0.995
   outlineDistanceScaleBias: 25
@@ -2307,7 +2307,7 @@ MonoBehaviour:
   seeThroughTextureUVSpace: 0
   seeThroughTextureScale: 1
   seeThroughChildrenSortingMode: 0
-  rmsCount: 3
+  rmsCount: 4
   hitFxInitialIntensity: 0
   hitFxMode: 0
   hitFXTriggerMode: 0
@@ -3351,10 +3351,10 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 49a4f5b035ce14c47b5564002b932c38, type: 2}
+  - {fileID: 2100000, guid: 3e2ae4a2633a5c3478d78c9654d21969, type: 2}
   - {fileID: 7581895683300004476, guid: 8870ace705c146145af70e429c4643f4, type: 3}
-  - {fileID: 2100000, guid: 67dd9fd488978b34da7448249f019dfe, type: 2}
-  - {fileID: 2100000, guid: 67dd9fd488978b34da7448249f019dfe, type: 2}
+  - {fileID: 2100000, guid: 3e2ae4a2633a5c3478d78c9654d21969, type: 2}
+  - {fileID: 2100000, guid: ffca4a4d5addbcd4e93a239f9d0c9826, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
