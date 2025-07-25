@@ -150,20 +150,20 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
                 Debug.Log($"파티 '{partyGroup.Key}' ({partyMembers.Count}명)를 팀 {teamNames[currentTeamIndex]}에 배정");
                 currentTeamIndex++;
             }
-            else
-            {
-                // 파티원이 3명보다 많은 경우 나누어서 배정
-                for (int i = 0; i < partyMembers.Count; i++)
-                {
-                    int teamIndex = currentTeamIndex + (i / PLAYERS_PER_TEAM);
-                    if (teamIndex < teamNames.Length)
-                    {
-                        AssignPlayerToTeam(partyMembers[i], teamIndex);
-                        assignedPlayers.Add(partyMembers[i]);
-                    }
-                }
-                currentTeamIndex += Mathf.CeilToInt((float)partyMembers.Count / PLAYERS_PER_TEAM);
-            }
+            // else
+            // {
+            //     // 파티원이 3명보다 많은 경우 나누어서 배정
+            //     for (int i = 0; i < partyMembers.Count; i++)
+            //     {
+            //         int teamIndex = currentTeamIndex + (i / PLAYERS_PER_TEAM);
+            //         if (teamIndex < teamNames.Length)
+            //         {
+            //             AssignPlayerToTeam(partyMembers[i], teamIndex);
+            //             assignedPlayers.Add(partyMembers[i]);
+            //         }
+            //     }
+            //     currentTeamIndex += Mathf.CeilToInt((float)partyMembers.Count / PLAYERS_PER_TEAM);
+            // }
         }
         
         // 남은 솔로 플레이어들을 랜덤하게 섞어서 배정
@@ -315,6 +315,17 @@ public class PhotonServerManager : PunSingleton<PhotonServerManager>
     {
         Debug.Log($"새로운 플레이어 입장: {newPlayer.NickName}");
         EventManager.Broadcast(new GameStartEvent(GetPlayerTeam(PhotonNetwork.LocalPlayer)));
+        if (PhotonNetwork.IsMasterClient)
+        {
+            Debug.Log($"현재 인원: {PhotonNetwork.CurrentRoom.PlayerCount} / {PhotonNetwork.CurrentRoom.MaxPlayers}");
+            
+            // 현재 방의 인원수가 최대 인원수와 같다면
+            if (PhotonNetwork.CurrentRoom.PlayerCount == PhotonNetwork.CurrentRoom.MaxPlayers)
+            {
+                Debug.Log("방이 꽉 찼습니다. 팀 배정을 시작합니다.");
+                AssignTeams(); // 팀 배정 함수 호출
+            }
+        }
     }
 
     public override void OnPlayerLeftRoom(PhotonPlayer otherPlayer)
