@@ -22,6 +22,7 @@ public class MouseSelector : Singleton<MouseSelector>
                 {
                     _currentSelected?.SetHighlight(false);
 
+
                     _currentSelected = selectable;
                     _currentSelected.SetHighlight(true);
                 }
