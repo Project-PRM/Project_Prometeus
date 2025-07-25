@@ -7,6 +7,7 @@ using UnityEngine.UIElements;
 public class VeckSkillShield : MonoBehaviour, ISummonObject, IDamageable
 {
     private CharacterBase _owner;
+    private CharacterBehaviour _behaviour;
     private SkillData _data;
     private Renderer _renderer;
 
@@ -53,7 +54,8 @@ public class VeckSkillShield : MonoBehaviour, ISummonObject, IDamageable
         Vector3 offset = _owner.Behaviour.transform.forward * 1.3f;
         transform.position = _owner.Behaviour.transform.position + offset + Vector3.up * 1.6f;
 
-        // 각도 회전
+        // 각도 회전 - 지금 모델링이 틀어져 있어서 각도 수정함
+        // 모델링 다른 것으로 교체하면 euler 파트 빼기
         Quaternion rotation = Quaternion.LookRotation(_owner.Behaviour.transform.forward, Vector3.up);
         Vector3 euler = rotation.eulerAngles;
         euler.y += 180f;
@@ -128,7 +130,18 @@ public class VeckSkillShield : MonoBehaviour, ISummonObject, IDamageable
         if (_renderer == null) return;
 
         Material mat = _renderer.material;
-        mat.SetColor("_EmissionColor", enable ? _emissionColor : Color.black);
+
+        Debug.Log("tried to change emission");
+        if (enable)
+        {
+            mat.EnableKeyword("_EMISSION");
+            mat.SetColor("_EmissionColor", _emissionColor);
+        }
+        else
+        {
+            mat.DisableKeyword("_EMISSION");
+            mat.SetColor("_EmissionColor", Color.black);
+        }
     }
 
     public void RPC_TakeDamage(float damage)
