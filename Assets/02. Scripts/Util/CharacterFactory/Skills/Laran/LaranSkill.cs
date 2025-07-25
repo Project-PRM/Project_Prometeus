@@ -7,6 +7,15 @@ public class LaranSkill : ITargetableSkill
 
     public SkillData Data { get; set; }
     public CharacterBase Character { get; set; }
+
+    /* 액티브 : 작은 불 대충 던지기
+    - 코스트 -10 / 쿨타임 6초
+    - 속성 1 : 포물선 투사체 공격 ( 느림 )
+    - 속성 2 : 2초간 화염 장판 생성
+    - 속성 3 : 화염 장판 피격 시 -8 데미지 ( 0.5초당 1틱 )
+    - 속성 4 : 화상
+        - 화상 : 도트 데미지 1초당 - 5
+        - 지속 시간 3초 */
     public void SetOwner(CharacterBase character)
     {
         Character = character;

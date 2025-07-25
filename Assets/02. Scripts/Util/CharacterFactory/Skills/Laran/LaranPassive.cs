@@ -2,15 +2,9 @@ using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 
-public class LaranPassive : IEventReactiveSkill
+public class LaranPassive : IPermanentSkill
 {
     private float _timer = 0f;
-
-    private bool _isActive = false;
-    private float _activeTimeRemaining = 0f;
-    private float _spawnCooldownTimer = 0f;
-
-    private Coroutine _smallPuddles;
 
     public SkillData Data { get; set; }
 
@@ -23,17 +17,6 @@ public class LaranPassive : IEventReactiveSkill
     public void Update()
     {
         _timer += Time.deltaTime;
-
-        if (!_isActive) return;
-        Debug.Log("passive active");
-        _activeTimeRemaining -= Time.deltaTime;
-        _spawnCooldownTimer -= Time.deltaTime;
-
-        if (_activeTimeRemaining <= 0f)
-        {
-            _isActive = false;
-            return;
-        }
     }
 
     public GameObject GetIndicatorPrefab()
@@ -43,21 +26,15 @@ public class LaranPassive : IEventReactiveSkill
 
     public void Activate()
     {
-        if (_smallPuddles == null)
-        {
-            _smallPuddles = Character.Behaviour.StartCoroutine(SpawnSmallPuddles());
-        }
-        _isActive = true;
-        _activeTimeRemaining = 5f;
-        _spawnCooldownTimer = 0f;
-
         if (_timer < Data.Cooltime)
         {
             Debug.Log($"{Character.Name} LaranPassive is on cooldown.");
             return;
         }
-        Debug.Log($"{Character.Name} activated LaranPassive.");
 
+        // 자신의 화염에 받는 데미지 50% 감소
+
+        Debug.Log($"{Character.Name} activated LaranPassive.");
         _timer = 0f;
     }
 
@@ -69,47 +46,5 @@ public class LaranPassive : IEventReactiveSkill
         }
         Activate();
         Debug.Log($"Laran passive start");
-    }
-
-    private void SpawnSmallAoE(Vector3 pos)
-    {
-        GameObject prefab = Resources.Load<GameObject>("Summons/" + Data.SummonPrefabName);
-
-        if (prefab == null)
-        {
-            Debug.LogError($"프리팹 {Data.SummonPrefabName} 을(를) Resources/Summons 에서 찾을 수 없습니다.");
-            return;
-        }
-
-        GameObject area = /*GameObject.*/PhotonNetwork.Instantiate($"Summons/{Data.SummonPrefabName}", pos, Quaternion.identity);
-        AttackerAoEField puddles = area.GetComponent<AttackerAoEField>();
-        puddles.StartAoEField(Character, Data.Duration, Data.Damage);
-    }
-
-    private IEnumerator SpawnSmallPuddles()
-    {
-        float duration = 5f;
-        float tick = 1f;
-        var tickSec = new WaitForSeconds(tick);
-
-        float elapsed = 0f;
-
-        while (elapsed < duration)
-        {
-            Vector3 spawnPos = Character.Behaviour.transform.position;
-            spawnPos.y = 0.1f;
-
-            Debug.Log("Spawn puddle at " + spawnPos);
-            SpawnSmallAoE(spawnPos);
-
-            yield return tickSec;
-            elapsed += tick;
-        }
-
-        // 쿨타임용
-
-        yield return new WaitForSeconds(6f);
-
-        _smallPuddles = null;
     }
 }
