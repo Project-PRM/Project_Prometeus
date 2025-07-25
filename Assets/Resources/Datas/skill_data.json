@@ -980,7 +980,7 @@
     "MaxRange": 0.0,
     "Speed": 0.0,
     "ProjectilePrefabName": "",
-    "SummonPrefabName": "VeckSkillSummon",
+    "SummonPrefabName": "VeckSkillShield",
     "IndicatorPrefabName": ""
   },
   "VeckUltimate": {

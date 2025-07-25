@@ -2,7 +2,7 @@ using FOW;
 using Photon.Pun;
 using UnityEngine;
 
-public class VeckSkillSummon : MonoBehaviour, ISummonObject, IDamageable
+public class VeckSkillShield : MonoBehaviour, ISummonObject, IDamageable
 {
     private CharacterBase _owner;
     private SkillData _data;
@@ -35,8 +35,9 @@ public class VeckSkillSummon : MonoBehaviour, ISummonObject, IDamageable
     {
         if (!_isInitialized || _owner == null || _owner.Behaviour == null) return;
 
-        Vector3 offset = _owner.Behaviour.transform.forward * 1f;
-        transform.position = _owner.Behaviour.transform.position + offset;
+        Vector3 offset = _owner.Behaviour.transform.forward * 1.5f;
+        transform.position = _owner.Behaviour.transform.position + offset + Vector3.up * 1.6f;
+        transform.rotation = Quaternion.LookRotation(_owner.Behaviour.transform.forward, Vector3.up);
     }
 
     public void RPC_TakeDamage(float damage)

@@ -7,7 +7,7 @@ public class VeckSkill : ISkillNoTarget
     public SkillData Data { get; set; }
     public CharacterBase Character { get; set; }
 
-    private VeckSkillSummon _currentShield;
+    private VeckSkillShield _currentShield;
 
     public void SetOwner(CharacterBase character)
     {
@@ -50,7 +50,7 @@ public class VeckSkill : ISkillNoTarget
 
         Vector3 spawnPos = Character.Behaviour.transform.position + Character.Behaviour.transform.forward * 1f;
         GameObject shieldObj = PhotonNetwork.Instantiate($"Summons/{Data.SummonPrefabName}", spawnPos, Quaternion.identity);
-        _currentShield = shieldObj.GetComponent<VeckSkillSummon>();
+        _currentShield = shieldObj.GetComponent<VeckSkillShield>();
 
         if (_currentShield == null)
         {
