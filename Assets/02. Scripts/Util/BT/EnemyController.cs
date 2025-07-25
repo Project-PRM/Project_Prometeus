@@ -177,4 +177,10 @@ public class EnemyController : MonoBehaviour, IDamageable, ISelectable
     {
         HighlightEffect.SetHighlighted(isOn);
     }
+
+    public bool IsPlayerDetected(float detectDistance)
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, detectDistance, LayerMask.GetMask("Character"));
+        return hits.Length > 0;
+    }
 }

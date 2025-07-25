@@ -11,10 +11,27 @@ public class AttackAction : IActionNode
     public ENodeState Evaluate()
     {
         Debug.Log("Attack 실행중");
-        if(Time.time < _lastAttackTime + _enemy.EnemyData.AttackCoolTime)
+
+        if (_enemy.Target == null)
         {
-            return ENodeState.Running;
+            return ENodeState.Failure;
         }
+
+        if (Time.time < _lastAttackTime + _enemy.EnemyData.AttackCoolTime)
+        {
+            _enemy.NavMeshAgent.isStopped = true;
+            _enemy.Animator.SetBool("isAttacking", false);
+            return ENodeState.Running; // 쿨타임 중
+        }
+
+        float distance = Vector3.Distance(_enemy.transform.position, _enemy.Target.position);
+        if (distance > _enemy.EnemyData.AttackRange)
+        {
+            _enemy.NavMeshAgent.isStopped = true;
+            _enemy.Animator.SetBool("isAttacking", false);
+            return ENodeState.Failure; // 범위 밖
+        }
+
         AttackPlayer();
         return ENodeState.Success;
     }
