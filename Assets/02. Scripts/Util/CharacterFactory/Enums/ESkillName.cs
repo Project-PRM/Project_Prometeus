@@ -23,4 +23,7 @@ public enum ESkillName
     FulfunsSkill,
     FulfunsUltimate,
     FulfunsPassive,
+    VeckSkill,
+    VeckUltimate,
+    VeckPassive,
 }

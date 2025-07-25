@@ -13,12 +13,6 @@ public class SpawnerSkillSummon : MonoBehaviour, ISummonObject, IDamageable
     private float _curHealth;
 
     private float _timer = 0f;
-    private float _speed = 0f;
-    private float _damage = 0f;
-    private float _maxRange = 0f;
-    private float _radius = 0f;
-    private float _duration = 0f;
-    private float _debuffAmount = 0f;
 
     private string _myTeam;
 
