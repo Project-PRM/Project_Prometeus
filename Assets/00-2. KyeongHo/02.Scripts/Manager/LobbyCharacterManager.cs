@@ -13,7 +13,9 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
     public Transform rightPos;  // 팀원2 위치
 
     // 생성된 캐릭터들을 관리하기 위한 딕셔너리
-    private Dictionary<int, GameObject> spawnedCharacters = new Dictionary<int, GameObject>();
+    private Dictionary<int, GameObject> _spawnedCharacters = new Dictionary<int, GameObject>();
+    private int _spawnCount = 0; // 스폰된 파티원 수
+
 
     /// <summary>
     /// 현재 네트워크 상태에 맞춰 캐릭터 디스플레이를 업데이트하는 메인 함수
@@ -22,15 +24,16 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
     {
         ClearAllCharacters(); // 일단 모든 캐릭터 삭제
         string myTeam = PhotonServerManager.Instance.GetPlayerTeam(PhotonNetwork.LocalPlayer);
-        
+
         if (!PhotonNetwork.InRoom || // 룸에 들어가 있지 않다면 내 캐릭터만 표시  
-            string.IsNullOrEmpty(myTeam) ||  
+            string.IsNullOrEmpty(myTeam) ||
             myTeam == "None") // 룸에 있지만 아직 팀이 없다면 내 캐릭터만 표시
         {
             SpawnCharacter(PhotonNetwork.LocalPlayer, centerPos);
             return;
         }
         
+
         // 팀이 정해졌다면, 우리 팀원들을 모두 찾아서 표시
         var myTeammates = PhotonNetwork.PlayerList
             .Where(p => PhotonServerManager.Instance.GetPlayerTeam(p) == myTeam)
@@ -43,6 +46,55 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
         var others = myTeammates.Where(p => !p.IsLocal).ToList();
         if (others.Count > 0) SpawnCharacter(others[0], leftPos);
         if (others.Count > 1) SpawnCharacter(others[1], rightPos);
+    }
+    public void UpdateCharacterDisplay(List<string> memberNicknames)
+    {
+        ClearAllCharacters();
+
+        // 파티가 없거나, 멤버가 없으면 내 캐릭터만 표시
+        if (memberNicknames == null || memberNicknames.Count <= 1)
+        {
+            SpawnCharacter(PhotonNetwork.LocalPlayer, centerPos); // 기존 로직 재활용
+            return;
+        }
+
+        // 파티가 있다면, 파티원들을 표시
+        // 나를 중앙에 먼저 배치
+        SpawnCharacter(PhotonNetwork.LocalPlayer, centerPos);
+
+        // 나를 제외한 다른 팀원들을 닉네임으로 찾아서 배치
+        var others = memberNicknames.Where(nickname => nickname != PhotonNetwork.NickName).ToList();
+        
+        if (others.Count > 0) SpawnCharacterByNickname(others[0], leftPos);
+        if (others.Count > 1) SpawnCharacterByNickname(others[1], rightPos);
+    }
+    /// <summary>
+    /// 닉네임으로 플레이어의 캐릭터를 생성 (파티용)
+    /// </summary>
+    private void SpawnCharacterByNickname(string nickname, Transform spawnPos)
+    {
+        if (string.IsNullOrEmpty(nickname)) return;
+
+        // TODO: AccountManager 등에서 플레이어의 닉네임을 기반으로 캐릭터 정보를 가져와야 합니다.
+        // 지금은 임시로 기본 캐릭터를 소환합니다.
+        // 예시: ECharacterName character = AccountManager.Instance.GetCharacterInfo(nickname);
+        
+        // 일단 더미 캐릭터를 로드
+        string path = "LobbyPlayers/DummyPlayer"; // 기본 캐릭터 경로
+        GameObject characterPrefab = Resources.Load<GameObject>(path);
+        
+        if (characterPrefab == null)
+        {
+            Debug.LogError($"[LobbyCharacterManager] 기본 캐릭터 프리팹 로드 실패: {path}");
+            return;
+        }
+
+        GameObject characterInstance = Instantiate(characterPrefab, spawnPos.position, spawnPos.rotation);
+        // **중요**: 다른 플레이어의 ActorNumber를 모르므로, 닉네임 기반의 임시 키를 사용하거나
+        // 스폰 카운트 등을 키로 사용할 수 있습니다.
+        _spawnedCharacters[_spawnCount++] = characterInstance; // 간단하게 카운터 사용
+
+        Debug.Log($"[LobbyCharacterManager] 파티원 {nickname} 캐릭터 생성");
     }
 
     /// <summary>
@@ -58,7 +110,7 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
         GameObject characterPrefab = Resources.Load<GameObject>("LobbyPlayer"); // 임시 프리팹
 
         GameObject character = Instantiate(characterPrefab, spawnPos.position, spawnPos.rotation);
-        spawnedCharacters[player.ActorNumber] = character;
+        _spawnedCharacters[player.ActorNumber] = character;
         
         // TODO: 캐릭터 외형 커스터마이징 적용
     }*/ 
@@ -83,7 +135,7 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
         }
 
         GameObject characterInstance = Instantiate(characterPrefab, spawnPos.position, spawnPos.rotation);
-        spawnedCharacters[player.ActorNumber] = characterInstance;
+        _spawnedCharacters[player.ActorNumber] = characterInstance;
 
         Debug.Log($"[LobbyCharacterManager] {player.NickName} → {character} 생성");
     }
@@ -93,11 +145,12 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
     /// </summary>
     private void ClearAllCharacters()
     {
-        foreach (var character in spawnedCharacters.Values)
+        foreach (var character in _spawnedCharacters.Values)
         {
             Destroy(character);
         }
-        spawnedCharacters.Clear();
+        _spawnedCharacters.Clear();
+        _spawnCount = 0;
     }
     
     // Pun Callbacks
@@ -105,8 +158,15 @@ public class LobbyCharacterManager : PunSingleton<LobbyCharacterManager>
     {
         base.OnEnable();
         PhotonNetwork.AddCallbackTarget(this);
+        PartyManager.Instance.OnPartyMemberChanged += HandlePartyUpdate;
     }
-
+    /// <summary>
+    /// PartyManager로부터 파티원 목록 변경 이벤트를 받았을 때 호출될 함수
+    /// </summary>
+    private void HandlePartyUpdate(HashSet<string> partyMembers)
+    {
+        UpdateCharacterDisplay(partyMembers.ToList());
+    }
     public override void OnDisable()
     {
         base.OnDisable();
